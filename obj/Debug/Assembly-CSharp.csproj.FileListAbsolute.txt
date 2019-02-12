@@ -1,2 +1,0 @@
-D:\Creativity\GitHub\NBH\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
-D:\Creativity\GitHub\NBH\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
