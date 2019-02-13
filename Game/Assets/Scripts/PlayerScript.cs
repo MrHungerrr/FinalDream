@@ -17,8 +17,8 @@ public class PlayerScript : MonoBehaviour
 
 
    //События и действия
-   private bool idle;
-   private bool action;
+   private bool idle = false;
+   private bool action = false;
 
 
    //Сила и мана
@@ -27,7 +27,8 @@ public class PlayerScript : MonoBehaviour
    private ParticleSystem partSys;
    private const float manaMax = 40;
    public Collider forceCol;
-   private bool forceAct;
+   [HideInInspector]
+   public bool forceAct;
    private float mana;
    private bool fire;
    public Material mana_material;
@@ -50,8 +51,6 @@ public class PlayerScript : MonoBehaviour
  //  private float hp_intensity;
 
 
-
-
    //Движение
    private const float speedWalk = 0.06f;
    private const float speedRun = 0.1f;
@@ -66,11 +65,22 @@ public class PlayerScript : MonoBehaviour
    private Vector3 movement;
    private Rigidbody rb;
    private Ray lookRay;
-   private bool runAct;
+   [HideInInspector]
+   public bool runAct;
 
 
-
-
+   //Прыжок
+   private Vector3 jumpVector = new Vector3(0,600,0);
+   [HideInInspector]
+   public bool jumpAct = false;
+   private bool jumpBounce = true;
+   private bool jumpFall = true;
+   private bool ground = true;
+   [HideInInspector]
+   public float jumpCD = 0;
+   private const float jumpCD_N = 1.0f;
+   private float jumpTime;
+   private const float jumpTime_N = 1.0f;
 
 
 
@@ -94,7 +104,6 @@ public class PlayerScript : MonoBehaviour
       mana_color = new Color(0, 1, 0.9647059f, 1);
       mana_material.SetColor("_EmissionColor", mana_color * Mathf.Pow(2,2.5f));
       forceCol.enabled = false;
-      idle = true;
 
       protectLevel = protectLevelMax;
       regenTime = regenTime_N;
@@ -114,6 +123,7 @@ public class PlayerScript : MonoBehaviour
    {
       Move();
       Force();
+      Jump();
    }
 
 
@@ -139,7 +149,6 @@ public class PlayerScript : MonoBehaviour
    private void Move()
    {
 
-
       if (runAct && !idle)
       {
          movement = inputMove * speedRun;
@@ -151,6 +160,15 @@ public class PlayerScript : MonoBehaviour
          movement = inputMove * speedWalk;
          rb.MoveRotation(targetRotation);
          playerAnim.SetBool("Run", false);
+      }
+
+      if (jumpAct)
+      {
+
+      }
+      else
+      {
+
       }
 
       if (!idle)
@@ -169,13 +187,49 @@ public class PlayerScript : MonoBehaviour
 
    }
 
-   public void Run(bool act)
+
+   //Прыжок
+   public void Jump()
    {
-      if(!forceAct)
-         runAct = act;
+      if (jumpAct)
+      {
+         //Отскок
+         if (jumpBounce)
+         {
+            rb.AddForce(jumpVector);
+            jumpBounce = false;
+         }
+         else
+         {
+            if (jumpTime > 0)
+            {
+               jumpTime -= Time.fixedDeltaTime;
+            }
+            else
+            {
+               rb.AddForce(-jumpVector/10);
+               jumpFall = true;
+            }
+
+            if (ground && jumpFall)
+            {
+               Debug.Log("Suka");
+               jumpAct = false;
+               jumpFall = false;
+               jumpBounce = true;
+               jumpTime = jumpTime_N;
+               jumpCD = jumpCD_N;
+            }
+         }
+      }
+
+      if (jumpCD > 0)
+      {
+         jumpCD -= Time.fixedDeltaTime;
+      }
+
+
    }
-
-
 
 
    //Слежение за мышкой
@@ -198,19 +252,12 @@ public class PlayerScript : MonoBehaviour
 
    
    //Сила
-   public void ForceCalculate(bool act)
-   {
-      if (!runAct)
-      {
-         forceAct = act;
-         playerAnim.SetBool("Force", act);
-      }
-   }
-
    private void Force() 
    {
       if (forceAct)
       {
+         playerAnim.SetBool("Force", true);
+
          if (mana > 0)
          {
             forceCol.enabled = true;
@@ -229,6 +276,7 @@ public class PlayerScript : MonoBehaviour
       {
          forceCol.enabled = false;
          partSys.enableEmission = false;
+         playerAnim.SetBool("Force", false);
       }
    }
 
@@ -292,27 +340,6 @@ public class PlayerScript : MonoBehaviour
       }
    }
 
-   public void RegenHealth()
-   {
-      /* if (!action)
-          if (regenTime > 0)
-          {
-             regenTime -= Time.deltaTime;
-          }
-          else
-          {
-             Debug.Log("Op, polekalis");
-             health = healthMax;
-             regenTime = regenTime_N;
-          }
-
-       if (Input.GetKeyUp(KeyCode.E))
-          regenTime = regenTime_N;
-    */
-   }
-
-
-
 
    //Получение дамага
    public void TakeDamage(int damage)
@@ -351,7 +378,22 @@ public class PlayerScript : MonoBehaviour
    }
 
 
-  
+   private void OnCollisionEnter(Collision col)
+   {
+      if (col.gameObject.tag == "ground")
+      {
+         ground = true;
+      }
+   }
+
+   private void OnCollisionExit(Collision col)
+   {
+      if (col.gameObject.tag == "ground")
+      {
+         ground = false;
+      }
+   }
+
 
    public void Save()
    {
