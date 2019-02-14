@@ -6927,5 +6927,25 @@ PrefabInstance:
       propertyPath: partSosi
       value: 
       objectReference: {fileID: 534669908}
+    - target: {fileID: 4987250442561674440, guid: 0d6ce98f21de37b48b1ddb36814ff026,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4987250442561674440, guid: 0d6ce98f21de37b48b1ddb36814ff026,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4987250442561674440, guid: 0d6ce98f21de37b48b1ddb36814ff026,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6718796686805414524, guid: 0d6ce98f21de37b48b1ddb36814ff026,
+        type: 3}
+      propertyPath: m_Range
+      value: 17
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d6ce98f21de37b48b1ddb36814ff026, type: 3}

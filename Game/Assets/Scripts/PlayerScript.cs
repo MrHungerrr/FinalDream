@@ -70,7 +70,7 @@ public class PlayerScript : MonoBehaviour
 
 
    //Прыжок
-   private Vector3 jumpVector = new Vector3(0,600,0);
+   private Vector3 jumpVector = new Vector3(0,1400,0);
    [HideInInspector]
    public bool jumpAct = false;
    private bool jumpBounce = true;
@@ -80,7 +80,7 @@ public class PlayerScript : MonoBehaviour
    public float jumpCD = 0;
    private const float jumpCD_N = 1.0f;
    private float jumpTime;
-   private const float jumpTime_N = 1.0f;
+   private const float jumpTime_N = 0.85f;
 
 
 
@@ -107,6 +107,7 @@ public class PlayerScript : MonoBehaviour
 
       protectLevel = protectLevelMax;
       regenTime = regenTime_N;
+      jumpTime = jumpTime_N;
       health = healthMax;
       mana = manaMax;
       mana_intensity = Mathf.Pow(2, (mana / 8 - 2.5f));
@@ -207,7 +208,7 @@ public class PlayerScript : MonoBehaviour
             }
             else
             {
-               rb.AddForce(-jumpVector/10);
+               rb.AddForce(-jumpVector/15);
                jumpFall = true;
             }
 
