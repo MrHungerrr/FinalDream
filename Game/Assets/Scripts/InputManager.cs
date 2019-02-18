@@ -8,7 +8,6 @@ public class InputManager : MonoBehaviour
    public bool game = true;
    private Vector2 inputMove;
    public PlayerScript player;
-   public ParticleSystem partSosi;
 
    //private ParticleSystem.VelocityOverLifetimeModule vel;
    //private ParticleSystem.ShapeModule shape;
@@ -42,28 +41,6 @@ public class InputManager : MonoBehaviour
       if (inputMove != Vector2.zero)
       {
          player.MoveCalculate(inputMove);
-
-         var vel = partSosi.velocityOverLifetime;
-         vel = partSosi.velocityOverLifetime;
-         vel.x = 5 * -inputMove.x;
-         vel.y = 2 * -inputMove.y;
-
-        if (inputMove.y == -1)
-            {
-                partSosi.startLifetime = 4.2f;
-            }
-        else
-            {
-                partSosi.startLifetime = 3.5f;
-            }
-         
-      }
-      else
-      {
-            partSosi.startLifetime = 3f;
-            var vel = partSosi.velocityOverLifetime;
-            vel.x = 0f;
-            vel.y = 0f;
       }
 
       //Сила
@@ -108,19 +85,19 @@ public class InputManager : MonoBehaviour
 
 
       //Первая способность костюма
-      if (Input.GetKeyDown(KeyCode.LeftShift) && !player.forceAct && !player.jumpAct)
+      if (Input.GetKey(KeyCode.LeftShift) && !player.forceAct && !player.jumpAct)
       {
          player.runAct = true;
       }
-
-      if (Input.GetKeyUp(KeyCode.LeftShift))
+      else
       {
          player.runAct = false;
       }
 
+
       //Вторая способность костюма
       if (Input.GetKeyDown(KeyCode.Space) && !player.forceAct && player.jumpCD<=0)
-      {
+      { 
          player.jumpAct = true;
       }
 

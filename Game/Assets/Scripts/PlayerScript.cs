@@ -14,6 +14,7 @@ public class PlayerScript : MonoBehaviour
    private Vector3 legsOffset;
    private Transform legsTrans;
    public Light[] lights_color = new Light[3];
+   public Light light_camera;
 
 
    //События и действия
@@ -74,7 +75,7 @@ public class PlayerScript : MonoBehaviour
    [HideInInspector]
    public bool jumpAct = false;
    private bool jumpBounce = true;
-   private bool jumpFall = true;
+   private bool jumpFall = false;
    private bool ground = true;
    [HideInInspector]
    public float jumpCD = 0;
@@ -149,31 +150,26 @@ public class PlayerScript : MonoBehaviour
 
    private void Move()
    {
-
-      if (runAct && !idle)
-      {
-         movement = inputMove * speedRun;
-         rb.MoveRotation(Quaternion.Slerp(transform.rotation, movementRotation, 14f * Time.deltaTime));
-         playerAnim.SetBool("Run", true);
-      }
-      else
-      {
-         movement = inputMove * speedWalk;
-         rb.MoveRotation(targetRotation);
-         playerAnim.SetBool("Run", false);
-      }
-
-      if (jumpAct)
-      {
-
-      }
-      else
-      {
-
-      }
-
       if (!idle)
       {
+         if (runAct)
+         {
+            movement = inputMove * speedRun;
+            rb.MoveRotation(Quaternion.Slerp(transform.rotation, movementRotation, 14f * Time.deltaTime));
+            playerAnim.SetBool("Run", true);
+         }
+         else
+         {
+            movement = inputMove * speedWalk;
+            if (jumpAct)
+               rb.MoveRotation(Quaternion.Slerp(transform.rotation, movementRotation, 14f * Time.deltaTime));
+            else
+               rb.MoveRotation(targetRotation);
+            playerAnim.SetBool("Run", false);
+         }
+
+
+
          rb.MovePosition(transform.position + movement);
 
          legsTrans.rotation = Quaternion.Slerp(legsTrans.rotation, movementRotation, 14f * Time.deltaTime);
@@ -182,11 +178,16 @@ public class PlayerScript : MonoBehaviour
       }
       else
       {
+         rb.MoveRotation(targetRotation);
          legsAnim.SetBool("Move", false);
+         playerAnim.SetBool("Run", false);
       }
+
+      Debug.Log(transform.rotation.y);
 
 
    }
+
 
 
    //Прыжок
@@ -195,6 +196,7 @@ public class PlayerScript : MonoBehaviour
       if (jumpAct)
       {
          //Отскок
+         legsAnim.SetBool("Jump", true);
          if (jumpBounce)
          {
             rb.AddForce(jumpVector);
@@ -214,12 +216,12 @@ public class PlayerScript : MonoBehaviour
 
             if (ground && jumpFall)
             {
-               Debug.Log("Suka");
                jumpAct = false;
                jumpFall = false;
                jumpBounce = true;
                jumpTime = jumpTime_N;
                jumpCD = jumpCD_N;
+               legsAnim.SetBool("Jump", false);
             }
          }
       }
@@ -248,10 +250,10 @@ public class PlayerScript : MonoBehaviour
          targetRotation = Quaternion.Slerp(transform.rotation, targetRotation, 14f * Time.deltaTime);
       }
    }
-
-
-
    
+
+
+
    //Сила
    private void Force() 
    {
