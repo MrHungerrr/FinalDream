@@ -8,7 +8,6 @@ public class InputManager : MonoBehaviour
    public bool game = true;
    private Vector2 inputMove;
    public PlayerScript player;
-   public ParticleSystem partSosi;
 
    //private ParticleSystem.VelocityOverLifetimeModule vel;
    //private ParticleSystem.ShapeModule shape;
@@ -42,39 +41,17 @@ public class InputManager : MonoBehaviour
       if (inputMove != Vector2.zero)
       {
          player.MoveCalculate(inputMove);
-
-         var vel = partSosi.velocityOverLifetime;
-         vel = partSosi.velocityOverLifetime;
-         vel.x = 5 * -inputMove.x;
-         vel.y = 2 * -inputMove.y;
-
-        if (inputMove.y == -1)
-            {
-                partSosi.startLifetime = 4.2f;
-            }
-        else
-            {
-                partSosi.startLifetime = 3.5f;
-            }
-         
-      }
-      else
-      {
-            partSosi.startLifetime = 3f;
-            var vel = partSosi.velocityOverLifetime;
-            vel.x = 0f;
-            vel.y = 0f;
       }
 
       //Сила
-      if (Input.GetMouseButtonDown(1))
+      if (Input.GetMouseButtonDown(1) && !player.jumpAct && !player.runAct)
       {
-         player.ForceCalculate(true);
+         player.forceAct = true;
       }
 
       if (Input.GetMouseButtonUp(1))
       {
-         player.ForceCalculate(false);
+         player.forceAct = false;
       }
    }
 
@@ -95,9 +72,8 @@ public class InputManager : MonoBehaviour
 
 
       //Действие или лечение
-      if (Input.GetKey(KeyCode.E) || Input.GetKeyUp(KeyCode.E))
+      if (Input.GetKey(KeyCode.E))
       {
-         player.RegenHealth();
       }
 
 
@@ -109,19 +85,20 @@ public class InputManager : MonoBehaviour
 
 
       //Первая способность костюма
-      if (Input.GetKeyDown(KeyCode.LeftShift))
+      if (Input.GetKey(KeyCode.LeftShift) && !player.forceAct && !player.jumpAct)
       {
-         player.Run(true);
+         player.runAct = true;
+      }
+      else
+      {
+         player.runAct = false;
       }
 
-      if (Input.GetKeyUp(KeyCode.LeftShift))
-      {
-         player.Run(false);
-      }
 
       //Вторая способность костюма
-      if (Input.GetKeyDown(KeyCode.Space))
-      {
+      if (Input.GetKeyDown(KeyCode.Space) && !player.forceAct && player.jumpCD<=0)
+      { 
+         player.jumpAct = true;
       }
 
 

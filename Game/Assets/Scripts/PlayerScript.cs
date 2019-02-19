@@ -14,11 +14,12 @@ public class PlayerScript : MonoBehaviour
    private Vector3 legsOffset;
    private Transform legsTrans;
    public Light[] lights_color = new Light[3];
+   public Light light_camera;
 
 
    //События и действия
-   private bool idle;
-   private bool action;
+   private bool idle = false;
+   private bool action = false;
 
 
    //Сила и мана
@@ -27,7 +28,8 @@ public class PlayerScript : MonoBehaviour
    private ParticleSystem partSys;
    private const float manaMax = 40;
    public Collider forceCol;
-   private bool forceAct;
+   [HideInInspector]
+   public bool forceAct;
    private float mana;
    private bool fire;
    public Material mana_material;
@@ -50,8 +52,6 @@ public class PlayerScript : MonoBehaviour
  //  private float hp_intensity;
 
 
-
-
    //Движение
    private const float speedWalk = 0.06f;
    private const float speedRun = 0.1f;
@@ -66,11 +66,22 @@ public class PlayerScript : MonoBehaviour
    private Vector3 movement;
    private Rigidbody rb;
    private Ray lookRay;
-   private bool runAct;
+   [HideInInspector]
+   public bool runAct;
 
 
-
-
+   //Прыжок
+   private Vector3 jumpVector = new Vector3(0,1400,0);
+   [HideInInspector]
+   public bool jumpAct = false;
+   private bool jumpBounce = true;
+   private bool jumpFall = false;
+   private bool ground = true;
+   [HideInInspector]
+   public float jumpCD = 0;
+   private const float jumpCD_N = 1.0f;
+   private float jumpTime;
+   private const float jumpTime_N = 0.85f;
 
 
 
@@ -94,10 +105,10 @@ public class PlayerScript : MonoBehaviour
       mana_color = new Color(0, 1, 0.9647059f, 1);
       mana_material.SetColor("_EmissionColor", mana_color * Mathf.Pow(2,2.5f));
       forceCol.enabled = false;
-      idle = true;
 
       protectLevel = protectLevelMax;
       regenTime = regenTime_N;
+      jumpTime = jumpTime_N;
       health = healthMax;
       mana = manaMax;
       mana_intensity = Mathf.Pow(2, (mana / 8 - 2.5f));
@@ -114,6 +125,7 @@ public class PlayerScript : MonoBehaviour
    {
       Move();
       Force();
+      Jump();
    }
 
 
@@ -138,23 +150,26 @@ public class PlayerScript : MonoBehaviour
 
    private void Move()
    {
-
-
-      if (runAct && !idle)
-      {
-         movement = inputMove * speedRun;
-         rb.MoveRotation(Quaternion.Slerp(transform.rotation, movementRotation, 14f * Time.deltaTime));
-         playerAnim.SetBool("Run", true);
-      }
-      else
-      {
-         movement = inputMove * speedWalk;
-         rb.MoveRotation(targetRotation);
-         playerAnim.SetBool("Run", false);
-      }
-
       if (!idle)
       {
+         if (runAct)
+         {
+            movement = inputMove * speedRun;
+            rb.MoveRotation(Quaternion.Slerp(transform.rotation, movementRotation, 14f * Time.deltaTime));
+            playerAnim.SetBool("Run", true);
+         }
+         else
+         {
+            movement = inputMove * speedWalk;
+            if (jumpAct)
+               rb.MoveRotation(Quaternion.Slerp(transform.rotation, movementRotation, 14f * Time.deltaTime));
+            else
+               rb.MoveRotation(targetRotation);
+            playerAnim.SetBool("Run", false);
+         }
+
+
+
          rb.MovePosition(transform.position + movement);
 
          legsTrans.rotation = Quaternion.Slerp(legsTrans.rotation, movementRotation, 14f * Time.deltaTime);
@@ -163,19 +178,61 @@ public class PlayerScript : MonoBehaviour
       }
       else
       {
+         rb.MoveRotation(targetRotation);
          legsAnim.SetBool("Move", false);
+         playerAnim.SetBool("Run", false);
+      }
+
+      Debug.Log(transform.rotation.y);
+
+
+   }
+
+
+
+   //Прыжок
+   public void Jump()
+   {
+      if (jumpAct)
+      {
+         //Отскок
+         legsAnim.SetBool("Jump", true);
+         if (jumpBounce)
+         {
+            rb.AddForce(jumpVector);
+            jumpBounce = false;
+         }
+         else
+         {
+            if (jumpTime > 0)
+            {
+               jumpTime -= Time.fixedDeltaTime;
+            }
+            else
+            {
+               rb.AddForce(-jumpVector/15);
+               jumpFall = true;
+            }
+
+            if (ground && jumpFall)
+            {
+               jumpAct = false;
+               jumpFall = false;
+               jumpBounce = true;
+               jumpTime = jumpTime_N;
+               jumpCD = jumpCD_N;
+               legsAnim.SetBool("Jump", false);
+            }
+         }
+      }
+
+      if (jumpCD > 0)
+      {
+         jumpCD -= Time.fixedDeltaTime;
       }
 
 
    }
-
-   public void Run(bool act)
-   {
-      if(!forceAct)
-         runAct = act;
-   }
-
-
 
 
    //Слежение за мышкой
@@ -193,24 +250,17 @@ public class PlayerScript : MonoBehaviour
          targetRotation = Quaternion.Slerp(transform.rotation, targetRotation, 14f * Time.deltaTime);
       }
    }
-
-
-
    
-   //Сила
-   public void ForceCalculate(bool act)
-   {
-      if (!runAct)
-      {
-         forceAct = act;
-         playerAnim.SetBool("Force", act);
-      }
-   }
 
+
+
+   //Сила
    private void Force() 
    {
       if (forceAct)
       {
+         playerAnim.SetBool("Force", true);
+
          if (mana > 0)
          {
             forceCol.enabled = true;
@@ -229,6 +279,7 @@ public class PlayerScript : MonoBehaviour
       {
          forceCol.enabled = false;
          partSys.enableEmission = false;
+         playerAnim.SetBool("Force", false);
       }
    }
 
@@ -292,27 +343,6 @@ public class PlayerScript : MonoBehaviour
       }
    }
 
-   public void RegenHealth()
-   {
-      /* if (!action)
-          if (regenTime > 0)
-          {
-             regenTime -= Time.deltaTime;
-          }
-          else
-          {
-             Debug.Log("Op, polekalis");
-             health = healthMax;
-             regenTime = regenTime_N;
-          }
-
-       if (Input.GetKeyUp(KeyCode.E))
-          regenTime = regenTime_N;
-    */
-   }
-
-
-
 
    //Получение дамага
    public void TakeDamage(int damage)
@@ -351,7 +381,22 @@ public class PlayerScript : MonoBehaviour
    }
 
 
-  
+   private void OnCollisionEnter(Collision col)
+   {
+      if (col.gameObject.tag == "ground")
+      {
+         ground = true;
+      }
+   }
+
+   private void OnCollisionExit(Collision col)
+   {
+      if (col.gameObject.tag == "ground")
+      {
+         ground = false;
+      }
+   }
+
 
    public void Save()
    {

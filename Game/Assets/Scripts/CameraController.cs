@@ -10,11 +10,14 @@ public class CameraController : MonoBehaviour {
    private Vector3 destonation;
    private Vector3 position;
    private Vector2 shake;
+   public ParticleSystem snow;
 
 
    void Start ()
    {
       position = transform.position;
+      snow.enableEmission = true;
+
    }
 	
 	void FixedUpdate ()
