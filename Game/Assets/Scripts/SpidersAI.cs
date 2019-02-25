@@ -26,19 +26,12 @@ public class SpidersAI : MonoBehaviour
    private bool attackRest;
    private bool attack;
    private float visible = 10f;
-   private const float canglevisible = 70f;
-   private const float chear = 3f;
    private float anglevisible = 70f;
-   private float looseanglevisible = 140f;
    private float hear = 3f;
-   private float loosehear = 5f;
-   private bool lp = true;
 
 
-
-
-    //Заморозка
-    private const float freezingTime_N = 2.50f;
+   //Заморозка
+   private const float freezingTime_N = 2.50f;
    private float freezingTime;
    private float freezing = 1;
 
@@ -74,21 +67,12 @@ public class SpidersAI : MonoBehaviour
       attack = false;
       attackRest = false;
       attackPrep = false;
-
-        StartCoroutine("baseOffset");
    }
-
-    IEnumerator baseOffset()
-    {
-        yield return new WaitForEndOfFrame();
-        agent.baseOffset = -transform.position.y;
-    }
 
    private void Update()
    {
       if (battle)
          BattleCalculate();
-        Debug.Log(hear + " " + anglevisible);
    }
 
    private void FixedUpdate()
@@ -101,7 +85,7 @@ public class SpidersAI : MonoBehaviour
 
 
     void PoiskPidora()
-    {   
+    {
         
         if (player != null)
         {
@@ -109,41 +93,34 @@ public class SpidersAI : MonoBehaviour
 
             if (dist < 1.5f)
             {
-                BattleCalculate();
+                Debug.Log("Получи СУКА!!!!!!!!!!!!!!!");
             }
             else if (dist < hear)
             {
+                Debug.Log("Услышал Пидора!!!!!!!!!!!!!!!");
                 agent.SetDestination(player.transform.position);
-                Debug.DrawRay(transform.position, player.position - transform.position, Color.red, visible);
                 battle = true;
             }
             else if (dist < visible)
             {
+                Debug.Log("Пидор в зоне видимости!!!!!!!!!!!!!!!");
                 Quaternion look = Quaternion.LookRotation(player.position - transform.position);
                 float angle = Quaternion.Angle(transform.rotation, look);
 
                 if (angle < anglevisible)
                 {
-                    Ray ray = new Ray(transform.position , player.position - transform.position);
+                    Debug.Log("Мне кажется или я его вижу!!!!!!!!!!!!!!!");
+                    Ray ray = new Ray(transform.position, player.position - transform.position);
                     RaycastHit hit;
-                    
+
                     if (Physics.Raycast(ray, out hit, visible))
                     {
-                        //Debug.Log(hit.transform.tag);
-                        Debug.DrawRay(transform.position , player.position - transform.position, Color.red, visible);
+                        //Debug.DrawRay(transform.position, player.position - transform.position, Color.red, visible);
                         if (hit.transform.tag == "Player")
                         {
+                            Debug.Log("Увидел Пидора!!!!!!!!!!!!!!!");
                             agent.SetDestination(player.transform.position);
                             battle = true;
-                            StopCoroutine("LoosePlayer");
-                            lp = true;
-                        }
-                        else if(hit.transform.name!= "Spider")
-                        {
-                            hear = loosehear;
-                            anglevisible = looseanglevisible;
-                            if (lp)
-                                StartCoroutine("LoosePlayer");
                         }
                     }
                 }
@@ -151,20 +128,10 @@ public class SpidersAI : MonoBehaviour
         }
     }
 
-    IEnumerator LoosePlayer()
-    {
-        lp = false;
-        yield return new WaitForSeconds(5f);
-        hear = chear;
-        anglevisible = canglevisible;
-        Debug.Log("Упустил");
-    }
-
-
 
     //Атака(Вычисления)
     void BattleCalculate()
-    {
+   {
 
       //Задержка перед атакой
       if (attackPrep)
@@ -182,7 +149,7 @@ public class SpidersAI : MonoBehaviour
 
       //Восстановление от заморозки
       Freezing();
-    }
+   }
 
    private void Prepare()
    {
@@ -241,7 +208,7 @@ public class SpidersAI : MonoBehaviour
       //Поворот к игроку
       if (!attack && !attackRest)
       {
-         //Rotate();
+         Rotate();
       }
 
       //Приближение к игроку
@@ -257,7 +224,7 @@ public class SpidersAI : MonoBehaviour
       }
    }
 
-   /*private void Rotate()
+   private void Rotate()
    {
       direct = player.position - transform.position;
       targetRotation = Quaternion.LookRotation(direct);
@@ -341,7 +308,6 @@ public class SpidersAI : MonoBehaviour
       {
          col.enabled = false;
          GetComponent<SpidersAI>().enabled = false;
-         agent.enabled = false;
       }
    }
 
