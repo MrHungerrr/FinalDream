@@ -189,7 +189,7 @@ public class PlayerScript : MonoBehaviour
          playerAnim.SetBool("Run", false);
       }
 
-      Debug.Log(transform.rotation.y);
+      //Debug.Log(transform.rotation.y);
 
 
    }
