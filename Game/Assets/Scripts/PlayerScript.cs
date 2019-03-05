@@ -15,6 +15,7 @@ public class PlayerScript : MonoBehaviour
    private Transform legsTrans;
    public Light[] lights_color = new Light[3];
    public Light light_camera;
+   public Transform cameraTrans;
 
 
    //События и действия
@@ -162,6 +163,7 @@ public class PlayerScript : MonoBehaviour
          {
             movement = inputMove * speedRun;
             rb.MoveRotation(Quaternion.Slerp(transform.rotation, movementRotation, 14f * Time.deltaTime));
+            cameraTrans.position = transform.position + new Vector3(inputMove.x, 0, inputMove.z).normalized * 3;
             playerAnim.SetBool("Run", true);
          }
          else
@@ -172,6 +174,8 @@ public class PlayerScript : MonoBehaviour
             else
                rb.MoveRotation(targetRotation);
             playerAnim.SetBool("Run", false);
+            cameraTrans.position = transform.position;
+
          }
 
 
@@ -184,12 +188,11 @@ public class PlayerScript : MonoBehaviour
       }
       else
       {
+         cameraTrans.position = transform.position;
          rb.MoveRotation(targetRotation);
          legsAnim.SetBool("Move", false);
          playerAnim.SetBool("Run", false);
       }
-
-      Debug.Log(transform.rotation.y);
 
 
    }
@@ -267,8 +270,10 @@ public class PlayerScript : MonoBehaviour
       if (forcePrep)
       {
          playerAnim.SetBool("Force", true);
-         
-         if(!forceAct && !forceSpec)
+         cameraTrans.position = transform.position - (new Vector3(transform.position.x, 0, transform.position.z) - new Vector3(targetPoint.x, 0, targetPoint.z)).normalized*3;
+
+
+         if (!forceAct && !forceSpec)
          {
             if (mana > 0)
                forcePrep_Particle.enableEmission = true;
@@ -305,6 +310,7 @@ public class PlayerScript : MonoBehaviour
       }
       else
       {
+         //cameraTrans.position = transform.position;
          force_Col.enabled = false;
          force_Particle.enableEmission = false;
          forcePrep_Particle.enableEmission = false;
