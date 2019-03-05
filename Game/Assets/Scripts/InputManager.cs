@@ -44,31 +44,14 @@ public class InputManager : MonoBehaviour
       }
 
       //Сила
-      if (Input.GetMouseButton(1) && !player.jumpAct && !player.runAct)
+      if (Input.GetMouseButtonDown(1) && !player.jumpAct && !player.runAct)
       {
-         player.forcePrep = true;
-
-         if(Input.GetMouseButton(0) && !Input.GetKey(KeyCode.E))
-         {
-            player.forceAct = true;
-         }
-         else
-         {
-            player.forceAct = false;
-         }
-
-         if (Input.GetKeyDown(KeyCode.E) && !Input.GetMouseButton(0))
-         {
-            player.forceSpec = true;
-         }
-         else
-         {
-            player.forceSpec = false;
-         }
+         player.forceAct = true;
       }
-      else
+
+      if (Input.GetMouseButtonUp(1))
       {
-         player.forcePrep = false;
+         player.forceAct = false;
       }
    }
 
