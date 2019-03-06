@@ -26,16 +26,21 @@ public class PlayerScript : MonoBehaviour
    //Сила и мана
    [Header("Force")]
    public GameObject force;
-   private ParticleSystem partSys;
+   public  ParticleSystem forcePrep_Particle;
+   private ParticleSystem force_Particle;
    private const float manaMax = 40;
-   public Collider forceCol;
+   public Collider force_Col;
    [HideInInspector]
-   public bool forceAct;
+   public bool forceAct = false;
+   [HideInInspector]
+   public bool forcePrep = false;
+   [HideInInspector]
+   public bool forceSpec = false;
    private float mana;
    private bool fire;
-   public Material mana_material;
-   private Color mana_color;
-   private float mana_intensity;
+   public Material mana_Material;
+   private Color mana_Color;
+   private float mana_Intensity;
 
 
    //Здоровье
@@ -48,14 +53,14 @@ public class PlayerScript : MonoBehaviour
    private const float regenTime_N = 4.0f;
    private float regenTime;
   // [HideInInspector]
-   public Material hp_material;
-   private Color protectLeavel_color;
+   public Material hp_Material;
+   private Color protectLevel_Color;
  //  private float hp_intensity;
 
 
    //Движение
-   private const float speedWalk = 0.06f;
-   private const float speedRun = 0.1f;
+   private const float speedWalk = 0.1f;
+   private const float speedRun = 0.15f;
    private float hitDist = 0.0f;
    private float movementAngle;
    private Plane playerPlane;
@@ -89,7 +94,7 @@ public class PlayerScript : MonoBehaviour
 
    private void Awake()
    {
-      partSys = force.GetComponent<ParticleSystem>();
+      force_Particle = force.GetComponent<ParticleSystem>();
       legsTrans = legs.GetComponent<Transform>();
       legsAnim = legs.GetComponent<Animator>();
       legsOffset = legsTrans.position;
@@ -99,20 +104,21 @@ public class PlayerScript : MonoBehaviour
 
    private void Start()
    {
-      partSys.enableEmission = false;
-      protectLeavel_color = new Color(0, 1, 0, 1);
-      hp_material.SetColor("_EmissionColor",protectLeavel_color);
-      partSys.startColor = new Color(0, 0.7490196f, 0.7254902f, 1);
-      mana_color = new Color(0, 1, 0.9647059f, 1);
-      mana_material.SetColor("_EmissionColor", mana_color * Mathf.Pow(2,2.5f));
-      forceCol.enabled = false;
+      force_Particle.enableEmission = false;
+      forcePrep_Particle.enableEmission = false;
+      protectLevel_Color = new Color(0, 1, 0, 1);
+      hp_Material.SetColor("_EmissionColor",protectLevel_Color);
+      force_Particle.startColor = new Color(0, 0.7490196f, 0.7254902f, 1);
+      mana_Color = new Color(0, 1, 0.9647059f, 1);
+      mana_Material.SetColor("_EmissionColor", mana_Color * Mathf.Pow(2,2.5f));
+      force_Col.enabled = false;
 
       protectLevel = protectLevelMax;
       regenTime = regenTime_N;
       jumpTime = jumpTime_N;
       health = healthMax;
       mana = manaMax;
-      mana_intensity = Mathf.Pow(2, (mana / 8 - 2.5f));
+      mana_Intensity = Mathf.Pow(2, (mana / 8 - 2.5f));
    }
 
    private void Update()
@@ -188,11 +194,6 @@ public class PlayerScript : MonoBehaviour
          playerAnim.SetBool("Run", false);
       }
 
-<<<<<<< HEAD
-=======
-      //Debug.Log(transform.rotation.y);
-
->>>>>>> 1b44535e9449927213d6d0999d1d95284f75eefe
 
    }
 
@@ -263,12 +264,12 @@ public class PlayerScript : MonoBehaviour
 
 
    //Сила
-   private void Force() 
+   private void Force()
    {
-      if (forceAct)
+      //Подготовка
+      if (forcePrep)
       {
          playerAnim.SetBool("Force", true);
-<<<<<<< HEAD
          cameraTrans.position = transform.position - (new Vector3(transform.position.x, 0, transform.position.z) - new Vector3(targetPoint.x, 0, targetPoint.z)).normalized*3;
 
 
@@ -282,34 +283,37 @@ public class PlayerScript : MonoBehaviour
          else
             forcePrep_Particle.enableEmission = false;
 
-=======
->>>>>>> 1b44535e9449927213d6d0999d1d95284f75eefe
 
-         if (mana > 0)
+         if (forceAct && mana > 0)
          {
-            forceCol.enabled = true;
-            partSys.enableEmission = true;
+            force_Col.enabled = true;
+            force_Particle.enableEmission = true;
             mana -= Time.deltaTime;
            // mana_intensity = Mathf.Pow(2,(mana / 8 - 2.5f));
-            mana_material.SetColor("_EmissionColor", mana_color * mana_intensity);
+            mana_Material.SetColor("_EmissionColor", mana_Color * mana_Intensity);
          }
          else
          {
-            forceCol.enabled = false;
-            partSys.enableEmission = false;
+            force_Col.enabled = false;
+            force_Particle.enableEmission = false;
+            
+         }
+
+         //СпешлУдар
+         if (forceSpec && mana>5)
+         {
+            if(fire)
+            {
+
+            }
          }
       }
       else
       {
-<<<<<<< HEAD
          //cameraTrans.position = transform.position;
          force_Col.enabled = false;
          force_Particle.enableEmission = false;
          forcePrep_Particle.enableEmission = false;
-=======
-         forceCol.enabled = false;
-         partSys.enableEmission = false;
->>>>>>> 1b44535e9449927213d6d0999d1d95284f75eefe
          playerAnim.SetBool("Force", false);
       }
    }
@@ -319,10 +323,10 @@ public class PlayerScript : MonoBehaviour
         fire = !fire;
         if (fire)
         {
-            forceCol.tag = "fire";
-            mana_color = new Color(1, 0.65f, 0, 1);
-            mana_material.SetColor("_EmissionColor", mana_color * mana_intensity);
-            partSys.startColor = new Color(1, 0.65f, 0, 1);
+            force_Col.tag = "fire";
+            mana_Color = new Color(1, 0.65f, 0, 1);
+            mana_Material.SetColor("_EmissionColor", mana_Color * mana_Intensity);
+            force_Particle.startColor = new Color(1, 0.65f, 0, 1);
             for (int i = 0; i < lights_color.Length; i++)
             {
                 lights_color[i].color = new Color(1, 0.65f, 0, 1);
@@ -330,10 +334,10 @@ public class PlayerScript : MonoBehaviour
         }
         else
         {
-            forceCol.tag = "ice";
-            mana_color = new Color(0, 0.7490196f, 0.7254902f, 1);
-            mana_material.SetColor("_EmissionColor", mana_color * mana_intensity);
-            partSys.startColor = new Color(0, 0.7490196f, 0.7254902f, 1);
+            force_Col.tag = "ice";
+            mana_Color = new Color(0, 0.7490196f, 0.7254902f, 1);
+            mana_Material.SetColor("_EmissionColor", mana_Color * mana_Intensity);
+            force_Particle.startColor = new Color(0, 0.7490196f, 0.7254902f, 1);
             for (int i = 0; i < lights_color.Length; i++)
             {
                 lights_color[i].color = new Color(0, 0.7490196f, 0.7254902f, 1);
@@ -388,21 +392,21 @@ public class PlayerScript : MonoBehaviour
          switch(protectLevel)
          {
              case 4:
-                 protectLeavel_color = new Color(0,1,0);
+                 protectLevel_Color = new Color(0,1,0);
                  break;
              case 3:
-                 protectLeavel_color = new Color(1,1,0);
+                 protectLevel_Color = new Color(1,1,0);
                  break;
              case 2:
-                 protectLeavel_color = new Color(1,0.5f,0);
+                 protectLevel_Color = new Color(1,0.5f,0);
                  break;
              case 1:
-                 protectLeavel_color = new Color(1,0,0);
+                 protectLevel_Color = new Color(1,0,0);
                  break;
 
          }
 
-         hp_material.SetColor("_EmissionColor", protectLeavel_color);
+         hp_Material.SetColor("_EmissionColor", protectLevel_Color);
     
          if (protectLevel <= 0)
          {
