@@ -41,7 +41,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 2
-  m_Color: {r: 1, g: 0.65, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.6, b: 0.7254902, a: 1}
   m_Intensity: 0.5
   m_Range: 4
   m_SpotAngle: 30
@@ -60,7 +60,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 567
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}

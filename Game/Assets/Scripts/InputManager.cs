@@ -12,7 +12,6 @@ public class InputManager : MonoBehaviour
    //private ParticleSystem.VelocityOverLifetimeModule vel;
    //private ParticleSystem.ShapeModule shape;
 
-
    void Start()
    {
    }
@@ -48,7 +47,7 @@ public class InputManager : MonoBehaviour
       {
          player.forcePrep = true;
 
-         if(Input.GetMouseButton(0) && !Input.GetKey(KeyCode.E))
+         if (Input.GetMouseButton(0))
          {
             player.forceAct = true;
          }
@@ -57,21 +56,12 @@ public class InputManager : MonoBehaviour
             player.forceAct = false;
          }
 
-         if (Input.GetKeyDown(KeyCode.E) && !Input.GetMouseButton(0))
-         {
-            player.forceSpec = true;
-         }
-         else
-         {
-            player.forceSpec = false;
-         }
       }
       else
       {
          player.forcePrep = false;
       }
    }
-
 
    private void GameInput()
    {
@@ -142,5 +132,4 @@ public class InputManager : MonoBehaviour
    {
 
    }
-
 }
