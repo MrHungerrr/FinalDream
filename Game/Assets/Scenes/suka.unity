@@ -123,10 +123,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: IceWall.Mid
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 100000, guid: 3081bb575c7dfd64f8478ec3e01eec50, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 8
       objectReference: {fileID: 0}
+=======
+>>>>>>> c77ad5681cf2cc633c43db212c5b192e592d4299
     - target: {fileID: 400000, guid: 3081bb575c7dfd64f8478ec3e01eec50, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.33
@@ -183,12 +186,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 9150923043866524876}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
 --- !u!4 &144651552 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1793274011, guid: d874df0217bc7004292c147d23f885b3,
     type: 3}
   m_PrefabInstance: {fileID: 423282615}
   m_PrefabAsset: {fileID: 0}
+=======
+>>>>>>> c77ad5681cf2cc633c43db212c5b192e592d4299
 --- !u!1001 &211337332
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -250,6 +256,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7040bedc95c17ad45a274ba1da7d0a9a, type: 3}
+<<<<<<< HEAD
 --- !u!1 &264967209
 GameObject:
   m_ObjectHideFlags: 0
@@ -280,6 +287,8 @@ Transform:
   m_Father: {fileID: 144651552}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+=======
+>>>>>>> c77ad5681cf2cc633c43db212c5b192e592d4299
 --- !u!64 &358550644 stripped
 MeshCollider:
   m_CorrespondingSourceObject: {fileID: 6718796686805414497, guid: 0d6ce98f21de37b48b1ddb36814ff026,
@@ -341,6 +350,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 1793274012, guid: d874df0217bc7004292c147d23f885b3, type: 3}
       propertyPath: points.Array.data[0]
       value: 
@@ -361,6 +371,8 @@ PrefabInstance:
       propertyPath: m_StoppingDistance
       value: 1.2
       objectReference: {fileID: 0}
+=======
+>>>>>>> c77ad5681cf2cc633c43db212c5b192e592d4299
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d874df0217bc7004292c147d23f885b3, type: 3}
 --- !u!1001 &483407951
@@ -374,10 +386,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: IceWall.End (2)
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 100000, guid: 584562fab04317b438891463b95a4ae4, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 8
       objectReference: {fileID: 0}
+=======
+>>>>>>> c77ad5681cf2cc633c43db212c5b192e592d4299
     - target: {fileID: 400000, guid: 584562fab04317b438891463b95a4ae4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5300,6 +5315,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Cinemachine.CinemachineBrain+VcamActivatedEvent, Cinemachine, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+<<<<<<< HEAD
 --- !u!1 &538373683
 GameObject:
   m_ObjectHideFlags: 0
@@ -5330,6 +5346,8 @@ Transform:
   m_Father: {fileID: 144651552}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+=======
+>>>>>>> c77ad5681cf2cc633c43db212c5b192e592d4299
 --- !u!1 &583740621 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: b57ea9747ae3131428a470c59bf1fecc,
@@ -5356,6 +5374,7 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: b57ea9747ae3131428a470c59bf1fecc, type: 3}
+<<<<<<< HEAD
 --- !u!1 &609966648
 GameObject:
   m_ObjectHideFlags: 0
@@ -5386,6 +5405,8 @@ Transform:
   m_Father: {fileID: 144651552}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+=======
+>>>>>>> c77ad5681cf2cc633c43db212c5b192e592d4299
 --- !u!1 &707618527
 GameObject:
   m_ObjectHideFlags: 0
@@ -5638,10 +5659,13 @@ PrefabInstance:
       propertyPath: m_TagString
       value: ground
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 100000, guid: 05adf1b8dbae30d4dacbf9921c05c050, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 8
       objectReference: {fileID: 0}
+=======
+>>>>>>> c77ad5681cf2cc633c43db212c5b192e592d4299
     - target: {fileID: 400000, guid: 05adf1b8dbae30d4dacbf9921c05c050, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5908,10 +5932,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: IceWall.End (1)
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 100000, guid: 584562fab04317b438891463b95a4ae4, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 8
       objectReference: {fileID: 0}
+=======
+>>>>>>> c77ad5681cf2cc633c43db212c5b192e592d4299
     - target: {fileID: 400000, guid: 584562fab04317b438891463b95a4ae4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6088,6 +6115,7 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: 584562fab04317b438891463b95a4ae4, type: 3}
+<<<<<<< HEAD
 --- !u!1 &1299245022
 GameObject:
   m_ObjectHideFlags: 0
@@ -6118,6 +6146,8 @@ Transform:
   m_Father: {fileID: 144651552}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+=======
+>>>>>>> c77ad5681cf2cc633c43db212c5b192e592d4299
 --- !u!1001 &1377407780
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6387,10 +6417,13 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 3081bb575c7dfd64f8478ec3e01eec50, type: 3}
       propertyPath: m_Name
       value: IceWall.Mid (1)
+<<<<<<< HEAD
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 3081bb575c7dfd64f8478ec3e01eec50, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 8
+=======
+>>>>>>> c77ad5681cf2cc633c43db212c5b192e592d4299
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 3081bb575c7dfd64f8478ec3e01eec50, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6453,10 +6486,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: IceWall.End
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 100000, guid: 584562fab04317b438891463b95a4ae4, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 8
       objectReference: {fileID: 0}
+=======
+>>>>>>> c77ad5681cf2cc633c43db212c5b192e592d4299
     - target: {fileID: 400000, guid: 584562fab04317b438891463b95a4ae4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6526,10 +6562,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: IceWall.End (3)
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 100000, guid: 584562fab04317b438891463b95a4ae4, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 8
       objectReference: {fileID: 0}
+=======
+>>>>>>> c77ad5681cf2cc633c43db212c5b192e592d4299
     - target: {fileID: 400000, guid: 584562fab04317b438891463b95a4ae4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
