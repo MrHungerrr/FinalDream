@@ -52,7 +52,9 @@ public class SpidersAI : MonoBehaviour
    private Rigidbody rb;
    private NavMeshAgent agent;
 
-
+    //Патрулирование
+    private Vector3[] target;
+    private int nextpoint = 0;
 
 
 
@@ -75,7 +77,16 @@ public class SpidersAI : MonoBehaviour
       attackRest = false;
       attackPrep = false;
 
-        StartCoroutine("baseOffset");
+        target = new Vector3[transform.childCount - 2];
+
+        for (int i = 0; i < transform.childCount - 2; i++)
+        {
+            Debug.Log(transform.GetChild(i + 2).name);
+            target[i] = transform.GetChild(i + 2).position;
+            Destroy(transform.GetChild(i + 2).gameObject);
+        }
+
+      StartCoroutine("baseOffset");
    }
 
     IEnumerator baseOffset()
@@ -95,10 +106,27 @@ public class SpidersAI : MonoBehaviour
    {
       if (battle)
          Battle();
+        Patrul();
       PoiskPidora();
 
    }
 
+
+    void Patrul()
+    {
+        agent.SetDestination(target[nextpoint]);
+        if (Vector3.Distance(transform.position, target[nextpoint]) < 1.2f) 
+        {
+            if (nextpoint < target.Length - 1) 
+            {
+                nextpoint++;
+            }
+            else
+            {
+                nextpoint = 0;
+            }
+        }
+    }
 
     void PoiskPidora()
     {   
@@ -129,7 +157,7 @@ public class SpidersAI : MonoBehaviour
                     
                     if (Physics.Raycast(ray, out hit, visible))
                     {
-                        //Debug.Log(hit.transform.tag);
+                        Debug.Log(hit.transform.tag);
                         Debug.DrawRay(transform.position , player.position - transform.position, Color.red, visible);
                         if (hit.transform.tag == "Player")
                         {
@@ -137,13 +165,6 @@ public class SpidersAI : MonoBehaviour
                             battle = true;
                             StopCoroutine("LoosePlayer");
                             lp = true;
-                        }
-                        else if(hit.transform.name!= "Spider")
-                        {
-                            hear = loosehear;
-                            anglevisible = looseanglevisible;
-                            if (lp)
-                                StartCoroutine("LoosePlayer");
                         }
                     }
                 }
@@ -160,7 +181,7 @@ public class SpidersAI : MonoBehaviour
         Debug.Log("Упустил");
     }
 
-
+        
 
     //Атака(Вычисления)
     void BattleCalculate()
