@@ -8,8 +8,7 @@ public class PlayerScript : MonoBehaviour
 {
    //Курсор
    [Header("Cursor")]
-   public Texture2D cursore_1;
-   public Texture2D cursore_2;
+   public Texture2D[] cursor = new Texture2D[2];
 
 
    //Костюм
@@ -19,22 +18,30 @@ public class PlayerScript : MonoBehaviour
    private Animator legsAnim;
    private Vector3 legsOffset;
    private Transform legsTrans;
-   public Light[] lights_color = new Light[4];
+   public Light[] lights_suit = new Light[3];
+   [HideInInspector]
+   public float[] lights_suit_intens = new float[3];
    public Light light_snow;
+   private float light_snow_intens;
    public Transform cameraTrans;
+   private Color[] suit_lightColor = new Color[2];
 
 
    //События и действия
    private bool idle = false;
    private bool action = false;
+   [HideInInspector]
+   public bool sonarDis;
 
 
    //Сила и мана
    [Header("Force")]
+   public Light[] lights_force = new Light[2];
    public GameObject force;
    public Light force_light;
-   public  ParticleSystem forcePrep_Particle;
-   private ParticleSystem force_Particle;
+   private float force_light_intens;
+   public  ParticleSystem forcePrep_particle;
+   private ParticleSystem force_particle;
    private const float manaMax = 40;
    public Collider force_Col;
    [HideInInspector]
@@ -42,10 +49,18 @@ public class PlayerScript : MonoBehaviour
    [HideInInspector]
    public bool forcePrep = false;
    private float mana;
-   private bool fire;
-   public Material mana_Material;
-   private Color mana_Color;
-   private float mana_Intensity;
+   private byte forceType = 0;
+   public Material mana_material;
+   [HideInInspector]
+   public Color mana_color;
+   [HideInInspector]
+   public float mana_intensity = 6.0f;
+   private Color[] force_lightColor = new Color[2];
+   [HideInInspector]
+   public bool forceSwitch = false;
+   private float switchTime;
+   private float switchTime_N = 1.0f;
+   private string[] forceType_string = new string[2];
 
 
    //Здоровье
@@ -99,7 +114,7 @@ public class PlayerScript : MonoBehaviour
 
    private void Awake()
    {
-      force_Particle = force.GetComponent<ParticleSystem>();
+      force_particle = force.GetComponent<ParticleSystem>();
       legsTrans = legs.GetComponent<Transform>();
       legsAnim = legs.GetComponent<Animator>();
       legsOffset = legsTrans.position;
@@ -109,26 +124,30 @@ public class PlayerScript : MonoBehaviour
 
    private void Start()
    {
-      force_Particle.enableEmission = false;
-      forcePrep_Particle.enableEmission = false;
-      protectLevel_Color = new Color(0, 1, 0, 1);
-      hp_Material.SetColor("_EmissionColor",protectLevel_Color);
-      force_Particle.startColor = new Color(0, 0.6f, 0.7254902f, 1);
-      forcePrep_Particle.startColor = new Color(0, 0.6f, 0.7254902f, 1);
-      mana_Color = new Color(0, 1, 0.9647059f, 1);
-      mana_Material.SetColor("_EmissionColor", mana_Color * Mathf.Pow(2,2.5f));
-      force_Col.enabled = false;
-      for (int i = 0; i < lights_color.Length; i++)
-      {
-         lights_color[i].color = new Color(0, 0.6f, 0.7254902f, 1);
-      }
-
       protectLevel = protectLevelMax;
       regenTime = regenTime_N;
       jumpTime = jumpTime_N;
       health = healthMax;
       mana = manaMax;
-      mana_Intensity = Mathf.Pow(2, (mana / 8 - 2.5f));
+      force_lightColor[0] = new Color(0, 0.6f, 0.7254902f, 1);
+      force_lightColor[1] = new Color(0.8f, 0.5f, 0, 1);
+      suit_lightColor[0] = new Color(0.4f, 0.9f, 1.0f, 1);
+      suit_lightColor[1] = new Color(1.0f, 0.86f, 0.63f, 1);
+      forceType_string[0] = "ice";
+      forceType_string[1] = "fire";
+      forceType = 0;
+
+      force_particle.enableEmission = false;
+      forcePrep_particle.enableEmission = false;
+      protectLevel_Color = new Color(0, 1, 0, 1);
+      hp_Material.SetColor("_EmissionColor", protectLevel_Color);
+   
+      LightForce();
+      for (int i = 0; i < lights_suit.Length; i++)
+      {
+         lights_suit_intens[i] = lights_suit[i].intensity;
+      }
+
    }
 
    private void Update()
@@ -144,8 +163,6 @@ public class PlayerScript : MonoBehaviour
       Force();
       Jump();
    }
-
-
 
 
    //Передвижение
@@ -280,90 +297,128 @@ public class PlayerScript : MonoBehaviour
       //Подготовка
       if (forcePrep)
       {
+
          playerAnim.SetBool("Force", true);
          cameraTrans.position = transform.position - (new Vector3(transform.position.x, 0, transform.position.z) - new Vector3(targetPoint.x, 0, targetPoint.z)).normalized*3;
-
+   
 
          if (!forceAct)
          {
             if (mana > 0)
             {
-               forcePrep_Particle.enableEmission = true;
-               force_light.intensity = Mathf.Lerp(force_light.intensity, 1.2f, 0.3f);
+               forcePrep_particle.enableEmission = true;
+               force_light_intens = 1.2f;
+               if (sonarDis)
+                  light_snow_intens = 2;
+               else
+                  light_snow_intens = 4;
             }
             else
             {
-               force_light.intensity = Mathf.Lerp(force_light.intensity, 0, 0.3f);
-               forcePrep_Particle.enableEmission = false;
+               forcePrep_particle.enableEmission = false;
+               force_light_intens = 0;
+               if (sonarDis)
+                  light_snow_intens = 0;
+               else
+                  light_snow_intens = 4;
             }
          }
          else
          {
-            force_light.intensity = Mathf.Lerp(force_light.intensity, 0, 0.3f);
-            forcePrep_Particle.enableEmission = false;
+            forcePrep_particle.enableEmission = false;
+            force_light_intens = 0;
          }
+
 
          if (forceAct && mana > 0)
          {
-            light_snow.intensity = Mathf.Lerp(light_snow.intensity, 8, 0.1f);
+            light_snow_intens = 8;
             force_Col.enabled = true;
-            force_Particle.enableEmission = true;
+            force_particle.enableEmission = true;
             mana -= Time.deltaTime;
-           // mana_intensity = Mathf.Pow(2,(mana / 8 - 2.5f));
-            mana_Material.SetColor("_EmissionColor", mana_Color * mana_Intensity);
          }
          else
          {
-            light_snow.intensity = Mathf.Lerp(light_snow.intensity, 4, 0.1f);
+            force_particle.enableEmission = false;
             force_Col.enabled = false;
-            force_Particle.enableEmission = false;
-            
+            if (sonarDis)
+               light_snow_intens = 0;
+            else
+               light_snow_intens = 4;
+
          }
+
       }
       else
       {
-         force_light.intensity = Mathf.Lerp(force_light.intensity, 0, 0.3f);
-         light_snow.intensity = Mathf.Lerp(light_snow.intensity, 4, 0.1f);
-         //cameraTrans.position = transform.position;
+         forcePrep_particle.enableEmission = false;
          force_Col.enabled = false;
-         force_Particle.enableEmission = false;
-         forcePrep_Particle.enableEmission = false;
+         force_particle.enableEmission = false;
+         forcePrep_particle.enableEmission = false;
          playerAnim.SetBool("Force", false);
+         force_light_intens = 0;
+         if (sonarDis)
+            light_snow_intens = 0;
+         else
+            light_snow_intens = 4;
+      }
+
+      light_snow.intensity = Mathf.Lerp(light_snow.intensity, light_snow_intens, 0.1f);
+      force_light.intensity = Mathf.Lerp(force_light.intensity, force_light_intens, 0.3f);
+
+      if (forceSwitch)
+      {
+         if(switchTime>0)
+         {
+            switchTime -= Time.fixedDeltaTime;
+         }
+         else
+         {
+            LightForce();
+            forceSwitch = false;
+            playerAnim.SetBool("Switch", false);
+         }
       }
    }
 
-    public void SwitchForce()
-    {
-        fire = !fire;
-        if (fire)
-        {
-            Cursor.SetCursor(cursore_1, Vector2.zero, CursorMode.Auto);
-            force_Col.tag = "fire";
-            mana_Color = new Color(0.8f, 0.5f, 0, 1);
-            mana_Material.SetColor("_EmissionColor", mana_Color * mana_Intensity);
-            force_Particle.startColor = new Color(0.8f, 0.5f, 0, 1);
-            forcePrep_Particle.startColor = new Color(0.8f, 0.5f, 0, 1);
-         for (int i = 0; i < lights_color.Length; i++)
-            {
-                lights_color[i].color = new Color(0.8f, 0.5f, 0, 1);
-            }
-        }
-        else
-        {
-            Cursor.SetCursor(cursore_2, Vector2.zero, CursorMode.Auto);
-            force_Col.tag = "ice";
-            mana_Color = new Color(0, 0.6f, 0.7254902f, 1);
-            mana_Material.SetColor("_EmissionColor", mana_Color * mana_Intensity);
-            force_Particle.startColor = new Color(0, 0.6f, 0.7254902f, 1);
-            forcePrep_Particle.startColor = new Color(0, 0.6f, 0.7254902f, 1);
-            for (int i = 0; i < lights_color.Length; i++)
-            {
-                lights_color[i].color = new Color(0, 0.6f, 0.7254902f, 1);
-            }
-        }
-    }
 
-    public void ReloadForce()
+   public void SwitchForce()
+   {
+      if (forceType == 0)
+      {
+         forceType = 1;
+      }
+      else
+      {
+         forceType = 0;
+      }
+      forceSwitch = true;
+      playerAnim.SetBool("Switch", true);
+      switchTime = switchTime_N;
+   }
+
+
+   public void LightForce()
+   {
+      Cursor.SetCursor(cursor[forceType], Vector2.zero, CursorMode.Auto);
+      force_Col.tag = forceType_string[forceType];
+      mana_color = force_lightColor[forceType];
+      mana_material.SetColor("_EmissionColor", mana_color * mana_intensity);
+      force_particle.startColor = mana_color;
+      forcePrep_particle.startColor = mana_color;
+
+      for (int i = 0; i < lights_suit.Length; i++)
+      {
+         lights_suit[i].color = suit_lightColor[forceType];
+      }
+      for (int i = 0; i < lights_force.Length; i++)
+      {
+         lights_force[i].color = mana_color;
+      }
+   }
+
+
+   public void ReloadForce()
    {
 
    }

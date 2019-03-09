@@ -43,7 +43,7 @@ public class InputManager : MonoBehaviour
       }
 
       //Сила
-      if (Input.GetMouseButton(1) && !player.jumpAct && !player.runAct)
+      if (Input.GetMouseButton(1) && !player.jumpAct && !player.runAct && !player.forceSwitch)
       {
          player.forcePrep = true;
 
@@ -72,7 +72,7 @@ public class InputManager : MonoBehaviour
 
 
       //Смена силы
-      if (Input.GetKeyDown(KeyCode.Q))
+      if (Input.GetKeyDown(KeyCode.Q) && !player.forceSwitch)
       {
          player.SwitchForce();
       }
@@ -92,7 +92,7 @@ public class InputManager : MonoBehaviour
 
 
       //Первая способность костюма
-      if (Input.GetKey(KeyCode.LeftShift) && !player.forceAct && !player.jumpAct)
+      if (Input.GetKey(KeyCode.LeftShift) && !player.forceAct && !player.jumpAct && !player.forceSwitch)
       {
          player.runAct = true;
       }
@@ -110,7 +110,7 @@ public class InputManager : MonoBehaviour
 
 
       //Сохранение
-      if (Input.GetKey(KeyCode.F))
+      if (Input.GetKey(KeyCode.F) && !player.forceAct && !player.forceSwitch && inputMove == Vector2.zero && !player.jumpAct)
       {
          player.Save();
       }

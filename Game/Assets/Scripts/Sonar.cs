@@ -6,6 +6,7 @@ public class Sonar : MonoBehaviour
 {
    public AudioSource sonar;
    public AudioSource sonarOff;
+   public PlayerScript player;
 
    private float time;
    private float time_N;
@@ -44,7 +45,17 @@ public class Sonar : MonoBehaviour
             if (timeCD > 0)
                timeCD -= Time.deltaTime;
             else
+            {
                sonarDisable = false;
+               for (int i = 0; i < player.lights_suit.Length; i++)
+               {
+                  player.lights_suit[i].intensity = player.lights_suit_intens[i];
+               }
+
+               player.sonarDis = false;
+               player.mana_intensity = 6;
+               player.mana_material.SetColor("_EmissionColor", player.mana_color * player.mana_intensity);
+            }
          }
       }
 
@@ -56,6 +67,15 @@ public class Sonar : MonoBehaviour
             sonarOff.Play();
             sonarDisable = true;
             timeCD = timeCD_N;
+            player.sonarDis = true;
+
+            for (int i = 0; i < player.lights_suit.Length; i++)
+            {
+               player.lights_suit[i].intensity = 0;
+            }
+
+            player.mana_intensity = 0;
+            player.mana_material.SetColor("_EmissionColor", new Color(0,0,0,0));
          }
       }
    }
