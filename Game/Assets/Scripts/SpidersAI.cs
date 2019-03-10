@@ -28,13 +28,16 @@ public class SpidersAI : MonoBehaviour
 
    // Взаимодействие с игроком
    private float visible = 10f;
+   private float anglevisible = 70f;
+   private float hear = 3f;
+   private const float cvisible = 10f;
    private const float canglevisible = 70f;
    private const float chear = 3f;
-   private float anglevisible = 70f;
-   private float looseanglevisible = 140f;
-   private float hear = 3f;
-   private float loosehear = 5f;
-   private bool lp = true;
+   private float battlevisible = 15f;
+   private float battleangelvisible = 140f;
+   private float battlehear = 5f;
+ 
+   public bool lp = false;
 
 
 
@@ -105,91 +108,107 @@ public class SpidersAI : MonoBehaviour
    private void FixedUpdate()
    {
       if (battle)
-            Battle();
-        Patrul();
+      {
+          Battle();
+            visible = battlevisible;
+            hear = battlehear;
+            anglevisible = battleangelvisible;
+      }
+        Poisk();
+        //Debug.Log("visible+hear+angle " + visible+ " " + hear + " " + anglevisible);
 
-   }
+    }
 
 
     void Patrul()
     {
-        
-        if (battle) 
+        agent.SetDestination(target[nextpoint]);
+        if (Vector3.Distance(transform.position, target[nextpoint]) < 1.2f)
         {
-            PoiskPidora();
-            Debug.Log("Search");
-        }
-        else
-        {
-            PoiskPidora();
-            agent.SetDestination(target[nextpoint]);
-            if (Vector3.Distance(transform.position, target[nextpoint]) < 1.2f)
+            if (nextpoint < target.Length - 1)
             {
-                if (nextpoint < target.Length - 1)
-                {
-                    nextpoint++;
-                }
-                else
-                {
-                    nextpoint = 0;
-                }
+                nextpoint++;
+            }
+            else
+            {
+                nextpoint = 0;
             }
         }
     }
 
-    void PoiskPidora()
-    {   
-        
+    void Poisk()
+    {        
         if (player != null)
         {
             float dist = Vector3.Distance(transform.position, player.position);
 
-            if (dist < 1.5f)
-            {
-                battle = true;
-            }
-            else if (dist < hear)
-            {
-                agent.SetDestination(player.transform.position);
-                //Debug.DrawRay(transform.position, player.position - transform.position, Color.red, visible);
-                battle = true;
-            }
-            else //if (dist < visible)
+            if (dist <= visible)
             {
                 Quaternion look = Quaternion.LookRotation(player.position - transform.position);
                 float angle = Quaternion.Angle(transform.rotation, look);
 
-                if (angle < anglevisible)
+                if (dist <= hear)
                 {
-                    Ray ray = new Ray(transform.position , player.position - transform.position);
+                    Debug.DrawRay(transform.position + (player.position - transform.position).normalized * 1.5f, player.position - transform.position, Color.magenta, visible);
+                    agent.SetDestination(player.transform.position);
+                    battle = true;
+                    lp = false;
+                }
+                else if (angle < anglevisible)
+                {
+                    Ray ray = new Ray(transform.position + (player.position - transform.position).normalized * 1.5f, player.position - transform.position);
                     RaycastHit hit;
-                    
+
                     if (Physics.Raycast(ray, out hit, visible))
                     {
-                        Debug.DrawRay(transform.position , player.position - transform.position, Color.red, visible);
+                        Debug.DrawRay(transform.position + (player.position - transform.position).normalized * 1.5f, player.position - transform.position, Color.blue, visible);
                         if (hit.transform.tag == "Player")
                         {
                             agent.SetDestination(player.transform.position);
                             battle = true;
-                            Debug.Log("THIS IS " + hit.transform.name);
+                            //Debug.Log("THIS IS " + hit.transform.name);
+                            lp = false;
                         }
                         else
                         {
-                            Debug.Log("THIS IS " + hit.transform.name);
+                            //Debug.Log("THIS IS " + hit.transform.name);
+                            if(battle)
+                            {
+                                if(!lp)
+                                    StartCoroutine("LoosePlayer");
+                            }                                                
                         }
                     }
                 }
+                else
+                {
+                    Patrul();
+                }
+            }
+            else if (battle)
+            {
+                if(!lp)
+                    StartCoroutine("LoosePlayer");
+            }
+            else
+            {
+                Patrul();
             }
         }
     }
 
     IEnumerator LoosePlayer()
     {
-        lp = false;
+        lp = true;
         yield return new WaitForSeconds(5f);
-        hear = chear;
-        anglevisible = canglevisible;
-        Debug.Log("Упустил");
+        if (lp)
+        {
+            visible = cvisible;
+            hear = chear;
+            anglevisible = canglevisible;
+            battle = false;
+            lp = false;
+        }
     }
 
         
