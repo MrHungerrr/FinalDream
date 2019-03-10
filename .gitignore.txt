@@ -1,10 +1,10 @@
-# Game/Library/
-# Game/Temp/
-# Game/Assembly-CSharp.csproj
-[Oo]bj/
-[Bb]uild/
-[Bb]uilds/
-[Ll]ogs/
+Game/Library/
+Game/Temp/
+Game/Assembly-CSharp.csproj
+Game/Obj/
+Game/Build/
+Game/Builds/
+Game/Logs/
 
 # Never ignore Asset meta data
 ![Aa]ssets/**/*.meta
