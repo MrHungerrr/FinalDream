@@ -1,5 +1,6 @@
-[Ll]ibrary/
-[Tt]emp/
+# Game/Library/
+# Game/Temp/
+# Game/Assembly-CSharp.csproj
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
