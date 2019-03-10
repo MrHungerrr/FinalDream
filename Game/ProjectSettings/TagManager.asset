@@ -8,6 +8,9 @@ TagManager:
   - fire
   - sword
   - ground
+  - actionOn
+  - actionOff
+  - actionWantOn
   layers:
   - Default
   - TransparentFX

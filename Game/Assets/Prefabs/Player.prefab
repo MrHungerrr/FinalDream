@@ -24,8 +24,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 818671360}
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.07000001, y: 0.4, z: 0.05000002}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1901129897}
@@ -43,7 +43,7 @@ Light:
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1.2
-  m_Range: 2.8485918
+  m_Range: 4
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -60,7 +60,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 311
+    m_Bits: 55
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -334,13 +334,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1901129896}
-  m_LocalRotation: {x: -0, y: -0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.0000001331581, y: 1, z: -0.0000002682209, w: 0.00000015208542}
+  m_LocalPosition: {x: -0.00002000149, y: 0.005999999, z: -0.00010000216}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 818671361}
-  m_Father: {fileID: 6718796686805414523}
-  m_RootOrder: 1
+  m_Father: {fileID: 9150923043297527070}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!199 &1901129899
 ParticleSystemRenderer:
@@ -419,7 +419,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
@@ -5041,7 +5041,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2003526047}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.56, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9150923043202464919}
@@ -5146,7 +5146,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 9150923044372093398}
-  - {fileID: 1901129897}
   m_Father: {fileID: 9150923043202464919}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -10280,7 +10279,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9150923043297527070}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9150923042864141394
 GameObject:
@@ -10879,7 +10878,7 @@ GameObject:
   - component: {fileID: 9150923043202464940}
   m_Layer: 9
   m_Name: Suit
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10950,8 +10949,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursor:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2800000, guid: 2cb844686d174ed428598506bc388f74, type: 3}
+  - {fileID: 2800000, guid: d998de5b65bf9ae4fbed1e475c3fb3d3, type: 3}
   legs: {fileID: 6718796686805414527}
   lights_suit:
   - {fileID: 6718796686805414524}
@@ -10962,6 +10961,8 @@ MonoBehaviour:
   - 0
   light_snow: {fileID: 0}
   cameraTrans: {fileID: 2003526048}
+  action: 0
+  doing: 0
   sonarDis: 0
   lights_force:
   - {fileID: 818671362}
@@ -10979,7 +10980,8 @@ MonoBehaviour:
   forceSwitch: 0
   protectLevel: 0
   health: 0
-  hp_Material: {fileID: 2100000, guid: 3eb1cff3ef3226048973e8f9c117c7a4, type: 2}
+  hp_material: {fileID: 2100000, guid: 3eb1cff3ef3226048973e8f9c117c7a4, type: 2}
+  hp_intensity: 0
   targetPoint: {x: 0, y: 0, z: 0}
   runAct: 0
   jumpAct: 0
@@ -11258,6 +11260,7 @@ Transform:
   m_LocalPosition: {x: -0.00332, y: 0.0044, z: 0}
   m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 1}
   m_Children:
+  - {fileID: 1901129897}
   - {fileID: 9150923042800175218}
   - {fileID: 9150923044231407574}
   m_Father: {fileID: 9150923042475111412}
@@ -11386,7 +11389,7 @@ Transform:
   - {fileID: 9150923044346731238}
   - {fileID: 9150923043256152852}
   m_Father: {fileID: 9150923043297527070}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9150923044346731237
 GameObject:

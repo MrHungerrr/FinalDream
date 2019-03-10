@@ -54,7 +54,7 @@ public class Sonar : MonoBehaviour
 
                player.sonarDis = false;
                player.mana_intensity = 6;
-               player.mana_material.SetColor("_EmissionColor", player.mana_color * player.mana_intensity);
+               player.LightSuit();
             }
          }
       }
@@ -75,7 +75,7 @@ public class Sonar : MonoBehaviour
             }
 
             player.mana_intensity = 0;
-            player.mana_material.SetColor("_EmissionColor", new Color(0,0,0,0));
+            player.LightSuit();
          }
       }
    }
@@ -94,7 +94,6 @@ public class Sonar : MonoBehaviour
       
       if (dist<alarmDistMin)
       {
-         Debug.Log(dist);
          sonarOut = true;
       }
       else
