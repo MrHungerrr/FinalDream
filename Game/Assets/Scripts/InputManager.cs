@@ -12,7 +12,6 @@ public class InputManager : MonoBehaviour
    //private ParticleSystem.VelocityOverLifetimeModule vel;
    //private ParticleSystem.ShapeModule shape;
 
-
    void Start()
    {
    }
@@ -44,17 +43,26 @@ public class InputManager : MonoBehaviour
       }
 
       //Сила
-      if (Input.GetMouseButtonDown(1) && !player.jumpAct && !player.runAct)
+      if (Input.GetMouseButton(1) && !player.jumpAct && !player.runAct && !player.forceSwitch && !player.doing)
       {
-         player.forceAct = true;
-      }
+         player.forcePrep = true;
 
-      if (Input.GetMouseButtonUp(1))
+         if (Input.GetMouseButton(0))
+         {
+            player.forceAct = true;
+         }
+         else
+         {
+            player.forceAct = false;
+         }
+
+      }
+      else
       {
          player.forceAct = false;
+         player.forcePrep = false;
       }
    }
-
 
    private void GameInput()
    {
@@ -65,15 +73,16 @@ public class InputManager : MonoBehaviour
 
 
       //Смена силы
-      if (Input.GetKeyDown(KeyCode.Q))
+      if (Input.GetKeyDown(KeyCode.Q) && !player.forceSwitch && !player.doing)
       {
          player.SwitchForce();
       }
 
 
-      //Действие или лечение
-      if (Input.GetKey(KeyCode.E))
+      //Действие
+      if (Input.GetKeyDown(KeyCode.E) && player.action && !player.forcePrep && !player.jumpAct && !player.forceSwitch)
       {
+         player.doing = true;
       }
 
 
@@ -85,7 +94,7 @@ public class InputManager : MonoBehaviour
 
 
       //Первая способность костюма
-      if (Input.GetKey(KeyCode.LeftShift) && !player.forceAct && !player.jumpAct)
+      if (Input.GetKey(KeyCode.LeftShift) && !player.forcePrep && !player.jumpAct && !player.forceSwitch && !player.doing)
       {
          player.runAct = true;
       }
@@ -96,14 +105,14 @@ public class InputManager : MonoBehaviour
 
 
       //Вторая способность костюма
-      if (Input.GetKeyDown(KeyCode.Space) && !player.forceAct && player.jumpCD<=0)
+      if (Input.GetKeyDown(KeyCode.Space) && (player.jumpCD <= 0) && !player.forcePrep && !player.doing)
       { 
          player.jumpAct = true;
       }
 
 
       //Сохранение
-      if (Input.GetKey(KeyCode.F))
+      if (Input.GetKey(KeyCode.F) && !player.forcePrep && !player.forceSwitch && inputMove == Vector2.zero && !player.jumpAct && !player.doing)
       {
          player.Save();
       }
@@ -125,5 +134,4 @@ public class InputManager : MonoBehaviour
    {
 
    }
-
 }

@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/suka.unity
+- path: Assets/Scenes/SceneEgora.unity
   isLoaded: 1
   isActive: 1

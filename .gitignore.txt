@@ -1,9 +1,17 @@
-[Ll]ibrary/
-[Tt]emp/
-[Oo]bj/
-[Bb]uild/
-[Bb]uilds/
-[Ll]ogs/
+Game/Library/
+Game/Temp/
+Game/Assembly-CSharp.csproj
+Game/Obj/
+Game/Build/
+Game/Builds/
+Logs/
+Library/
+Temp/
+Assembly-CSharp.csproj
+Obj/
+Build/
+Builds/
+Logs/
 
 # Never ignore Asset meta data
 ![Aa]ssets/**/*.meta

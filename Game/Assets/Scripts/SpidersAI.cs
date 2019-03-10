@@ -25,13 +25,25 @@ public class SpidersAI : MonoBehaviour
    private bool attackPrep;
    private bool attackRest;
    private bool attack;
+
+   // Взаимодействие с игроком
    private float visible = 10f;
    private float anglevisible = 70f;
    private float hear = 3f;
+   private const float cvisible = 10f;
+   private const float canglevisible = 70f;
+   private const float chear = 3f;
+   private float battlevisible = 15f;
+   private float battleangelvisible = 140f;
+   private float battlehear = 5f;
+ 
+   public bool lp = false;
 
 
-   //Заморозка
-   private const float freezingTime_N = 2.50f;
+
+
+    //Заморозка
+    private const float freezingTime_N = 2.50f;
    private float freezingTime;
    private float freezing = 1;
 
@@ -45,7 +57,9 @@ public class SpidersAI : MonoBehaviour
    private Rigidbody rb;
    private NavMeshAgent agent;
 
-
+    //Патрулирование
+    private Vector3[] target;
+    private int nextpoint = 0;
 
 
 
@@ -67,7 +81,23 @@ public class SpidersAI : MonoBehaviour
       attack = false;
       attackRest = false;
       attackPrep = false;
+
+        target = new Vector3[transform.childCount - 2];
+
+        for (int i = 0; i < transform.childCount - 2; i++)
+        {
+            target[i] = transform.GetChild(i + 2).position;
+            Destroy(transform.GetChild(i + 2).gameObject);
+        }
+
+      StartCoroutine("baseOffset");
    }
+
+    IEnumerator baseOffset()
+    {
+        yield return new WaitForEndOfFrame();
+        agent.baseOffset = -transform.position.y;
+    }
 
    private void Update()
    {
@@ -78,60 +108,114 @@ public class SpidersAI : MonoBehaviour
    private void FixedUpdate()
    {
       if (battle)
-         Battle();
-      PoiskPidora();
+      {
+          Battle();
+            visible = battlevisible;
+            hear = battlehear;
+            anglevisible = battleangelvisible;
+      }
+        Poisk();
+        //Debug.Log("visible+hear+angle " + visible+ " " + hear + " " + anglevisible);
 
-   }
+    }
 
 
-    void PoiskPidora()
+    void Patrul()
     {
-        
-        if (player != null)
+        agent.SetDestination(target[nextpoint]);
+        if (Vector3.Distance(transform.position, target[nextpoint]) < 1.2f)
         {
-            float dist = Vector3.Distance(transform.position, player.position);
-
-            if (dist < 1.5f)
+            if (nextpoint < target.Length - 1)
             {
-                Debug.Log("Получи СУКА!!!!!!!!!!!!!!!");
+                nextpoint++;
             }
-            else if (dist < hear)
+            else
             {
-                Debug.Log("Услышал Пидора!!!!!!!!!!!!!!!");
-                agent.SetDestination(player.transform.position);
-                battle = true;
-            }
-            else if (dist < visible)
-            {
-                Debug.Log("Пидор в зоне видимости!!!!!!!!!!!!!!!");
-                Quaternion look = Quaternion.LookRotation(player.position - transform.position);
-                float angle = Quaternion.Angle(transform.rotation, look);
-
-                if (angle < anglevisible)
-                {
-                    Debug.Log("Мне кажется или я его вижу!!!!!!!!!!!!!!!");
-                    Ray ray = new Ray(transform.position, player.position - transform.position);
-                    RaycastHit hit;
-
-                    if (Physics.Raycast(ray, out hit, visible))
-                    {
-                        //Debug.DrawRay(transform.position, player.position - transform.position, Color.red, visible);
-                        if (hit.transform.tag == "Player")
-                        {
-                            Debug.Log("Увидел Пидора!!!!!!!!!!!!!!!");
-                            agent.SetDestination(player.transform.position);
-                            battle = true;
-                        }
-                    }
-                }
+                nextpoint = 0;
             }
         }
     }
 
+    void Poisk()
+    {        
+        if (player != null)
+        {
+            float dist = Vector3.Distance(transform.position, player.position);
+
+            if (dist <= visible)
+            {
+                Quaternion look = Quaternion.LookRotation(player.position - transform.position);
+                float angle = Quaternion.Angle(transform.rotation, look);
+
+                if (dist <= hear)
+                {
+                    Debug.DrawRay(transform.position + (player.position - transform.position).normalized * 1.5f, player.position - transform.position, Color.magenta, visible);
+                    agent.SetDestination(player.transform.position);
+                    battle = true;
+                    lp = false;
+                }
+                else if (angle < anglevisible)
+                {
+                    Ray ray = new Ray(transform.position + (player.position - transform.position).normalized * 1.5f, player.position - transform.position);
+                    RaycastHit hit;
+
+                    if (Physics.Raycast(ray, out hit, visible))
+                    {
+                        Debug.DrawRay(transform.position + (player.position - transform.position).normalized * 1.5f, player.position - transform.position, Color.blue, visible);
+                        if (hit.transform.tag == "Player")
+                        {
+                            agent.SetDestination(player.transform.position);
+                            battle = true;
+                            //Debug.Log("THIS IS " + hit.transform.name);
+                            lp = false;
+                        }
+                        else
+                        {
+                            //Debug.Log("THIS IS " + hit.transform.name);
+                            if(battle)
+                            {
+                                if(!lp)
+                                    StartCoroutine("LoosePlayer");
+                            }                                                
+                        }
+                    }
+                }
+                else
+                {
+                    Patrul();
+                }
+            }
+            else if (battle)
+            {
+                if(!lp)
+                    StartCoroutine("LoosePlayer");
+            }
+            else
+            {
+                Patrul();
+            }
+        }
+    }
+
+    IEnumerator LoosePlayer()
+    {
+        lp = true;
+        yield return new WaitForSeconds(5f);
+        if (lp)
+        {
+            visible = cvisible;
+            hear = chear;
+            anglevisible = canglevisible;
+            battle = false;
+            lp = false;
+        }
+    }
+
+        
 
     //Атака(Вычисления)
     void BattleCalculate()
-   {
+    {
 
       //Задержка перед атакой
       if (attackPrep)
@@ -149,7 +233,7 @@ public class SpidersAI : MonoBehaviour
 
       //Восстановление от заморозки
       Freezing();
-   }
+    }
 
    private void Prepare()
    {
@@ -208,7 +292,7 @@ public class SpidersAI : MonoBehaviour
       //Поворот к игроку
       if (!attack && !attackRest)
       {
-         Rotate();
+         //Rotate();
       }
 
       //Приближение к игроку
@@ -224,7 +308,7 @@ public class SpidersAI : MonoBehaviour
       }
    }
 
-   private void Rotate()
+   /*private void Rotate()
    {
       direct = player.position - transform.position;
       targetRotation = Quaternion.LookRotation(direct);
@@ -308,6 +392,7 @@ public class SpidersAI : MonoBehaviour
       {
          col.enabled = false;
          GetComponent<SpidersAI>().enabled = false;
+         agent.enabled = false;
       }
    }
 
