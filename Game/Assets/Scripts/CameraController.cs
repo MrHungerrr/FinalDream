@@ -4,21 +4,22 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
-   public Transform player;
-   public PlayerScript playerScript;
+   private Vector3 position;
 
+   private void Awake()
+   {
+      position = transform.position;
+   }
 
    void Start ()
    {
-    //  Cursor.visible = false;
+
+      transform.position = position;
 
    }
 
    void FixedUpdate ()
-    {
-      if (player)
-      {
+   {
 
-      } 
 	}
 }

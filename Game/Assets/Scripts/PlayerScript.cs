@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using System.IO;
+﻿using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -29,7 +25,16 @@ public class PlayerScript : MonoBehaviour
 
    //События и действия
    private bool idle = false;
-   private bool action = false;
+   [HideInInspector]
+   public bool action = false;
+   private bool actionStart = false;
+   [HideInInspector]
+   public bool doing = false;
+   private float actTime;
+   private Quaternion lookAct;
+   private float angleAct;
+   private const float actTime_N = 0.4f;
+   private GameObject actObject;
    [HideInInspector]
    public bool sonarDis;
 
@@ -73,8 +78,10 @@ public class PlayerScript : MonoBehaviour
    private const float regenTime_N = 4.0f;
    private float regenTime;
   // [HideInInspector]
-   public Material hp_Material;
-   private Color protectLevel_Color;
+   public Material hp_material;
+   [HideInInspector]
+   public float hp_intensity;
+   private Color protectLevel_color;
  //  private float hp_intensity;
 
 
@@ -93,7 +100,7 @@ public class PlayerScript : MonoBehaviour
    private Rigidbody rb;
    private Ray lookRay;
    [HideInInspector]
-   public bool runAct;
+   public bool runAct = false;
 
 
    //Прыжок
@@ -120,6 +127,7 @@ public class PlayerScript : MonoBehaviour
       legsOffset = legsTrans.position;
       playerAnim = GetComponent<Animator>();
       rb = GetComponent<Rigidbody>();
+      cameraTrans.position = transform.position;
    }
 
    private void Start()
@@ -139,10 +147,10 @@ public class PlayerScript : MonoBehaviour
 
       force_particle.enableEmission = false;
       forcePrep_particle.enableEmission = false;
-      protectLevel_Color = new Color(0, 1, 0, 1);
-      hp_Material.SetColor("_EmissionColor", protectLevel_Color);
+      protectLevel_color = new Color(0, 1, 0, 1);
+      hp_material.SetColor("_EmissionColor", protectLevel_color);
    
-      LightForce();
+      LightSuit();
       for (int i = 0; i < lights_suit.Length; i++)
       {
          lights_suit_intens[i] = lights_suit[i].intensity;
@@ -154,6 +162,11 @@ public class PlayerScript : MonoBehaviour
    {
       MouseFace();
       legsTrans.position = transform.position + legsOffset;
+      
+      if(doing)
+      {
+         Act();
+      }
    }
 
 
@@ -374,7 +387,7 @@ public class PlayerScript : MonoBehaviour
          }
          else
          {
-            LightForce();
+            LightSuit();
             forceSwitch = false;
             playerAnim.SetBool("Switch", false);
          }
@@ -398,7 +411,7 @@ public class PlayerScript : MonoBehaviour
    }
 
 
-   public void LightForce()
+   public void LightSuit()
    {
       Cursor.SetCursor(cursor[forceType], Vector2.zero, CursorMode.Auto);
       force_Col.tag = forceType_string[forceType];
@@ -406,6 +419,10 @@ public class PlayerScript : MonoBehaviour
       mana_material.SetColor("_EmissionColor", mana_color * mana_intensity);
       force_particle.startColor = mana_color;
       forcePrep_particle.startColor = mana_color;
+      if (sonarDis)
+         hp_material.SetColor("_EmissionColor", protectLevel_color * hp_intensity);
+      else
+         hp_material.SetColor("_EmissionColor", protectLevel_color);
 
       for (int i = 0; i < lights_suit.Length; i++)
       {
@@ -425,21 +442,26 @@ public class PlayerScript : MonoBehaviour
 
 
    //События и действия
-   private void OnTriggerEnter(Collider interactive)
+   private void OnTriggerStay(Collider interactive)
    {
       if (interactive.tag == "actionOff" || interactive.tag == "actionOn")
       {
-         action = true;
-         if (Input.GetKeyDown(KeyCode.E))
-         {
-            if (interactive.tag == "actionOn")
-               interactive.tag = "actionOff";
-            else
-               interactive.tag = "actionOn";
-         }
 
+         lookAct = Quaternion.LookRotation(transform.position - interactive.transform.position);
+         angleAct = Quaternion.Angle(transform.rotation, lookAct);
+
+         if (angleAct < 60)
+         {
+            action = true;
+            actObject = interactive.gameObject;
+         }
+         else
+         {
+            action = false;
+         }
       }
    }
+
 
    private void OnTriggerExit(Collider interactive)
    {
@@ -450,8 +472,34 @@ public class PlayerScript : MonoBehaviour
    }
 
 
-   //Получение дамага
-   public void TakeDamage(int damage)
+   public void Act()
+   {
+      if ((actObject.tag == "actionOff" || actObject.tag == "actionOn") && actionStart)
+      {
+         playerAnim.SetBool("Action", true);
+         if (actObject.tag == "actionOn")
+            actObject.tag = "actionOff";
+         else
+            actObject.tag = "actionWantOn";
+         actionStart = false;
+      }
+      
+      if(actTime>0)
+      {
+         actTime -= Time.deltaTime;
+      }
+      else
+      {
+         doing = false;
+         actTime = actTime_N;
+         actionStart = true;
+         playerAnim.SetBool("Action", false);
+      }
+   }
+
+
+      //Получение дамага
+      public void TakeDamage(int damage)
    {
       health -= damage;
    
@@ -463,21 +511,21 @@ public class PlayerScript : MonoBehaviour
          switch(protectLevel)
          {
              case 4:
-                 protectLevel_Color = new Color(0,1,0);
+                 protectLevel_color = new Color(0,1,0);
                  break;
              case 3:
-                 protectLevel_Color = new Color(1,1,0);
+                 protectLevel_color = new Color(1,1,0);
                  break;
              case 2:
-                 protectLevel_Color = new Color(1,0.5f,0);
+                 protectLevel_color = new Color(1,0.5f,0);
                  break;
              case 1:
-                 protectLevel_Color = new Color(1,0,0);
+                 protectLevel_color = new Color(1,0,0);
                  break;
 
          }
 
-         hp_Material.SetColor("_EmissionColor", protectLevel_Color);
+         LightSuit();
     
          if (protectLevel <= 0)
          {
