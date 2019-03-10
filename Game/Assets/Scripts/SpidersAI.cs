@@ -25,6 +25,8 @@ public class SpidersAI : MonoBehaviour
    private bool attackPrep;
    private bool attackRest;
    private bool attack;
+
+   // Взаимодействие с игроком
    private float visible = 10f;
    private const float canglevisible = 70f;
    private const float chear = 3f;
@@ -81,7 +83,6 @@ public class SpidersAI : MonoBehaviour
 
         for (int i = 0; i < transform.childCount - 2; i++)
         {
-            Debug.Log(transform.GetChild(i + 2).name);
             target[i] = transform.GetChild(i + 2).position;
             Destroy(transform.GetChild(i + 2).gameObject);
         }
@@ -99,31 +100,39 @@ public class SpidersAI : MonoBehaviour
    {
       if (battle)
          BattleCalculate();
-        Debug.Log(hear + " " + anglevisible);
    }
 
    private void FixedUpdate()
    {
       if (battle)
-         Battle();
+            Battle();
         Patrul();
-      PoiskPidora();
 
    }
 
 
     void Patrul()
     {
-        agent.SetDestination(target[nextpoint]);
-        if (Vector3.Distance(transform.position, target[nextpoint]) < 1.2f) 
+        
+        if (battle) 
         {
-            if (nextpoint < target.Length - 1) 
+            PoiskPidora();
+            Debug.Log("Search");
+        }
+        else
+        {
+            PoiskPidora();
+            agent.SetDestination(target[nextpoint]);
+            if (Vector3.Distance(transform.position, target[nextpoint]) < 1.2f)
             {
-                nextpoint++;
-            }
-            else
-            {
-                nextpoint = 0;
+                if (nextpoint < target.Length - 1)
+                {
+                    nextpoint++;
+                }
+                else
+                {
+                    nextpoint = 0;
+                }
             }
         }
     }
@@ -137,15 +146,15 @@ public class SpidersAI : MonoBehaviour
 
             if (dist < 1.5f)
             {
-                BattleCalculate();
+                battle = true;
             }
             else if (dist < hear)
             {
                 agent.SetDestination(player.transform.position);
-                Debug.DrawRay(transform.position, player.position - transform.position, Color.red, visible);
+                //Debug.DrawRay(transform.position, player.position - transform.position, Color.red, visible);
                 battle = true;
             }
-            else if (dist < visible)
+            else //if (dist < visible)
             {
                 Quaternion look = Quaternion.LookRotation(player.position - transform.position);
                 float angle = Quaternion.Angle(transform.rotation, look);
@@ -157,14 +166,16 @@ public class SpidersAI : MonoBehaviour
                     
                     if (Physics.Raycast(ray, out hit, visible))
                     {
-                        Debug.Log(hit.transform.tag);
                         Debug.DrawRay(transform.position , player.position - transform.position, Color.red, visible);
                         if (hit.transform.tag == "Player")
                         {
                             agent.SetDestination(player.transform.position);
                             battle = true;
-                            StopCoroutine("LoosePlayer");
-                            lp = true;
+                            Debug.Log("THIS IS " + hit.transform.name);
+                        }
+                        else
+                        {
+                            Debug.Log("THIS IS " + hit.transform.name);
                         }
                     }
                 }
