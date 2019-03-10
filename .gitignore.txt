@@ -4,7 +4,14 @@ Game/Assembly-CSharp.csproj
 Game/Obj/
 Game/Build/
 Game/Builds/
-Game/Logs/
+Logs/
+Library/
+Temp/
+Assembly-CSharp.csproj
+Obj/
+Build/
+Builds/
+Logs/
 
 # Never ignore Asset meta data
 ![Aa]ssets/**/*.meta
