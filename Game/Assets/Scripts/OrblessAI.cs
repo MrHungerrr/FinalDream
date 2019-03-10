@@ -18,6 +18,6 @@ public class OrblessAI : MonoBehaviour
       dist3 = transform.position - player.transform.position;
       dist = dist3.magnitude;
       player.GetComponent<Sonar>().Distance(dist);
-      Debug.Log(dist);
+      //Debug.Log(dist);
     }
 }
