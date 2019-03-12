@@ -11,7 +11,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/GrafhonSuka.unity
     guid: 65996e47f5d090a4e9dfaafc3faaadbb
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/suka.unity
     guid: ea1a0abf5066e68429e596dc8e79267a
+  - enabled: 1
+    path: Assets/Scenes/SceneEgora.unity
+    guid: c53040ea1e9265042a98cf0d8c0010f0
   m_configObjects: {}
