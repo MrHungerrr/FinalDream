@@ -21,6 +21,7 @@ public class PlayerScript : MonoBehaviour
    private float light_snow_intens;
    public Transform cameraTrans;
    private Color[] suit_lightColor = new Color[2];
+   private BoxCollider coll;
 
 
    //События и действия
@@ -92,7 +93,7 @@ public class PlayerScript : MonoBehaviour
    private float movementAngle;
    private Plane playerPlane;
    private Quaternion movementRotation;
-   private Quaternion targetRotation;
+   private Quaternion targetRotation = new Quaternion(0,0,0,1);
    [HideInInspector]
    public Vector3 targetPoint;
    private Vector3 inputMove;
@@ -121,6 +122,7 @@ public class PlayerScript : MonoBehaviour
 
    private void Awake()
    {
+      coll = GetComponent<BoxCollider>();
       force_particle = force.GetComponent<ParticleSystem>();
       legsTrans = legs.GetComponent<Transform>();
       legsAnim = legs.GetComponent<Animator>();
@@ -312,6 +314,8 @@ public class PlayerScript : MonoBehaviour
       {
 
          playerAnim.SetBool("Force", true);
+         coll.size = new Vector3(0.8f, 1.5f, 0.75f);
+         coll.center = new Vector3(0.0f, 0.25f, -0.15f);
          cameraTrans.position = transform.position - (new Vector3(transform.position.x, 0, transform.position.z) - new Vector3(targetPoint.x, 0, targetPoint.z)).normalized*3;
    
 
@@ -364,6 +368,8 @@ public class PlayerScript : MonoBehaviour
       }
       else
       {
+         coll.size = new Vector3(0.8f, 1.5f, 0.5f);
+         coll.center = new Vector3(0.0f, 0.25f, 0.0f);
          forcePrep_particle.enableEmission = false;
          force_Col.enabled = false;
          force_particle.enableEmission = false;

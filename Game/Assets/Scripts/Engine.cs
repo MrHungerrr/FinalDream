@@ -19,7 +19,7 @@ public class Engine : MonoBehaviour
    private const float forceTime = 2;
    private float iceTime = forceTime;
    private float fireTime = forceTime;
-   private bool act;
+   private bool act; 
    private Animator anim;
 
    private Color colorOn = new Color(0,1,0);
