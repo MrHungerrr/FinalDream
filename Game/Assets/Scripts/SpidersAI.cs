@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
+public class Point
+{
+    public Vector3 position;
+    public bool active;
+}
+
 public class SpidersAI : MonoBehaviour
 {
    private Animator spiderAnim;
@@ -58,7 +65,10 @@ public class SpidersAI : MonoBehaviour
    private NavMeshAgent agent;
 
     //Патрулирование
-    private Vector3[] target;
+    public Transform[] alltarget;
+    private Point[] target;
+    private Vector3[] maintarget;
+    //public GameObject Point;
     private int nextpoint = 0;
 
 
@@ -82,15 +92,30 @@ public class SpidersAI : MonoBehaviour
       attackRest = false;
       attackPrep = false;
 
-        target = new Vector3[transform.childCount - 2];
+        /*alltarget = new Transform[Point.transform.childCount];
 
-        for (int i = 0; i < transform.childCount - 2; i++)
+        for (int i = 0; i < alltarget.Length; i++)
         {
-            target[i] = transform.GetChild(i + 2).position;
-            Destroy(transform.GetChild(i + 2).gameObject);
+            alltarget[i] = Point.transform.GetChild(i);
+        }
+        */
+        target = new Point[5];
+
+        for (int i = 0; i < target.Length; i++)
+        {
+            target[i] = new Point();
         }
 
-      StartCoroutine("baseOffset");
+        PointForPatrol();
+        maintarget = new Vector3[target.Length];
+
+        for (int i = 0; i < target.Length; i++)
+        {
+            maintarget[i] = target[i].position;
+        }
+
+
+        StartCoroutine("baseOffset");
    }
 
     IEnumerator baseOffset()
@@ -114,26 +139,78 @@ public class SpidersAI : MonoBehaviour
             hear = battlehear;
             anglevisible = battleangelvisible;
       }
-        Poisk();
-        //Debug.Log("visible+hear+angle " + visible+ " " + hear + " " + anglevisible);
+        Poisk();      
+    }
 
+    void PointForPatrol()
+    {
+        //Debug.DrawRay(transform.position, Vector3.forward * 15f, Color.yellow, 20f);
+        float dist = 20f;
+        int count = 0;
+        Vector3 mainpoint = agent.destination;
+
+        for (int i = 0; i < target.Length; i++)
+        {
+            target[i].position = Vector3.zero;
+        } // ну типа ясно дело перед заполнением надо обнулить, а если быть точнее массив target[5] а точек может быть и 3, а мне не нужны старые 4 и 5 точка.
+
+        while(count < 2) //3
+        {
+            count = 0;
+            for (int i = 0; i < alltarget.Length; i++)
+            {
+                if (Vector3.Distance(mainpoint, alltarget[i].position) < dist && (count < target.Length)) 
+                {
+                    target[count].position = alltarget[i].position;
+                    target[count].active = false;
+                    count++;
+                }
+            }
+            dist += 5;
+        }
     }
 
 
-    void Patrul()
+    void Patrol()
     {
-        agent.SetDestination(target[nextpoint]);
-        if (Vector3.Distance(transform.position, target[nextpoint]) < 1.2f)
+
+        if(Vector3.Distance(transform.position,target[nextpoint].position) < 1.2f)
         {
-            if (nextpoint < target.Length - 1)
+            
+            if (nextpoint + 1 != target.Length)
             {
+                while (target[nextpoint + 1].active || target[nextpoint + 1].position == Vector3.zero)
+                {
+                    if (target[nextpoint + 1].position != Vector3.zero)
+                    {
+                        nextpoint++;
+                    }
+                    else
+                    {
+                        nextpoint = 0 - 1;
+                    }
+                }
                 nextpoint++;
             }
             else
             {
-                nextpoint = 0;
-            }
+                nextpoint = -1;
+                while (target[nextpoint + 1].active || target[nextpoint + 1].position == Vector3.zero)
+                {
+                    if (target[nextpoint + 1].position != Vector3.zero)
+                    {
+                        nextpoint++;
+                    }
+                    else
+                    {
+                        nextpoint = 0 - 1;
+                    }
+                }
+                nextpoint++;
+            }         
         }
+
+        agent.SetDestination(target[nextpoint].position);
     }
 
     void Poisk()
@@ -149,7 +226,7 @@ public class SpidersAI : MonoBehaviour
 
                 if (dist <= hear)
                 {
-                    Debug.DrawRay(transform.position + (player.position - transform.position).normalized * 1.5f, player.position - transform.position, Color.magenta, visible);
+                    Debug.DrawRay(transform.position + (player.position - transform.position).normalized * 1.5f, player.position - transform.position, Color.magenta, 1f);
                     agent.SetDestination(player.transform.position);
                     battle = true;
                     lp = false;
@@ -161,7 +238,7 @@ public class SpidersAI : MonoBehaviour
 
                     if (Physics.Raycast(ray, out hit, visible))
                     {
-                        Debug.DrawRay(transform.position + (player.position - transform.position).normalized * 1.5f, player.position - transform.position, Color.blue, visible);
+                        Debug.DrawRay(transform.position + (player.position - transform.position).normalized * 1.5f, player.position - transform.position, Color.blue, 1f);
                         if (hit.transform.tag == "Player")
                         {
                             agent.SetDestination(player.transform.position);
@@ -182,7 +259,7 @@ public class SpidersAI : MonoBehaviour
                 }
                 else
                 {
-                    Patrul();
+                    Patrol();
                 }
             }
             else if (battle)
@@ -192,7 +269,7 @@ public class SpidersAI : MonoBehaviour
             }
             else
             {
-                Patrul();
+                Patrol();
             }
         }
     }
@@ -200,9 +277,10 @@ public class SpidersAI : MonoBehaviour
     IEnumerator LoosePlayer()
     {
         lp = true;
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(5f);     
         if (lp)
         {
+            PointForPatrol();
             visible = cvisible;
             hear = chear;
             anglevisible = canglevisible;
