@@ -5,6 +5,8 @@ Game/Assembly-CSharp-Editor.csproj
 Game/obj/
 Game/Build/
 Game/Builds/
+Game/.vs/
+.vscode/
 
 
 # Never ignore Asset meta data
