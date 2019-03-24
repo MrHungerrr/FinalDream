@@ -80,9 +80,13 @@ public class InputManager : MonoBehaviour
 
 
       //Действие
-      if (Input.GetKeyDown(KeyCode.E) && player.action && !player.forcePrep && !player.jumpAct && !player.forceSwitch)
+      if (Input.GetKey(KeyCode.E) && player.action && !player.forcePrep && !player.jumpAct && !player.forceSwitch)
       {
          player.doing = true;
+      }
+      else if (!player.actEasyHappen)
+      {
+         player.doing = false;
       }
 
 

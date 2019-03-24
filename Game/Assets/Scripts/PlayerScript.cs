@@ -28,14 +28,19 @@ public class PlayerScript : MonoBehaviour
    private bool idle = false;
    [HideInInspector]
    public bool action = false;
-   private bool actionStart = false;
+   private bool actComplete = false;
+   [HideInInspector]
+   public bool actEasyHappen = false;
    [HideInInspector]
    public bool doing = false;
-   private float actTime;
+   private float actHardTime;
+   private float actEasyTime;
    private Quaternion lookAct;
    private float angleAct;
-   private const float actTime_N = 0.4f;
+   private const float actHardTime_N = 4.0f;
+   private const float actEasyTime_N = 0.4f;
    private GameObject actObject;
+   private bool actBoolBuf;
    [HideInInspector]
    public bool sonarDis;
 
@@ -135,6 +140,8 @@ public class PlayerScript : MonoBehaviour
    private void Start()
    {
       protectLevel = protectLevelMax;
+      actHardTime = actHardTime_N;
+      actEasyTime = actEasyTime_N;
       regenTime = regenTime_N;
       jumpTime = jumpTime_N;
       health = healthMax;
@@ -164,8 +171,8 @@ public class PlayerScript : MonoBehaviour
    {
       MouseFace();
       legsTrans.position = transform.position + legsOffset;
-      
-      if(doing)
+
+      if (action)
       {
          Act();
       }
@@ -303,7 +310,6 @@ public class PlayerScript : MonoBehaviour
       }
    }
    
-
 
 
    //Сила
@@ -450,7 +456,7 @@ public class PlayerScript : MonoBehaviour
    //События и действия
    private void OnTriggerStay(Collider interactive)
    {
-      if (interactive.tag == "actionOff" || interactive.tag == "actionOn")
+      if (interactive.tag == "engine" || interactive.tag == "door")
       {
 
          lookAct = Quaternion.LookRotation(transform.position - interactive.transform.position);
@@ -464,80 +470,122 @@ public class PlayerScript : MonoBehaviour
          else
          {
             action = false;
+            actEasyHappen = false;
+            actComplete = false;
+            actHardTime = actHardTime_N;
+            actEasyTime = actEasyTime_N;
+            playerAnim.SetBool("ActionHard", false);
          }
       }
    }
+
+
 
 
    private void OnTriggerExit(Collider interactive)
    {
-      if (interactive.tag == "actionOff" || interactive.tag == "actionOn")
-      {
-         action = false;
-      }
+      action = false;
+      actEasyHappen = false;
+      actComplete = false;
+      actHardTime = actHardTime_N;
+      actEasyTime = actEasyTime_N;
+      playerAnim.SetBool("ActionHard", false);
+
    }
 
 
-   public void Act()
+   //Действия игрока с предметами
+      public void Act()
    {
-      if ((actObject.tag == "actionOff" || actObject.tag == "actionOn") && actionStart)
+      if (doing)
       {
-         playerAnim.SetBool("Action", true);
-         if (actObject.tag == "actionOn")
-            actObject.tag = "actionOff";
-         else
-            actObject.tag = "actionWantOn";
-         actionStart = false;
-      }
-      
-      if(actTime>0)
-      {
-         actTime -= Time.deltaTime;
+         //Включение двигателя(зажать)
+         if (actObject.tag == "engine")
+         {
+            if (actHardTime > 0)
+            {
+               //Debug.Log("Двигатель включается")
+               actHardTime -= Time.deltaTime;
+               playerAnim.SetBool("ActionHard", true);
+            }
+            else
+            {
+               if (!actComplete)
+               {
+                  //Debug.Log("Вкл/Выкл двигателя + остановка действия")
+                  actObject.GetComponent<Engine>().power = !actObject.GetComponent<Engine>().power;
+                  playerAnim.SetBool("ActionHard", false);
+                  actComplete = true;
+               }
+            }
+         }
+
+         //Открытие дверей(одно нажатие)
+         if (actObject.tag == "door" && !actComplete)
+         {
+            if (!actEasyHappen)
+            {
+               playerAnim.SetBool("ActionEasy", true);
+               actEasyHappen = true;
+            }
+
+            if (actEasyTime > 0)
+            {
+               actEasyTime -= Time.deltaTime;
+            }
+            else
+            {
+               actEasyHappen = false;
+               actComplete = true;
+               actEasyTime = actEasyTime_N;
+               playerAnim.SetBool("ActionEasy", false);
+            }
+
+         }
       }
       else
       {
-         doing = false;
-         actTime = actTime_N;
-         actionStart = true;
-         playerAnim.SetBool("Action", false);
+         //Debug.Log("Обнуление переменных")
+         actEasyHappen = false;
+         actComplete = false;
+         actHardTime = actHardTime_N;
+         actEasyTime = actEasyTime_N;
+         playerAnim.SetBool("ActionHard", false);
+         playerAnim.SetBool("ActionEasy", false);
       }
    }
 
 
-      //Получение дамага
-      public void TakeDamage(int damage)
+   //Получение дамага
+   public void TakeDamage(int damage)
    {
       health -= damage;
-   
+
       if (health <= 0)
       {
-         protectLevel--;
-         health = healthMax;
-
-         switch(protectLevel)
-         {
-             case 4:
-                 protectLevel_color = new Color(0,1,0);
-                 break;
-             case 3:
-                 protectLevel_color = new Color(1,1,0);
-                 break;
-             case 2:
-                 protectLevel_color = new Color(1,0.5f,0);
-                 break;
-             case 1:
-                 protectLevel_color = new Color(1,0,0);
-                 break;
-
-         }
-
-         LightSuit();
-    
-         if (protectLevel <= 0)
-         {
-            gameObject.SetActive(false);
-         }
+         gameObject.SetActive(false);
       }
+
+      switch (health)
+      {
+         case 4:
+            protectLevel_color = new Color(0, 1, 0);
+            break;
+         case 3:
+            protectLevel_color = new Color(1, 1, 0);
+            break;
+         case 2:
+            protectLevel_color = new Color(1, 0.5f, 0);
+            break;
+         case 1:
+            protectLevel_color = new Color(1, 0, 0);
+            break;
+
+      }
+
+      LightSuit();
+
+
    }
 
    private void OnCollisionEnter(Collision col)

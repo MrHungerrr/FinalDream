@@ -11,6 +11,10 @@ TagManager:
   - actionOn
   - actionOff
   - actionWantOn
+  - electricityOn
+  - electricityOff
+  - engine
+  - door
   layers:
   - Default
   - TransparentFX
