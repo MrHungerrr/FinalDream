@@ -15,6 +15,7 @@ TagManager:
   - electricityOff
   - engine
   - door
+  - sound
   layers:
   - Default
   - TransparentFX

@@ -8,14 +8,13 @@ public class Lamp : MonoBehaviour
    [HideInInspector]
    public bool power = false;
    [HideInInspector]
-   public bool danger = false;
    private bool blackout = false;
 
-   public Transform[] orbless = new Transform[3];
+   public EnemyHelperAI enemyHelpAI;
    private float distBuf;
    private float dist;
-   private float blackoutDist = 75;
-   private float overloadDist = 3;
+   private float blackoutDist;
+   private float overloadDist;
 
 
    public Renderer lamp;
@@ -29,6 +28,9 @@ public class Lamp : MonoBehaviour
 
    void Start()
    {
+      blackoutDist = enemyHelpAI.blackoutDist;
+      overloadDist = enemyHelpAI.overloadDist;
+
       material = lamp.GetComponent<Renderer>().material;
       PowerOff();
 
@@ -51,20 +53,21 @@ public class Lamp : MonoBehaviour
 
    void Update()
    {
-      if (danger)
+      if (enemyHelpAI.night)
       {
-         dist = 0;
+         dist = blackoutDist + 1;
 
-         for (int i = 0; i < orbless.Length; i++)
+         for (int i = 0; i < enemyHelpAI.orblessCount; i++)
          {
-            distBuf = (transform.position - orbless[i].position).magnitude;
-            if (dist < distBuf)
+            distBuf = (transform.position - enemyHelpAI.orbless[i].transform.position).magnitude;
+            if (dist > distBuf)
                dist = distBuf;
          }
 
-         if (dist <= overloadDist)
+            if (dist <= overloadDist)
          {
-            PowerOn(1 / Mathf.Sqrt(dist));
+            blackout = false;
+            PowerOn(1 / Mathf.Sqrt(dist) + Random.Range(0.0f, 0.2f) - 0.1f);
          }
          else if (dist <= blackoutDist)
          {
@@ -78,8 +81,13 @@ public class Lamp : MonoBehaviour
          {
             if (blackout)
             {
-               Power();
+               PowerOff();
+               this.tag = "electricityOff";
                blackout = false;
+            }
+            else
+            {
+               Power();
             }
          }
       }
@@ -120,8 +128,8 @@ public class Lamp : MonoBehaviour
    private void PowerOn(float intensivity)
    {
       power = true;
-      material.SetColor("_EmissionColor", colorOn *intensivity);
-      pointLight.intensity = 1.5f * intensivity;
+      material.SetColor("_EmissionColor", colorOn * intensivity);
+      pointLight.intensity = Mathf.Lerp(pointLight.intensity, 1.5f * intensivity, 0.3f);
 
    }
 

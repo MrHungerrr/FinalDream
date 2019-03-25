@@ -5,20 +5,18 @@ using UnityEngine;
 public class Engine : MonoBehaviour
 {
 
-
    public bool power;
    private bool powerNow;
    public GameObject[] mechanism = new GameObject[0];
 
 
    [HideInInspector]
-   public bool danger = true;
    private bool blackout = false;
-   public Transform[] orbless = new Transform[3];
+   public EnemyHelperAI enemyHelpAI;
    private float distBuf;
    private float dist;
-   private float blackoutDist = 75;
-   private float overloadDist = 2;
+   private float blackoutDist;
+   private float overloadDist;
 
 
    [HideInInspector]
@@ -41,6 +39,8 @@ public class Engine : MonoBehaviour
    void Start()
    {
       lightsQuant = lights.Length;
+      blackoutDist = enemyHelpAI.blackoutDist;
+      overloadDist = enemyHelpAI.overloadDist;
 
       for (int i = 0; i < lightsQuant; i++)
       {
@@ -62,23 +62,21 @@ public class Engine : MonoBehaviour
 
 	void Update ()
    {
-      Debug.Log(dist);
-      Debug.Log(danger);
-      if (danger)
+      if (enemyHelpAI.night)
       {
-         dist = 0;
-         Debug.Log("Da, on ryadom");
-         for (int i = 0; i < orbless.Length; i++)
+         dist = blackoutDist+1;
+         for (int i = 0; i < enemyHelpAI.orblessCount; i++)
          {
-            distBuf = (transform.position - orbless[i].position).magnitude;
-            if (dist < distBuf)
+            distBuf = (transform.position - enemyHelpAI.orbless[i].transform.position).magnitude;
+            if (dist > distBuf)
                dist = distBuf;
          }
+
 
          if (dist <= overloadDist)
          {
             blackout = false;
-            PowerOn(1 / Mathf.Sqrt(dist));
+            PowerOn(1 / Mathf.Sqrt(dist) + Random.Range(0.0f, 0.2f) - 0.1f);
          }
          else if (dist <= blackoutDist)
          {
@@ -93,6 +91,7 @@ public class Engine : MonoBehaviour
             if (blackout)
             {
                blackout = false;
+               power = false;
                PowerOff();
             }
             else
@@ -150,12 +149,12 @@ public class Engine : MonoBehaviour
 
       for (int i = 0; i < lightsQuant; i++)
       {
-         materials[i].SetColor("_EmissionColor", colorOn * 5);
+         materials[i].SetColor("_EmissionColor", colorOn * 5 * intesivity);
 
       }
 
       pointLight_active.color = colorLightOn;
-      pointLight_active.intensity = intesivity;
+      pointLight_active.intensity = Mathf.Lerp(pointLight_active.intensity, intesivity, 0.3f);
    }
 
 

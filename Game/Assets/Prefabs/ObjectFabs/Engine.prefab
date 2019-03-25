@@ -124,7 +124,7 @@ Light:
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 1
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -315,7 +315,7 @@ GameObject:
   - component: {fileID: 2859588596412076190}
   m_Layer: 10
   m_Name: Engine
-  m_TagString: actionOn
+  m_TagString: engine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -373,14 +373,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   power: 0
-  mechanism: []
+  mechanism:
+  - {fileID: 0}
+  orbHelpAI: {fileID: 0}
   lights:
-  - {fileID: 2870367299182361014}
   - {fileID: 2549156602398444467}
   - {fileID: 2549156604371706216}
+  - {fileID: 2870367299182361014}
   - {fileID: 2549156603980347847}
   pointLight_active: {fileID: 2549156602645801573}
-  temp: 1
 --- !u!65 &2859588596412076188
 BoxCollider:
   m_ObjectHideFlags: 0

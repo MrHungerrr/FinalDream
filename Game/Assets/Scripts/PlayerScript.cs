@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -76,18 +78,13 @@ public class PlayerScript : MonoBehaviour
 
    //Здоровье
    [HideInInspector]
-   public int protectLevel;
-   [HideInInspector]
    public int health;
-   private const int protectLevelMax = 4;
    private const int healthMax = 4;
-   private const float regenTime_N = 4.0f;
-   private float regenTime;
   // [HideInInspector]
    public Material hp_material;
    [HideInInspector]
    public float hp_intensity;
-   private Color protectLevel_color;
+   private Color hp_color;
  //  private float hp_intensity;
 
 
@@ -103,10 +100,17 @@ public class PlayerScript : MonoBehaviour
    public Vector3 targetPoint;
    private Vector3 inputMove;
    private Vector3 movement;
+   private float runSoundCD_N;
+   private float walkSoundCD_N;
+   private float moveSoundCD;
    private Rigidbody rb;
    private Ray lookRay;
    [HideInInspector]
    public bool runAct = false;
+
+
+   //Звуки
+   public EnemyHelperAI enemyHelpAI;
 
 
    //Прыжок
@@ -135,14 +139,14 @@ public class PlayerScript : MonoBehaviour
       playerAnim = GetComponent<Animator>();
       rb = GetComponent<Rigidbody>();
       cameraTrans.position = transform.position;
+
    }
 
    private void Start()
    {
-      protectLevel = protectLevelMax;
+      actHardTime = actHardTime_N;
       actHardTime = actHardTime_N;
       actEasyTime = actEasyTime_N;
-      regenTime = regenTime_N;
       jumpTime = jumpTime_N;
       health = healthMax;
       mana = manaMax;
@@ -156,8 +160,8 @@ public class PlayerScript : MonoBehaviour
 
       force_particle.enableEmission = false;
       forcePrep_particle.enableEmission = false;
-      protectLevel_color = new Color(0, 1, 0, 1);
-      hp_material.SetColor("_EmissionColor", protectLevel_color);
+      hp_color = new Color(0, 1, 0, 1);
+      hp_material.SetColor("_EmissionColor", hp_color);
    
       LightSuit();
       for (int i = 0; i < lights_suit.Length; i++)
@@ -214,6 +218,16 @@ public class PlayerScript : MonoBehaviour
             rb.MoveRotation(Quaternion.Slerp(transform.rotation, movementRotation, 14f * Time.deltaTime));
             cameraTrans.position = transform.position + new Vector3(inputMove.x, 0, inputMove.z).normalized * 3;
             playerAnim.SetBool("Run", true);
+
+            if(moveSoundCD>0)
+            {
+               moveSoundCD -= Time.fixedDeltaTime;
+            }
+            else
+            {
+               moveSoundCD = runSoundCD_N;
+               enemyHelpAI.Sound(transform.position, 12);
+            }
          }
          else
          {
@@ -221,13 +235,22 @@ public class PlayerScript : MonoBehaviour
             if (jumpAct)
                rb.MoveRotation(Quaternion.Slerp(transform.rotation, movementRotation, 14f * Time.deltaTime));
             else
+            {
                rb.MoveRotation(targetRotation);
+
+               if (moveSoundCD > 0)
+               {
+                  moveSoundCD -= Time.fixedDeltaTime;
+               }
+               else
+               {
+                  moveSoundCD = walkSoundCD_N;
+                  enemyHelpAI.Sound(transform.position, 6);
+               }
+            }
             playerAnim.SetBool("Run", false);
             cameraTrans.position = transform.position;
-
          }
-
-
 
          rb.MovePosition(transform.position + movement);
 
@@ -237,6 +260,7 @@ public class PlayerScript : MonoBehaviour
       }
       else
       {
+         moveSoundCD = 0;
          cameraTrans.position = transform.position;
          rb.MoveRotation(targetRotation);
          legsAnim.SetBool("Move", false);
@@ -253,12 +277,14 @@ public class PlayerScript : MonoBehaviour
    {
       if (jumpAct)
       {
-         //Отскок
+         
          legsAnim.SetBool("Jump", true);
          if (jumpBounce)
          {
             rb.AddForce(jumpVector);
             jumpBounce = false;
+            enemyHelpAI.Sound(transform.position, 12);
+            //Debug.Log("Отпрыгнули");
          }
          else
          {
@@ -280,6 +306,7 @@ public class PlayerScript : MonoBehaviour
                jumpTime = jumpTime_N;
                jumpCD = jumpCD_N;
                legsAnim.SetBool("Jump", false);
+               enemyHelpAI.Sound(transform.position, 12);
             }
          }
       }
@@ -330,6 +357,7 @@ public class PlayerScript : MonoBehaviour
             if (mana > 0)
             {
                forcePrep_particle.enableEmission = true;
+               mana -= Time.deltaTime*0.1f;
                force_light_intens = 1.2f;
                if (sonarDis)
                   light_snow_intens = 2;
@@ -359,6 +387,7 @@ public class PlayerScript : MonoBehaviour
             force_Col.enabled = true;
             force_particle.enableEmission = true;
             mana -= Time.deltaTime;
+            enemyHelpAI.Sound(transform.position, 12);
          }
          else
          {
@@ -432,9 +461,9 @@ public class PlayerScript : MonoBehaviour
       force_particle.startColor = mana_color;
       forcePrep_particle.startColor = mana_color;
       if (sonarDis)
-         hp_material.SetColor("_EmissionColor", protectLevel_color * hp_intensity);
+         hp_material.SetColor("_EmissionColor", hp_color * hp_intensity);
       else
-         hp_material.SetColor("_EmissionColor", protectLevel_color);
+         hp_material.SetColor("_EmissionColor", hp_color);
 
       for (int i = 0; i < lights_suit.Length; i++)
       {
@@ -569,16 +598,16 @@ public class PlayerScript : MonoBehaviour
       switch (health)
       {
          case 4:
-            protectLevel_color = new Color(0, 1, 0);
+            hp_color = new Color(0, 1, 0);
             break;
          case 3:
-            protectLevel_color = new Color(1, 1, 0);
+            hp_color = new Color(1, 1, 0);
             break;
          case 2:
-            protectLevel_color = new Color(1, 0.5f, 0);
+            hp_color = new Color(1, 0.5f, 0);
             break;
          case 1:
-            protectLevel_color = new Color(1, 0, 0);
+            hp_color = new Color(1, 0, 0);
             break;
 
       }
@@ -604,6 +633,7 @@ public class PlayerScript : MonoBehaviour
          ground = false;
       }
    }
+
 
 
    public void Save()

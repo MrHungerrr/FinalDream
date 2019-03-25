@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class Sonar : MonoBehaviour
 {
-   public AudioSource sonar;
-   public AudioSource sonarOff;
+
    public PlayerScript player;
+   public EnemyHelperAI enemyHelpAI;
+   private float distBuf;
+   private float dist;
+   private float blackoutDist;
+   private float overloadDist;
+   private float sonarOffDist = 20;
+   private bool blackout;
+
 
    private float time;
    private float time_N;
@@ -16,89 +23,75 @@ public class Sonar : MonoBehaviour
    private bool sonarOut = false;
    private bool sonarDisable = false;
 
-   private float alarmDistMax = 75;
-   private float alarmDistMin = 15;
-
-    void Start()
-    {
-        
-    }
+   void Start()
+   {
+      blackoutDist = enemyHelpAI.blackoutDist;
+      overloadDist = enemyHelpAI.overloadDist;
+   }
 
    // Update is called once per frame
    void Update()
    {
-      if (sonarAct)
+      if (enemyHelpAI.night)
       {
-         if (!sonarDisable)
-         {
-            if (time > 0)
-               time -= Time.deltaTime;
-            else
-            {
-               sonar.Play();
+         dist = blackoutDist + 1;
 
-               time = time_N;
+         for (int i = 0; i < enemyHelpAI.orblessCount; i++)
+         {
+            distBuf = (transform.position - enemyHelpAI.orbless[i].transform.position).magnitude;
+            if (dist > distBuf)
+               dist = distBuf;
+         }
+
+         if (dist <= overloadDist)
+         {
+            player.sonarDis = false;
+            Light(1 / Mathf.Sqrt(dist) + Random.Range(0.0f, 0.2f) - 0.1f);
+            blackout = false;
+         }
+         else if (dist <= blackoutDist)
+         {
+            if (!blackout)
+            {
+               player.sonarDis = true;
+               Light(0);
+               Distance();
+               blackout = true;
             }
          }
          else
          {
-            if (timeCD > 0)
-               timeCD -= Time.deltaTime;
-            else
+            if (blackout)
             {
-               sonarDisable = false;
-               for (int i = 0; i < player.lights_suit.Length; i++)
-               {
-                  player.lights_suit[i].intensity = player.lights_suit_intens[i];
-               }
-
                player.sonarDis = false;
-               player.mana_intensity = 6;
-               player.LightSuit();
+               Light(1);
+               blackout = false;
             }
-         }
-      }
-
-      if(sonarOut)
-      {
-         if (!sonarDisable)
-         {
-            sonar.Play();
-            sonarOff.Play();
-            sonarDisable = true;
-            timeCD = timeCD_N;
-            player.sonarDis = true;
-
-            for (int i = 0; i < player.lights_suit.Length; i++)
-            {
-               player.lights_suit[i].intensity = 0;
-            }
-
-            player.mana_intensity = 0;
-            player.LightSuit();
          }
       }
    }
 
-   public void Distance(float dist)
+
+
+   private void Light(float coef)
+   { 
+      for (int i = 0; i < player.lights_suit.Length; i++)
+      {
+         player.lights_suit[i].intensity = player.lights_suit_intens[i] * coef;
+      }
+
+      player.mana_intensity = 6 * coef;
+      player.LightSuit();
+   }
+
+
+
+   private void Distance()
    {
-      if (dist < alarmDistMax && dist > alarmDistMin)
+      if (dist > sonarOffDist)
       {
-         sonarAct = true;
-         time_N = (dist / (alarmDistMax-25)) * (dist / (alarmDistMax-25));
-      }
-      else
-      {
-         sonarAct = false;
-      }
-      
-      if (dist<alarmDistMin)
-      {
-         sonarOut = true;
-      }
-      else
-      {
-         sonarOut = false;
+         time_N = (dist / blackoutDist - sonarOffDist);
+         time_N *= time_N; ;
       }
    }
 }
