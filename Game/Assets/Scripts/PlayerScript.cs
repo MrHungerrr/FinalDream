@@ -44,7 +44,7 @@ public class PlayerScript : MonoBehaviour
    private GameObject actObject;
    private bool actBoolBuf;
    [HideInInspector]
-   public bool sonarDis;
+   public bool suitOff;
 
 
    //Сила и мана
@@ -63,6 +63,7 @@ public class PlayerScript : MonoBehaviour
    public bool forcePrep = false;
    private float mana;
    private byte forceType = 0;
+   [HideInInspector]
    public Material mana_material;
    [HideInInspector]
    public Color mana_color;
@@ -80,12 +81,11 @@ public class PlayerScript : MonoBehaviour
    [HideInInspector]
    public int health;
    private const int healthMax = 4;
-  // [HideInInspector]
+   [HideInInspector]
    public Material hp_material;
    [HideInInspector]
-   public float hp_intensity;
+   public float hp_intensity = 1.0f;
    private Color hp_color;
- //  private float hp_intensity;
 
 
    //Движение
@@ -100,8 +100,8 @@ public class PlayerScript : MonoBehaviour
    public Vector3 targetPoint;
    private Vector3 inputMove;
    private Vector3 movement;
-   private float runSoundCD_N;
-   private float walkSoundCD_N;
+   private float runSoundCD_N = 0.2f;
+   private float walkSoundCD_N = 0.3f;
    private float moveSoundCD;
    private Rigidbody rb;
    private Ray lookRay;
@@ -161,7 +161,6 @@ public class PlayerScript : MonoBehaviour
       force_particle.enableEmission = false;
       forcePrep_particle.enableEmission = false;
       hp_color = new Color(0, 1, 0, 1);
-      hp_material.SetColor("_EmissionColor", hp_color);
    
       LightSuit();
       for (int i = 0; i < lights_suit.Length; i++)
@@ -359,7 +358,7 @@ public class PlayerScript : MonoBehaviour
                forcePrep_particle.enableEmission = true;
                mana -= Time.deltaTime*0.1f;
                force_light_intens = 1.2f;
-               if (sonarDis)
+               if (suitOff)
                   light_snow_intens = 2;
                else
                   light_snow_intens = 4;
@@ -368,7 +367,7 @@ public class PlayerScript : MonoBehaviour
             {
                forcePrep_particle.enableEmission = false;
                force_light_intens = 0;
-               if (sonarDis)
+               if (suitOff)
                   light_snow_intens = 0;
                else
                   light_snow_intens = 4;
@@ -393,7 +392,7 @@ public class PlayerScript : MonoBehaviour
          {
             force_particle.enableEmission = false;
             force_Col.enabled = false;
-            if (sonarDis)
+            if (suitOff)
                light_snow_intens = 0;
             else
                light_snow_intens = 4;
@@ -411,7 +410,7 @@ public class PlayerScript : MonoBehaviour
          forcePrep_particle.enableEmission = false;
          playerAnim.SetBool("Force", false);
          force_light_intens = 0;
-         if (sonarDis)
+         if (suitOff)
             light_snow_intens = 0;
          else
             light_snow_intens = 4;
@@ -460,10 +459,7 @@ public class PlayerScript : MonoBehaviour
       mana_material.SetColor("_EmissionColor", mana_color * mana_intensity);
       force_particle.startColor = mana_color;
       forcePrep_particle.startColor = mana_color;
-      if (sonarDis)
-         hp_material.SetColor("_EmissionColor", hp_color * hp_intensity);
-      else
-         hp_material.SetColor("_EmissionColor", hp_color);
+      hp_material.SetColor("_EmissionColor", hp_color * hp_intensity);
 
       for (int i = 0; i < lights_suit.Length; i++)
       {

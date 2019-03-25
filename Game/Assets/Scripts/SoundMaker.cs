@@ -11,6 +11,7 @@ public class SoundMaker : MonoBehaviour
    private void OnCollisionEnter(Collision collision)
    {
       enemyHelpAI.Sound(transform.position, rad);
+      Debug.Log("Звук от предмета");
    }
 
 

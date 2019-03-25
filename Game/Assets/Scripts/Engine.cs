@@ -67,7 +67,7 @@ public class Engine : MonoBehaviour
          dist = blackoutDist+1;
          for (int i = 0; i < enemyHelpAI.orblessCount; i++)
          {
-            distBuf = (transform.position - enemyHelpAI.orbless[i].transform.position).magnitude;
+            distBuf = (transform.position - enemyHelpAI.orbless[i].position).magnitude;
             if (dist > distBuf)
                dist = distBuf;
          }
@@ -76,7 +76,7 @@ public class Engine : MonoBehaviour
          if (dist <= overloadDist)
          {
             blackout = false;
-            PowerOn(1 / Mathf.Sqrt(dist) + Random.Range(0.0f, 0.2f) - 0.1f);
+            PowerOn((1 / ((dist - 0.5f) * (dist - 0.5f))) + Random.Range(-0.1f, 0.1f));
          }
          else if (dist <= blackoutDist)
          {

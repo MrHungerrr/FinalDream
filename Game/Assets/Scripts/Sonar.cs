@@ -12,16 +12,11 @@ public class Sonar : MonoBehaviour
    private float blackoutDist;
    private float overloadDist;
    private float sonarOffDist = 20;
-   private bool blackout;
+   private bool blackout = false;
 
 
    private float time;
    private float time_N;
-   private float timeCD;
-   private float timeCD_N = 5;
-   private bool sonarAct = false;
-   private bool sonarOut = false;
-   private bool sonarDisable = false;
 
    void Start()
    {
@@ -38,22 +33,24 @@ public class Sonar : MonoBehaviour
 
          for (int i = 0; i < enemyHelpAI.orblessCount; i++)
          {
-            distBuf = (transform.position - enemyHelpAI.orbless[i].transform.position).magnitude;
+            distBuf = (transform.position - enemyHelpAI.orbless[i].position).magnitude;
             if (dist > distBuf)
                dist = distBuf;
          }
 
          if (dist <= overloadDist)
          {
-            player.sonarDis = false;
-            Light(1 / Mathf.Sqrt(dist) + Random.Range(0.0f, 0.2f) - 0.1f);
+            //Debug.Log("Перенапряжение");
+            player.suitOff = false;
+            Light((1 / ((dist - 0.5f) * (dist - 0.5f))) + Random.Range(-0.1f, 0.1f));
             blackout = false;
          }
          else if (dist <= blackoutDist)
          {
             if (!blackout)
             {
-               player.sonarDis = true;
+               //Debug.Log("Отрубается костюм");
+               player.suitOff = true;
                Light(0);
                Distance();
                blackout = true;
@@ -63,7 +60,8 @@ public class Sonar : MonoBehaviour
          {
             if (blackout)
             {
-               player.sonarDis = false;
+               //Debug.Log("Нормальная работа");
+               player.suitOff = false;
                Light(1);
                blackout = false;
             }
@@ -81,6 +79,7 @@ public class Sonar : MonoBehaviour
       }
 
       player.mana_intensity = 6 * coef;
+      player.hp_intensity = 1 * coef;
       player.LightSuit();
    }
 

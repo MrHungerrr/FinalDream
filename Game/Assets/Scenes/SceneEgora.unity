@@ -248,6 +248,10 @@ PrefabInstance:
       propertyPath: orbHelpAI
       value: 
       objectReference: {fileID: 194770645}
+    - target: {fileID: 828508793, guid: 5be05efb1acbc1e4e9d0cc6105461a84, type: 3}
+      propertyPath: enemyHelpAI
+      value: 
+      objectReference: {fileID: 194770645}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5be05efb1acbc1e4e9d0cc6105461a84, type: 3}
 --- !u!1 &194770644
@@ -266,7 +270,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &194770645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,18 +284,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orbless:
-  - {fileID: 1631482517}
+  - {fileID: 1631482519}
   orblessAI:
   - {fileID: 0}
   - {fileID: 0}
   orblessCount: 0
-  spider:
-  - {fileID: 0}
-  - {fileID: 0}
+  orblessPointBusy: 
+  spider: []
   spiderAI:
   - {fileID: 0}
   - {fileID: 0}
   spiderCount: 0
+  spiderPointBusy: 
+  point: []
+  pointCount: 0
   player: {fileID: 1066526514}
   night: 1
   blackoutDist: 75
@@ -5327,50 +5333,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: b57ea9747ae3131428a470c59bf1fecc, type: 3}
---- !u!1 &612351391
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 612351392}
-  - component: {fileID: 612351393}
-  m_Layer: 9
-  m_Name: LoudSound
-  m_TagString: sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &612351392
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 612351391}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1912766366}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &612351393
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 612351391}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 6
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &779241426
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5943,7 +5905,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rad: 0
-  enemyHelpAI: {fileID: 0}
+  enemyHelpAI: {fileID: 194770645}
 --- !u!65 &1254628676
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6304,50 +6266,6 @@ MonoBehaviour:
   m_AmplitudeGain: 0.2
   m_FrequencyGain: 2
   mNoiseOffsets: {x: 0, y: 0, z: 0}
---- !u!1 &1552362477
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1552362479}
-  - component: {fileID: 1552362478}
-  m_Layer: 9
-  m_Name: QuietSound
-  m_TagString: sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!135 &1552362478
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1552362477}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 12
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!4 &1552362479
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1552362477}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1912766366}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1631482517
 GameObject:
   m_ObjectHideFlags: 0
@@ -6365,7 +6283,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1631482518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6378,7 +6296,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06826ffd77b3aaf4a80acac65d96e4a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 957387340}
 --- !u!4 &1631482519
 Transform:
   m_ObjectHideFlags: 0
@@ -6611,38 +6528,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 584562fab04317b438891463b95a4ae4, type: 3}
---- !u!1 &1912766365
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1912766366}
-  m_Layer: 9
-  m_Name: Sounds
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1912766366
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1912766365}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 612351392}
-  - {fileID: 1552362479}
-  m_Father: {fileID: 1066526514}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1939580973 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 7040bedc95c17ad45a274ba1da7d0a9a,
@@ -7141,6 +7026,11 @@ PrefabInstance:
       propertyPath: orbHelpAI
       value: 
       objectReference: {fileID: 194770645}
+    - target: {fileID: 2859588596412076176, guid: 913592e09cd50684493ec7de3c8dd170,
+        type: 3}
+      propertyPath: enemyHelpAI
+      value: 
+      objectReference: {fileID: 194770645}
     - target: {fileID: 2549156602645801573, guid: 913592e09cd50684493ec7de3c8dd170,
         type: 3}
       propertyPath: m_Shadows.m_Type
@@ -7179,12 +7069,22 @@ PrefabInstance:
         type: 3}
       propertyPath: loudSound
       value: 
-      objectReference: {fileID: 612351393}
+      objectReference: {fileID: 0}
     - target: {fileID: 9150923043202464913, guid: 0d6ce98f21de37b48b1ddb36814ff026,
         type: 3}
       propertyPath: quietSound
       value: 
-      objectReference: {fileID: 1552362478}
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150923043202464913, guid: 0d6ce98f21de37b48b1ddb36814ff026,
+        type: 3}
+      propertyPath: enemyHelpAI
+      value: 
+      objectReference: {fileID: 194770645}
+    - target: {fileID: 9150923043202464913, guid: 0d6ce98f21de37b48b1ddb36814ff026,
+        type: 3}
+      propertyPath: hp_intensity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9150923043126642932, guid: 0d6ce98f21de37b48b1ddb36814ff026,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7306,7 +7206,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1776100798, guid: 0d6ce98f21de37b48b1ddb36814ff026, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1776100798, guid: 0d6ce98f21de37b48b1ddb36814ff026, type: 3}
       propertyPath: sonar
@@ -7316,6 +7216,10 @@ PrefabInstance:
       propertyPath: sonarOff
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1776100798, guid: 0d6ce98f21de37b48b1ddb36814ff026, type: 3}
+      propertyPath: enemyHelpAI
+      value: 
+      objectReference: {fileID: 194770645}
     - target: {fileID: 6718796686805414499, guid: 0d6ce98f21de37b48b1ddb36814ff026,
         type: 3}
       propertyPath: CollisionModule.maxCollisionShapes

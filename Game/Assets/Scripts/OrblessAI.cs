@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class OrblessAI : MonoBehaviour
 {
-   public GameObject player;
-   private Vector3 dist3;
-   private float dist;
+
+
+
 
     void Start()
     {
@@ -15,13 +15,16 @@ public class OrblessAI : MonoBehaviour
 
     void Update()
     {
-      dist3 = transform.position - player.transform.position;
-      dist = dist3.magnitude;
+
+
+
     }
 
 
    public void Sound(Vector3 pos)
    {
+
+
 
    }
 
