@@ -4,12 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-public class Point
-{
-    public Vector3 position;
-    public bool active;
-}
-
 public class SpidersAI : MonoBehaviour
 {
    private Animator spiderAnim;
@@ -66,9 +60,10 @@ public class SpidersAI : MonoBehaviour
 
     //Патрулирование
     public Transform[] alltarget;
-    private Point[] target;
+    public Transform[] target;
+    private static bool[] targetactive;
     private Vector3[] maintarget;
-    //public GameObject Point;
+    public GameObject Point;
     private int nextpoint = 0;
 
 
@@ -92,22 +87,16 @@ public class SpidersAI : MonoBehaviour
       attackRest = false;
       attackPrep = false;
 
-        /*alltarget = new Transform[Point.transform.childCount];
+        alltarget = new Transform[Point.transform.childCount];
 
         for (int i = 0; i < alltarget.Length; i++)
         {
             alltarget[i] = Point.transform.GetChild(i);
         }
-        */
-        target = new Point[5];
+        
 
-        for (int i = 0; i < target.Length; i++)
-        {
-            target[i] = new Point();
-        }
-
-        PointForPatrol();
         maintarget = new Vector3[target.Length];
+        targetactive = new bool[target.Length];
 
         for (int i = 0; i < target.Length; i++)
         {
@@ -162,7 +151,7 @@ public class SpidersAI : MonoBehaviour
                 if (Vector3.Distance(mainpoint, alltarget[i].position) < dist && (count < target.Length)) 
                 {
                     target[count].position = alltarget[i].position;
-                    target[count].active = false;
+                    targetactive[count] = false;
                     count++;
                 }
             }
@@ -179,7 +168,7 @@ public class SpidersAI : MonoBehaviour
             
             if (nextpoint + 1 != target.Length)
             {
-                while (target[nextpoint + 1].active || target[nextpoint + 1].position == Vector3.zero)
+                while (targetactive[nextpoint + 1] || target[nextpoint + 1].position == Vector3.zero)
                 {
                     if (target[nextpoint + 1].position != Vector3.zero)
                     {
@@ -195,7 +184,7 @@ public class SpidersAI : MonoBehaviour
             else
             {
                 nextpoint = -1;
-                while (target[nextpoint + 1].active || target[nextpoint + 1].position == Vector3.zero)
+                while (targetactive[nextpoint + 1] || target[nextpoint + 1].position == Vector3.zero)
                 {
                     if (target[nextpoint + 1].position != Vector3.zero)
                     {
@@ -285,7 +274,7 @@ public class SpidersAI : MonoBehaviour
             hear = chear;
             anglevisible = canglevisible;
             battle = false;
-            lp = false;
+            lp = false;       
         }
     }
 
