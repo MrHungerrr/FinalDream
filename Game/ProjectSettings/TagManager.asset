@@ -6,7 +6,6 @@ TagManager:
   tags:
   - ice
   - fire
-  - sword
   - ground
   - actionOn
   - actionOff
@@ -16,6 +15,9 @@ TagManager:
   - engine
   - door
   - sound
+  - spider
+  - orbless
+  - point
   layers:
   - Default
   - TransparentFX

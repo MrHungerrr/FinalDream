@@ -5,35 +5,44 @@ using UnityEngine;
 public class Sonar : MonoBehaviour
 {
 
+
    public PlayerScript player;
-   public EnemyHelperAI enemyHelpAI;
+   public EnemyHelperAI eHelpAI;
    private float distBuf;
-   private float dist;
+   [HideInInspector]
+   public float dist;
    private float blackoutDist;
    private float overloadDist;
-   private float sonarOffDist = 20;
+   private float sonarOffDist = 10;
    private bool blackout = false;
 
+   [FMODUnity.EventRef]
+   public string sonarSound;
+   private float time = 0;
 
-   private float time;
-   private float time_N;
+   [ContextMenu("AutoFill")]
+   public void Fiil()
+   {
+      eHelpAI = GameObject.FindGameObjectWithTag("enemyHelper").GetComponent<EnemyHelperAI>();
+      player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerScript>();
+   }
 
    void Start()
    {
-      blackoutDist = enemyHelpAI.blackoutDist;
-      overloadDist = enemyHelpAI.overloadDist;
+      blackoutDist = eHelpAI.blackoutDist;
+      overloadDist = eHelpAI.overloadDist;
    }
 
    // Update is called once per frame
    void Update()
    {
-      if (enemyHelpAI.night)
+      if (eHelpAI.night)
       {
          dist = blackoutDist + 1;
 
-         for (int i = 0; i < enemyHelpAI.orblessCount; i++)
+         for (int i = 0; i < eHelpAI.orblessCount; i++)
          {
-            distBuf = (transform.position - enemyHelpAI.orbless[i].position).magnitude;
+            distBuf = (transform.position - eHelpAI.orblesses[i].transform.position).magnitude;
             if (dist > distBuf)
                dist = distBuf;
          }
@@ -42,7 +51,7 @@ public class Sonar : MonoBehaviour
          {
             //Debug.Log("Перенапряжение");
             player.suitOff = false;
-            Light((1 / ((dist - 0.5f) * (dist - 0.5f))) + Random.Range(-0.1f, 0.1f));
+            Light((1 / (dist - 0.5f) + Random.Range(-0.1f, 0.1f)));
             blackout = false;
          }
          else if (dist <= blackoutDist)
@@ -89,8 +98,16 @@ public class Sonar : MonoBehaviour
    {
       if (dist > sonarOffDist)
       {
-         time_N = (dist / blackoutDist - sonarOffDist);
-         time_N *= time_N; ;
+         if (time > 0)
+         {
+            time -= Time.deltaTime;
+         }
+         else
+         {
+            FMODUnity.RuntimeManager.PlayOneShot(sonarSound);
+            time = (dist / blackoutDist - sonarOffDist);
+            time *= time;
+         }
       }
    }
 }

@@ -58,11 +58,14 @@ public class PlayerScript : MonoBehaviour
    private const float manaMax = 40;
    public Collider force_Col;
    [HideInInspector]
+   public bool forceScare = false;
+   [HideInInspector]
    public bool forceAct = false;
    [HideInInspector]
    public bool forcePrep = false;
    private float mana;
-   private byte forceType = 0;
+   [HideInInspector]
+   public byte forceType = 0;
    [HideInInspector]
    public Material mana_material;
    [HideInInspector]
@@ -225,7 +228,7 @@ public class PlayerScript : MonoBehaviour
             else
             {
                moveSoundCD = runSoundCD_N;
-               enemyHelpAI.Sound(transform.position, 12);
+               enemyHelpAI.Sound(transform.position, 12, this.gameObject);
             }
          }
          else
@@ -244,7 +247,7 @@ public class PlayerScript : MonoBehaviour
                else
                {
                   moveSoundCD = walkSoundCD_N;
-                  enemyHelpAI.Sound(transform.position, 6);
+                  enemyHelpAI.Sound(transform.position, 6, this.gameObject);
                }
             }
             playerAnim.SetBool("Run", false);
@@ -282,7 +285,7 @@ public class PlayerScript : MonoBehaviour
          {
             rb.AddForce(jumpVector);
             jumpBounce = false;
-            enemyHelpAI.Sound(transform.position, 12);
+            enemyHelpAI.Sound(transform.position, 12, this.gameObject);
             //Debug.Log("Отпрыгнули");
          }
          else
@@ -305,7 +308,7 @@ public class PlayerScript : MonoBehaviour
                jumpTime = jumpTime_N;
                jumpCD = jumpCD_N;
                legsAnim.SetBool("Jump", false);
-               enemyHelpAI.Sound(transform.position, 12);
+               enemyHelpAI.Sound(transform.position, 12, this.gameObject);
             }
          }
       }
@@ -349,59 +352,51 @@ public class PlayerScript : MonoBehaviour
          coll.size = new Vector3(0.8f, 1.5f, 0.75f);
          coll.center = new Vector3(0.0f, 0.25f, -0.15f);
          cameraTrans.position = transform.position - (new Vector3(transform.position.x, 0, transform.position.z) - new Vector3(targetPoint.x, 0, targetPoint.z)).normalized*3;
-   
 
-         if (!forceAct)
+         if (mana > 0)
          {
-            if (mana > 0)
+            forceScare = true;
+
+            if (forceAct)
             {
+               force_Col.enabled = true;
+               force_particle.enableEmission = true;
+               forcePrep_particle.enableEmission = false;
+               enemyHelpAI.Sound(transform.position, 12, this.gameObject);
+               mana -= Time.deltaTime;
+               force_light_intens = 0;
+               light_snow_intens = 8;
+
+            }
+            else
+            {
+               force_Col.enabled = false;
+               force_particle.enableEmission = false;
                forcePrep_particle.enableEmission = true;
-               mana -= Time.deltaTime*0.1f;
+               mana -= Time.deltaTime * 0.1f;
                force_light_intens = 1.2f;
                if (suitOff)
                   light_snow_intens = 2;
                else
                   light_snow_intens = 4;
             }
-            else
-            {
-               forcePrep_particle.enableEmission = false;
-               force_light_intens = 0;
-               if (suitOff)
-                  light_snow_intens = 0;
-               else
-                  light_snow_intens = 4;
-            }
+
          }
          else
          {
+            forceScare = false;
             forcePrep_particle.enableEmission = false;
             force_light_intens = 0;
-         }
-
-
-         if (forceAct && mana > 0)
-         {
-            light_snow_intens = 8;
-            force_Col.enabled = true;
-            force_particle.enableEmission = true;
-            mana -= Time.deltaTime;
-            enemyHelpAI.Sound(transform.position, 12);
-         }
-         else
-         {
-            force_particle.enableEmission = false;
-            force_Col.enabled = false;
             if (suitOff)
                light_snow_intens = 0;
             else
                light_snow_intens = 4;
-
          }
 
       }
       else
       {
+         forceScare = false;
          coll.size = new Vector3(0.8f, 1.5f, 0.5f);
          coll.center = new Vector3(0.0f, 0.25f, 0.0f);
          forcePrep_particle.enableEmission = false;
@@ -481,7 +476,7 @@ public class PlayerScript : MonoBehaviour
    //События и действия
    private void OnTriggerStay(Collider interactive)
    {
-      if (interactive.tag == "engine" || interactive.tag == "door")
+      if ((interactive.tag == "engine" && !suitOff) || interactive.tag == "door")
       {
 
          lookAct = Quaternion.LookRotation(transform.position - interactive.transform.position);
