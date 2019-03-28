@@ -4,12 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-public class Point
-{
-    public Vector3 position;
-    public bool active;
-}
-
 public class SpidersAI : MonoBehaviour
 {
    private Animator spiderAnim;
@@ -64,14 +58,20 @@ public class SpidersAI : MonoBehaviour
    private Rigidbody rb;
    private NavMeshAgent agent;
 
+    /*
     //Патрулирование
-    public Transform[] alltarget;
-    private Point[] target;
+    [Header("POINT")]
+    [SerializeField]
+    private Transform[] alltarget;   
+    public Transform[] target;
+    [SerializeField]
+    private static bool[] targetactive;
+    [SerializeField]
     private Vector3[] maintarget;
-    //public GameObject Point;
-    private int nextpoint = 0;
+    public GameObject Point;
+    public int nextpoint = 0;
 
-
+*/
 
    void Start()
    {
@@ -91,30 +91,24 @@ public class SpidersAI : MonoBehaviour
       attack = false;
       attackRest = false;
       attackPrep = false;
-
-        /*alltarget = new Transform[Point.transform.childCount];
+/*
+        alltarget = new Transform[Point.transform.childCount];
 
         for (int i = 0; i < alltarget.Length; i++)
         {
             alltarget[i] = Point.transform.GetChild(i);
         }
-        */
-        target = new Point[5];
 
-        for (int i = 0; i < target.Length; i++)
-        {
-            target[i] = new Point();
-        }
-
-        PointForPatrol();
+        targetactive = new bool[alltarget.Length];
         maintarget = new Vector3[target.Length];
 
         for (int i = 0; i < target.Length; i++)
         {
             maintarget[i] = target[i].position;
+            targetactive[i] = false;
         }
 
-
+*/
         StartCoroutine("baseOffset");
    }
 
@@ -126,6 +120,7 @@ public class SpidersAI : MonoBehaviour
 
    private void Update()
    {
+ 
       if (battle)
          BattleCalculate();
    }
@@ -139,157 +134,168 @@ public class SpidersAI : MonoBehaviour
             hear = battlehear;
             anglevisible = battleangelvisible;
       }
-        Poisk();      
+//        Poisk();      
     }
 
-    void PointForPatrol()
-    {
-        //Debug.DrawRay(transform.position, Vector3.forward * 15f, Color.yellow, 20f);
-        float dist = 20f;
-        int count = 0;
-        Vector3 mainpoint = agent.destination;
+    /* void PointForPatrol()
+     {
+         //Debug.DrawRay(transform.position, Vector3.forward * 15f, Color.yellow, 20f);
+         float dist = 20f;
+         int count = 0;
+         Vector3 mainpoint = agent.destination;
 
-        for (int i = 0; i < target.Length; i++)
-        {
-            target[i].position = Vector3.zero;
-        } // ну типа ясно дело перед заполнением надо обнулить, а если быть точнее массив target[5] а точек может быть и 3, а мне не нужны старые 4 и 5 точка.
+         for (int i = 0; i < target.Length; i++)
+         {
+             target[i].position = Vector3.zero;
+         } // ну типа ясно дело перед заполнением надо обнулить, а если быть точнее массив target[5] а точек может быть и 3, а мне не нужны старые 4 и 5 точка.
 
-        while(count < 2) //3
-        {
-            count = 0;
-            for (int i = 0; i < alltarget.Length; i++)
-            {
-                if (Vector3.Distance(mainpoint, alltarget[i].position) < dist && (count < target.Length)) 
-                {
-                    target[count].position = alltarget[i].position;
-                    target[count].active = false;
-                    count++;
-                }
-            }
-            dist += 5;
-        }
-    }
+         while(count < 2) //3
+         {
+             count = 0;
+             for (int i = 0; i < alltarget.Length; i++)
+             {
+                 if (Vector3.Distance(mainpoint, alltarget[i].position) < dist && (count < target.Length)) 
+                 {
+                     target[count].position = alltarget[i].position;
+                     targetactive[count] = false;
+                     count++;
+                 }
+             }
+             dist += 5;
+         }
+     }
 
 
-    void Patrol()
-    {
+     void Patrol()
+     {
 
-        if(Vector3.Distance(transform.position,target[nextpoint].position) < 1.2f)
-        {
-            
-            if (nextpoint + 1 != target.Length)
-            {
-                while (target[nextpoint + 1].active || target[nextpoint + 1].position == Vector3.zero)
-                {
-                    if (target[nextpoint + 1].position != Vector3.zero)
-                    {
-                        nextpoint++;
-                    }
-                    else
-                    {
-                        nextpoint = 0 - 1;
-                    }
-                }
-                nextpoint++;
-            }
-            else
-            {
-                nextpoint = -1;
-                while (target[nextpoint + 1].active || target[nextpoint + 1].position == Vector3.zero)
-                {
-                    if (target[nextpoint + 1].position != Vector3.zero)
-                    {
-                        nextpoint++;
-                    }
-                    else
-                    {
-                        nextpoint = 0 - 1;
-                    }
-                }
-                nextpoint++;
-            }         
-        }
+         if(Vector3.Distance(transform.position,target[nextpoint].position) < 1.2f)
+         {
+             targetactive[nextpoint] = false;
 
-        agent.SetDestination(target[nextpoint].position);
-    }
+             if (nextpoint + 1 != target.Length)
+             {
+                 while (targetactive[nextpoint + 1] || target[nextpoint + 1].position == Vector3.zero)
+                 {
+                     if (target[nextpoint + 1].position != Vector3.zero)
+                     {
+                         nextpoint++;
+                     }
+                     else
+                     {
+                         nextpoint = 0 - 1;
+                     }
+                     if (nextpoint + 1 == target.Length)
+                     {
+                         nextpoint = -1;
+                     }
+                 }               
+                 nextpoint++;
+             }
+             else
+             {
+                 nextpoint = -1;
+                 while (targetactive[nextpoint + 1] || target[nextpoint + 1].position == Vector3.zero)
+                 {
+                     if (target[nextpoint + 1].position != Vector3.zero && nextpoint + 1 != target.Length)
+                     {
+                         nextpoint++;
+                     }
+                     else
+                     {
+                         nextpoint = 0 - 1;
+                     }
+                     if (nextpoint + 1 == target.Length)
+                     {
+                         nextpoint = -1;
+                     }
+                 }
+                 nextpoint++;
+             }
+         }
 
-    void Poisk()
-    {        
-        if (player != null)
-        {
-            float dist = Vector3.Distance(transform.position, player.position);
 
-            if (dist <= visible)
-            {
-                Quaternion look = Quaternion.LookRotation(player.position - transform.position);
-                float angle = Quaternion.Angle(transform.rotation, look);
+         targetactive[nextpoint] = true;
+         agent.SetDestination(target[nextpoint].position);
+     }
 
-                if (dist <= hear)
-                {
-                    Debug.DrawRay(transform.position + (player.position - transform.position).normalized * 1.5f, player.position - transform.position, Color.magenta, 1f);
-                    agent.SetDestination(player.transform.position);
-                    battle = true;
-                    lp = false;
-                }
-                else if (angle < anglevisible)
-                {
-                    Ray ray = new Ray(transform.position + (player.position - transform.position).normalized * 1.5f, player.position - transform.position);
-                    RaycastHit hit;
+     void Poisk()
+     {        
+         if (player != null)
+         {
+             float dist = Vector3.Distance(transform.position, player.position);
 
-                    if (Physics.Raycast(ray, out hit, visible))
-                    {
-                        Debug.DrawRay(transform.position + (player.position - transform.position).normalized * 1.5f, player.position - transform.position, Color.blue, 1f);
-                        if (hit.transform.tag == "Player")
-                        {
-                            agent.SetDestination(player.transform.position);
-                            battle = true;
-                            //Debug.Log("THIS IS " + hit.transform.name);
-                            lp = false;
-                        }
-                        else
-                        {
-                            //Debug.Log("THIS IS " + hit.transform.name);
-                            if(battle)
-                            {
-                                if(!lp)
-                                    StartCoroutine("LoosePlayer");
-                            }                                                
-                        }
-                    }
-                }
-                else
-                {
-                    Patrol();
-                }
-            }
-            else if (battle)
-            {
-                if(!lp)
-                    StartCoroutine("LoosePlayer");
-            }
-            else
-            {
-                Patrol();
-            }
-        }
-    }
+             if (dist <= visible)
+             {
+                 Quaternion look = Quaternion.LookRotation(player.position - transform.position);
+                 float angle = Quaternion.Angle(transform.rotation, look);
 
-    IEnumerator LoosePlayer()
-    {
-        lp = true;
-        yield return new WaitForSeconds(5f);     
-        if (lp)
-        {
-            PointForPatrol();
-            visible = cvisible;
-            hear = chear;
-            anglevisible = canglevisible;
-            battle = false;
-            lp = false;
-        }
-    }
+                 if (dist <= hear)
+                 {
+                     Debug.DrawRay(transform.position + (player.position - transform.position).normalized * 1.5f, player.position - transform.position, Color.magenta, 1f);
+                     agent.SetDestination(player.transform.position);
+                     battle = true;
+                     lp = false;
+                 }
+                 else if (angle < anglevisible)
+                 {
+                     Ray ray = new Ray(transform.position + (player.position - transform.position).normalized * 1.5f, player.position - transform.position);
+                     RaycastHit hit;
 
-        
+                     if (Physics.Raycast(ray, out hit, visible))
+                     {
+                         Debug.DrawRay(transform.position + (player.position - transform.position).normalized * 1.5f, player.position - transform.position, Color.blue, 1f);
+                         if (hit.transform.tag == "Player")
+                         {
+                             agent.SetDestination(player.transform.position);
+                             battle = true;
+                             //Debug.Log("THIS IS " + hit.transform.name);
+                             lp = false;
+                         }
+                         else
+                         {
+                             //Debug.Log("THIS IS " + hit.transform.name);
+                             if(battle)
+                             {
+                                 if(!lp)
+                                     StartCoroutine("LoosePlayer");
+                             }                                                
+                         }
+                     }
+                 }
+                 else
+                 {
+                     Patrol();
+                 }
+             }
+             else if (battle)
+             {
+                 if(!lp)
+                     StartCoroutine("LoosePlayer");
+             }
+             else
+             {
+                 Patrol();
+             }
+         }
+     }
+
+     IEnumerator LoosePlayer()
+     {
+         lp = true;
+         yield return new WaitForSeconds(5f);     
+         if (lp)
+         {
+             PointForPatrol();
+             visible = cvisible;
+             hear = chear;
+             anglevisible = canglevisible;
+             battle = false;
+             lp = false;
+         }
+     }
+
+ */
 
     //Атака(Вычисления)
     void BattleCalculate()
