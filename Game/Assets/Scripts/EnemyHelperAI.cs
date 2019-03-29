@@ -43,7 +43,7 @@ public class EnemyHelperAI : MonoBehaviour
    public byte spider_Nom = 1;
 
    [ContextMenu("AutoFill")]
-   public void Fiil()
+   public void Fill()
    {
          orblesses = GameObject.FindGameObjectsWithTag("orbless");
          spiders = GameObject.FindGameObjectsWithTag("spider");
@@ -63,7 +63,6 @@ public class EnemyHelperAI : MonoBehaviour
          pointsBusy[i, orbless_Nom] = false;
          pointsBusy[i, spider_Nom] = false;
       }
-      Debug.Log(pointCount);
    }
 
    // Start is called before the first frame update
@@ -98,6 +97,7 @@ public class EnemyHelperAI : MonoBehaviour
 
    public int PointNear(Vector3 pos, float rad, int EnemyType)
    {
+      rand = !rand;
       if (rand)
       {
          for (int i = 0; i < pointCount; i++)
@@ -132,8 +132,11 @@ public class EnemyHelperAI : MonoBehaviour
       }
    }
 
+
+
    public int PointBetween(Vector3 pos, float rad_B, float rad_S, int EnemyType)
    {
+      rand = !rand;
       if (rand)
       {
          for (int i = 0; i < pointCount; i++)

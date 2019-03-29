@@ -228,7 +228,7 @@ public class PlayerScript : MonoBehaviour
             else
             {
                moveSoundCD = runSoundCD_N;
-               enemyHelpAI.Sound(transform.position, 12, this.gameObject);
+               enemyHelpAI.Sound(transform.position, 20, this.gameObject);
             }
          }
          else
@@ -247,7 +247,7 @@ public class PlayerScript : MonoBehaviour
                else
                {
                   moveSoundCD = walkSoundCD_N;
-                  enemyHelpAI.Sound(transform.position, 6, this.gameObject);
+                  enemyHelpAI.Sound(transform.position, 8, this.gameObject);
                }
             }
             playerAnim.SetBool("Run", false);
@@ -285,7 +285,7 @@ public class PlayerScript : MonoBehaviour
          {
             rb.AddForce(jumpVector);
             jumpBounce = false;
-            enemyHelpAI.Sound(transform.position, 12, this.gameObject);
+            enemyHelpAI.Sound(transform.position, 20, this.gameObject);
             //Debug.Log("Отпрыгнули");
          }
          else
@@ -308,7 +308,7 @@ public class PlayerScript : MonoBehaviour
                jumpTime = jumpTime_N;
                jumpCD = jumpCD_N;
                legsAnim.SetBool("Jump", false);
-               enemyHelpAI.Sound(transform.position, 12, this.gameObject);
+               enemyHelpAI.Sound(transform.position, 20, this.gameObject);
             }
          }
       }
@@ -362,7 +362,7 @@ public class PlayerScript : MonoBehaviour
                force_Col.enabled = true;
                force_particle.enableEmission = true;
                forcePrep_particle.enableEmission = false;
-               enemyHelpAI.Sound(transform.position, 12, this.gameObject);
+               enemyHelpAI.Sound(transform.position, 40, this.gameObject);
                mana -= Time.deltaTime;
                force_light_intens = 0;
                light_snow_intens = 8;
@@ -372,6 +372,7 @@ public class PlayerScript : MonoBehaviour
             {
                force_Col.enabled = false;
                force_particle.enableEmission = false;
+               enemyHelpAI.Sound(transform.position, 8, this.gameObject);
                forcePrep_particle.enableEmission = true;
                mana -= Time.deltaTime * 0.1f;
                force_light_intens = 1.2f;

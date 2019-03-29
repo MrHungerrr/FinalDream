@@ -9153,6 +9153,22 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
+    - target: {fileID: 1776100798, guid: 0d6ce98f21de37b48b1ddb36814ff026, type: 3}
+      propertyPath: enemyHelpAI
+      value: 
+      objectReference: {fileID: 194770645}
+    - target: {fileID: 1776100798, guid: 0d6ce98f21de37b48b1ddb36814ff026, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1776100798, guid: 0d6ce98f21de37b48b1ddb36814ff026, type: 3}
+      propertyPath: sonarSound
+      value: event:/Player/Sonar
+      objectReference: {fileID: 0}
+    - target: {fileID: 1776100798, guid: 0d6ce98f21de37b48b1ddb36814ff026, type: 3}
+      propertyPath: eHelpAI
+      value: 
+      objectReference: {fileID: 194770645}
     - target: {fileID: 9150923043202464913, guid: 0d6ce98f21de37b48b1ddb36814ff026,
         type: 3}
       propertyPath: light_snow
@@ -9223,21 +9239,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1776100798, guid: 0d6ce98f21de37b48b1ddb36814ff026, type: 3}
-      propertyPath: enemyHelpAI
-      value: 
-      objectReference: {fileID: 194770645}
-    - target: {fileID: 1776100798, guid: 0d6ce98f21de37b48b1ddb36814ff026, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1776100798, guid: 0d6ce98f21de37b48b1ddb36814ff026, type: 3}
-      propertyPath: sonarSound
-      value: event:/Player/Sonar
-      objectReference: {fileID: 0}
-    - target: {fileID: 1776100798, guid: 0d6ce98f21de37b48b1ddb36814ff026, type: 3}
-      propertyPath: eHelpAI
-      value: 
-      objectReference: {fileID: 194770645}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d6ce98f21de37b48b1ddb36814ff026, type: 3}
