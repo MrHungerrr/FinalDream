@@ -476,7 +476,7 @@ public class PlayerScript : MonoBehaviour
    //События и действия
    private void OnTriggerStay(Collider interactive)
    {
-      if ((interactive.tag == "engine" && !suitOff) || interactive.tag == "door")
+      if ((interactive.tag == "engine" && !suitOff) || interactive.tag == "door" || interactive.gameObject.layer == 11)
       {
 
          lookAct = Quaternion.LookRotation(transform.position - interactive.transform.position);
@@ -500,8 +500,6 @@ public class PlayerScript : MonoBehaviour
    }
 
 
-
-
    private void OnTriggerExit(Collider interactive)
    {
       action = false;
@@ -516,7 +514,7 @@ public class PlayerScript : MonoBehaviour
 
    //Действия игрока с предметами
       public void Act()
-   {
+      {
       if (doing)
       {
          //Включение двигателя(зажать)
@@ -562,7 +560,50 @@ public class PlayerScript : MonoBehaviour
             }
 
          }
-      }
+
+         if (actObject.tag == "AudioRecord" && !actComplete)
+            {
+                if (!actEasyHappen)
+                {
+                    FMOD.Studio.EventInstance play;
+                    play.start;
+                    actEasyHappen = true;
+                }
+
+                if (actEasyTime > 0)
+                {
+                    actEasyTime -= Time.deltaTime;
+                }
+                else
+                {
+                    actEasyHappen = false;
+                    actComplete = true;
+                    actEasyTime = actEasyTime_N;
+                    playerAnim.SetBool("ActionEasy", false);
+                }
+            }
+
+         if (actObject.tag =="Note" && !actComplete)
+            {
+                if (!actEasyHappen)
+                {
+                    playerAnim.SetBool("ActionEasy", true);
+                    actEasyHappen = true;
+                }
+
+                if (actEasyTime > 0)
+                {
+                    actEasyTime -= Time.deltaTime;
+                }
+                else
+                {
+                    actEasyHappen = false;
+                    actComplete = true;
+                    actEasyTime = actEasyTime_N;
+                    playerAnim.SetBool("ActionEasy", false);
+                }
+            }
+        }
       else
       {
          //Debug.Log("Обнуление переменных")

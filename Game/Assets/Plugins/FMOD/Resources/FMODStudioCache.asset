@@ -13,19 +13,16 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: 
   EditorBanks:
-  - {fileID: 114011845849945032}
-  - {fileID: 114526464239465290}
-  - {fileID: 114775774360018830}
-  - {fileID: 114394974171592524}
-  - {fileID: 114971298887758528}
+  - {fileID: 114511183182482558}
+  - {fileID: 114454759624531410}
   EditorEvents:
-  - {fileID: 114638783767349704}
+  - {fileID: 114085969633461624}
   EditorParameters: []
   MasterBanks:
-  - {fileID: 114526464239465290}
+  - {fileID: 114454759624531410}
   StringsBanks:
-  - {fileID: 114011845849945032}
-  stringsBankWriteTime: 636888026669296576
+  - {fileID: 114511183182482558}
+  stringsBankWriteTime: 636893979683991651
   cacheVersion: 3
 --- !u!114 &114011845849945032
 MonoBehaviour:
@@ -40,7 +37,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: FMOD\Build\Desktop\Master.strings.bank
-  lastModified: 636888026669296576
+  lastModified: 636891152053486836
   LoadResult: 0
   FileSizes:
   - Name: Desktop
@@ -49,7 +46,7 @@ MonoBehaviour:
     Value: 826
   - Name: XboxOne
     Value: 826
-  Exists: 1
+  Exists: 0
 --- !u!114 &114065886805563590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,6 +70,29 @@ MonoBehaviour:
   - Name: XboxOne
     Value: 730
   Exists: 1
+--- !u!114 &114085969633461624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/Record
+  guid: 958c221d401b644c87ec18e5b8b24863
+  Banks:
+  - {fileID: 114454759624531410}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 1700
 --- !u!114 &114147963029392166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,6 +110,23 @@ MonoBehaviour:
   LoadResult: 0
   FileSizes: []
   Exists: 1
+--- !u!114 &114215850929318978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: F:\Bogdan\NBH\FinalDream\Game\FMOD\Build\Desktop\Master.assets.bank
+  lastModified: 636891152053446844
+  LoadResult: 0
+  FileSizes: []
+  Exists: 0
 --- !u!114 &114276962066121802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,6 +218,25 @@ MonoBehaviour:
   LoadResult: 0
   FileSizes: []
   Exists: 1
+--- !u!114 &114454759624531410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: C:\Users\Public\Documents\Unity Projects\NBH\FMOD\Build\Desktop\Master.bank
+  lastModified: 636893979683941658
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 2360
+  Exists: 1
 --- !u!114 &114488084784344090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,6 +259,25 @@ MonoBehaviour:
     Value: 730
   - Name: XboxOne
     Value: 730
+  Exists: 1
+--- !u!114 &114511183182482558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: C:\Users\Public\Documents\Unity Projects\NBH\FMOD\Build\Desktop\Master.strings.bank
+  lastModified: 636893979683991651
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 724
   Exists: 1
 --- !u!114 &114526464239465290
 MonoBehaviour:
@@ -238,6 +313,23 @@ MonoBehaviour:
   LoadResult: 70
   FileSizes: []
   Exists: 1
+--- !u!114 &114578453613893560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: F:\Bogdan\NBH\FinalDream\Game\FMOD\Build\Desktop\Master.streams.bank
+  lastModified: 636891152053456839
+  LoadResult: 0
+  FileSizes: []
+  Exists: 0
 --- !u!114 &114614977212001338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294,8 +386,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/Player/Sonar
   guid: e800fb8de627864c849bad6d1a2791b4
-  Banks:
-  - {fileID: 114526464239465290}
+  Banks: []
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -337,6 +428,40 @@ MonoBehaviour:
   LoadResult: 70
   FileSizes: []
   Exists: 1
+--- !u!114 &114899326935030876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: F:\Bogdan\NBH\FinalDream\Game\FMOD\Build\Desktop\Master.bank
+  lastModified: 636891152053456839
+  LoadResult: 0
+  FileSizes: []
+  Exists: 0
+--- !u!114 &114916425356065434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: F:\Bogdan\NBH\FinalDream\Game\FMOD\Build\Desktop\Master.strings.bank
+  lastModified: 636891152053486836
+  LoadResult: 70
+  FileSizes: []
+  Exists: 0
 --- !u!114 &114971298887758528
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class InputManager : MonoBehaviour
-{
+{ 
+   
    [HideInInspector]
    public bool game = true;
    private Vector2 inputMove;
