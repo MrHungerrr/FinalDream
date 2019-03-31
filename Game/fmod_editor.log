@@ -9,7 +9,11 @@
 [LOG] DownMix::init                            : done.
 [LOG] Thread::initThread                       : Init FMOD stream thread. Priority: 2, Stack Size: 65536, Semaphore: No, Sleep Time: 10, Looping: Yes.
 [LOG] Thread::initThread                       : Init FMOD mixer thread. Priority: 3, Stack Size: 49152, Semaphore: No, Sleep Time: 0, Looping: Yes.
+<<<<<<< HEAD
 [LOG] AsyncManager::init                       : manager 000000003D354EB8 isAsync 0 updatePeriod 0.02
+=======
+[LOG] AsyncManager::init                       : manager 000000005BF45788 isAsync 0 updatePeriod 0.02
+>>>>>>> 79bed4fd3326fd85cf0e549f13bda1c016891013
 [LOG] AsyncManager::init                       : done
 [LOG] PlaybackSystem::init                     : 
 [LOG] Thread::initThread                       : Init FMOD Studio sample load thread. Priority: 0, Stack Size: 65536, Semaphore: No, Sleep Time: 1, Looping: No.
@@ -24,10 +28,13 @@
 [LOG] Manager::readBank                        : fileversion = 119, compatVersion = 119 (oldest = 44, newest = 119)
 [LOG] Manager::readBank                        : fileversion = 119, compatVersion = 119 (oldest = 44, newest = 119)
 [LOG] PlaybackSystem::acquireMasterBus         : Setting master channel group format to 6
+<<<<<<< HEAD
 [WRN] ObjectLookup::get                        : Lookup failed for WaveformResourceModel: {ee0ebac8-27d9-4dee-8310-c689524a3217}
 [WRN] ObjectLookup::get                        : Lookup failed for WaveformResourceModel: {ee0ebac8-27d9-4dee-8310-c689524a3217}
 [WRN] ObjectLookup::get                        : Lookup failed for WaveformResourceModel: {18707c47-8534-409c-82c9-7a229aaf3838}
 [WRN] ObjectLookup::get                        : Lookup failed for WaveformResourceModel: {18707c47-8534-409c-82c9-7a229aaf3838}
+=======
+>>>>>>> 79bed4fd3326fd85cf0e549f13bda1c016891013
 [WRN] ObjectLookup::get                        : Lookup failed for WaveformResourceModel: {b11606ee-0be2-48f2-89e7-a17b952e10c0}
 [LOG] Manager::readBank                        : fileversion = 119, compatVersion = 119 (oldest = 44, newest = 119)
 [LOG] Manager::readBank                        : fileversion = 119, compatVersion = 119 (oldest = 44, newest = 119)

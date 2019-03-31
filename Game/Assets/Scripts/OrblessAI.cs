@@ -20,18 +20,19 @@ public class OrblessAI : MonoBehaviour
    private int pTarget_Nom;
    private int[] pTargets_Nom;
    private bool pHave = true;
-   private int p_i=0;
+   private int p_i = 0;
    private byte orb_Nom;
 
    //Реакция на силы игрока
+   private float nervous;
    private float forceDangerDist;
    private float forceTime;
-   private const float fireTime_N = 3f;
+   private const float fireTime_N = 2f;
    private const float iceTime_N = -5f;
-   private float stunTime;
    private const float stunTime_N = 10f;
    private Quaternion pLook;
    private float pAngle;
+   private bool hurt;
 
    private bool patrol = true;
    private bool patrolFar = true;
@@ -43,11 +44,16 @@ public class OrblessAI : MonoBehaviour
 
    private GameObject chaseTarget;
    private const float chaseDistance = 12f;
+   private Vector3 chaseFearVec;
    private const float patrolCD_N = 2f;
    private float patrolCD = 0f;
    private const float checkCD_N = 1.0f;
    private float checkCD = 0f;
    private Vector3 checkPos;
+
+   private const float fastSpeed = 15f;
+   private const float midSpeed = 10f;
+   private const float slowSpeed = 6f;
 
 
    void Start()
@@ -88,6 +94,8 @@ public class OrblessAI : MonoBehaviour
       {
          Chase();
       }
+
+      Speed();
    }
 
    private void FixedUpdate()
@@ -269,18 +277,27 @@ public class OrblessAI : MonoBehaviour
    {
       if (chaseTarget == player)
       {
-         if (pScript.forceScare && (pScript.forceType == 1))
+         pLook = Quaternion.LookRotation(player.transform.position - transform.position);
+         pAngle = Quaternion.Angle(player.transform.rotation, pLook);
+         if (pAngle < 75)
          {
+<<<<<<< HEAD
 <<<<<<< HEAD
             pLook = Quaternion.LookRotation(player.transform.position - transform.position);
             pAngle = Quaternion.Angle(transform.rotation, pLook);
             if (pAngle < 75)
+=======
+            if (pScript.forceScare && (pScript.forceType == 1) && Vector3.Distance(transform.position, player.transform.position) > 2f)
+>>>>>>> 79bed4fd3326fd85cf0e549f13bda1c016891013
             {
+               agent.speed = slowSpeed;
                Debug.Log("Безокий боится огня");
-               goal = player.transform.position + (transform.position - player.transform.position).normalized * 5;
+               goal = player.transform.position + (transform.position - player.transform.position).normalized * 5 + chaseFearVec;
+               nervous = 0;
             }
             else
             {
+               nervous += Time.deltaTime;
                goal = player.transform.position;
             }
 =======
@@ -290,8 +307,10 @@ public class OrblessAI : MonoBehaviour
          }
          else
          {
+            nervous += Time.deltaTime * 5;
             goal = player.transform.position;
          }
+
          if (Vector3.Distance(transform.position, player.transform.position) <= 0.2f)
          {
             Debug.Log("Безокий убил нас");
@@ -300,7 +319,7 @@ public class OrblessAI : MonoBehaviour
       }
       else
       {
-         goal = player.transform.position;
+         goal = chaseTarget.transform.position;
          if (Vector3.Distance(transform.position, chaseTarget.transform.position) <= 0.5f)
          {
             //Debug.Log("Безокий убил " + chaseTarget);
@@ -308,6 +327,57 @@ public class OrblessAI : MonoBehaviour
          }
       }
       agent.SetDestination(goal);
+   }
+
+
+
+   private void Speed()
+   {
+
+      if (patrol)
+      {
+         if (nervous > 0)
+         {
+            agent.speed = midSpeed;
+            nervous -= Time.deltaTime;
+         }
+         else
+         {
+            agent.speed = slowSpeed;
+         }
+      }
+
+      if (check)
+      {
+         agent.speed = midSpeed;
+      }
+
+      if (chase)
+      {
+         if (hurt)
+         {
+            if (forceTime < 0)
+            {
+               agent.speed = fastSpeed * ((3 + forceTime) / 3);
+            }
+            else
+            {
+               agent.speed = fastSpeed;
+            }
+         }
+         else
+         {
+            if (nervous > 3)
+            {
+
+               agent.speed = fastSpeed;
+            }
+            else
+            {
+               agent.speed = slowSpeed;
+            }
+         }
+      }
    }
 
 
@@ -365,7 +435,7 @@ public class OrblessAI : MonoBehaviour
             pTargets_Nom[i] = pTarget_NomBuf;
             Debug.Log("Безокий НЕ НАШЕЛ ТОЧКУ");
             FindPoint(count, target, rad + 1);
-         }   
+         }
       }
    }
 
@@ -419,7 +489,7 @@ public class OrblessAI : MonoBehaviour
             pTargets_Nom[i] = pTarget_NomBuf;
             Debug.Log("Безокий НЕ НАШЕЛ ТОЧКУ");
             FindPoint(count, target, rad_B + 1, rad_S - 1);
-         } 
+         }
       }
    }
 
@@ -450,6 +520,13 @@ public class OrblessAI : MonoBehaviour
             StartCoroutine(StartCheck());
          }
       }
+
+      if(hurt)
+      {
+         patrol = false;
+         check = false;
+         chase = true;
+      }
    }
 
 
@@ -479,7 +556,7 @@ public class OrblessAI : MonoBehaviour
 
       p_i = 1;
       pHave = true;
-      agent.speed = 15;
+      agent.speed = midSpeed;
       pTarget_Nom = pTargets_Nom[0];
       goal = eHelpAI.points[pTarget_Nom].transform.position;
       Debug.Log("Следующая точка для проверки места" + goal);
@@ -496,6 +573,26 @@ public class OrblessAI : MonoBehaviour
       //Звуки всякие
       agent.SetDestination(transform.position);
       yield return new WaitForSeconds(1.0f);
+      chase = true;
+   }
+
+   IEnumerator Stun()
+   {
+      patrol = false;
+      check = false;
+      chase = false;
+      //Звуки всякие
+      agent.SetDestination(transform.position);
+      yield return new WaitForSeconds(stunTime_N);
+      Debug.Log("Безокий перестает искать добычу в месте");
+      patrolCD = 0f;
+      chase = false;
+      nervous = 120;
+      patrol = true;
+      patrolFar = false;
+      patrolMid = true;
+      patrolNear = false;
+      pHave = false;
       agent.speed = 15;
       chase = true;
    }
@@ -510,11 +607,26 @@ public class OrblessAI : MonoBehaviour
 
          if(forceTime<fireTime_N)
          {
-            //отближение + настроить две скорости
+            chaseFearVec = (transform.position - player.transform.position).normalized * forceTime * 2;
          }
          else
          {
-            //уюегание
+            hurt = false;
+            Debug.Log("Убегает");
+            //Звук
+            hurt = false;
+            chase = false;
+            FindPoint(player.transform.position, 50, 40);
+            goals[2] = goal;   
+            patrolCD = 4f;
+            nervous = 120;
+            agent.speed = 10;
+            patrol = true;
+            patrolFar = false;
+            patrolMid = true;
+            patrolNear = false;
+            p_i = 2;
+            pHave = true;
          }
       }
 
@@ -523,13 +635,15 @@ public class OrblessAI : MonoBehaviour
       {
          forceTime += Time.fixedDeltaTime;
 
-         if (forceTime > fireTime_N)
+         if (forceTime > iceTime_N)
          {
-
+            nervous += Time.fixedDeltaTime * 5;
          }
          else
          {
-            //заморозка
+            hurt = false;
+            Debug.Log("Заморозился");
+            StartCoroutine(Stun());
          }
       }
    }
@@ -539,14 +653,24 @@ public class OrblessAI : MonoBehaviour
    {
       if(harm.tag == "fire")
       {
+         hurt = true;
          forceTime += 2 * Time.fixedDeltaTime;
       }
 
       if (harm.tag == "ice")
       {
+         hurt = true;
          forceTime -= 2 * Time.fixedDeltaTime;
       }
 
+   }
+
+   private void OnTriggerExit(Collider harm)
+   {
+      if (harm.tag == "fire" || harm.tag == "ice")
+      {
+         hurt = false;
+      }
    }
 
 }
