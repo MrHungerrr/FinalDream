@@ -116,8 +116,8 @@ public class PlayerScript : MonoBehaviour
    public EnemyHelperAI enemyHelpAI;
 
 
-   //Прыжок
-   private Vector3 jumpVector = new Vector3(0,1400,0);
+    //Прыжок
+    private Vector3 jumpVector = new Vector3(0,1400,0);
    [HideInInspector]
    public bool jumpAct = false;
    private bool jumpBounce = true;
@@ -515,7 +515,7 @@ public class PlayerScript : MonoBehaviour
    //Действия игрока с предметами
       public void Act()
       {
-      if (doing)
+      if (doing && actObject!=null)
       {
          //Включение двигателя(зажать)
          if (actObject.tag == "engine")
@@ -565,9 +565,11 @@ public class PlayerScript : MonoBehaviour
             {
                 if (!actEasyHappen)
                 {
-                    FMOD.Studio.EventInstance play;
-                    play.start;
+                    string path = ("event:/AudioRecordsAndNotes/" + actObject.name);
+                    AudioRecordsAndNotes.AudioRecords_Script.AddAudioRecord(path);
+                    playerAnim.SetBool("ActionEasy", true);
                     actEasyHappen = true;
+                    Destroy(actObject.gameObject);
                 }
 
                 if (actEasyTime > 0)
@@ -585,8 +587,10 @@ public class PlayerScript : MonoBehaviour
 
          if (actObject.tag =="Note" && !actComplete)
             {
-                if (!actEasyHappen)
+                if (!actEasyHappen && !AudioRecordsAndNotes.Notes_Script.cheking)
                 {
+                    string path = ("event:/AudioRecordsAndNotes/OpenNote");                   
+                    AudioRecordsAndNotes.Notes_Script.OpenNote(path, actObject.transform.GetChild(0).gameObject);
                     playerAnim.SetBool("ActionEasy", true);
                     actEasyHappen = true;
                 }

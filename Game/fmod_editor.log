@@ -9,7 +9,7 @@
 [LOG] DownMix::init                            : done.
 [LOG] Thread::initThread                       : Init FMOD stream thread. Priority: 2, Stack Size: 65536, Semaphore: No, Sleep Time: 10, Looping: Yes.
 [LOG] Thread::initThread                       : Init FMOD mixer thread. Priority: 3, Stack Size: 49152, Semaphore: No, Sleep Time: 0, Looping: Yes.
-[LOG] AsyncManager::init                       : manager 000000006AC61B18 isAsync 0 updatePeriod 0.02
+[LOG] AsyncManager::init                       : manager 000000003D354EB8 isAsync 0 updatePeriod 0.02
 [LOG] AsyncManager::init                       : done
 [LOG] PlaybackSystem::init                     : 
 [LOG] Thread::initThread                       : Init FMOD Studio sample load thread. Priority: 0, Stack Size: 65536, Semaphore: No, Sleep Time: 1, Looping: No.
@@ -22,11 +22,17 @@
 [LOG] Manager::readBank                        : fileversion = 119, compatVersion = 119 (oldest = 44, newest = 119)
 [LOG] Manager::readBank                        : fileversion = 119, compatVersion = 119 (oldest = 44, newest = 119)
 [LOG] Manager::readBank                        : fileversion = 119, compatVersion = 119 (oldest = 44, newest = 119)
+[LOG] Manager::readBank                        : fileversion = 119, compatVersion = 119 (oldest = 44, newest = 119)
 [LOG] PlaybackSystem::acquireMasterBus         : Setting master channel group format to 6
-[LOG] Thread::callback                         : FMOD Studio bank load thread finished.
-[LOG] Thread::callback                         : FMOD Studio sample load thread finished.
-[LOG] LiveUpdate::release                      : 
-[LOG] LiveUpdate::reset                        : Reset connection (reason Disconnected)
-[LOG] Thread::callback                         : FMOD stream thread finished.
-[LOG] Thread::callback                         : FMOD mixer thread finished.
-[LOG] SystemI::close                           : Closed.
+[WRN] ObjectLookup::get                        : Lookup failed for WaveformResourceModel: {ee0ebac8-27d9-4dee-8310-c689524a3217}
+[WRN] ObjectLookup::get                        : Lookup failed for WaveformResourceModel: {ee0ebac8-27d9-4dee-8310-c689524a3217}
+[WRN] ObjectLookup::get                        : Lookup failed for WaveformResourceModel: {18707c47-8534-409c-82c9-7a229aaf3838}
+[WRN] ObjectLookup::get                        : Lookup failed for WaveformResourceModel: {18707c47-8534-409c-82c9-7a229aaf3838}
+[WRN] ObjectLookup::get                        : Lookup failed for WaveformResourceModel: {b11606ee-0be2-48f2-89e7-a17b952e10c0}
+[LOG] Manager::readBank                        : fileversion = 119, compatVersion = 119 (oldest = 44, newest = 119)
+[LOG] Manager::readBank                        : fileversion = 119, compatVersion = 119 (oldest = 44, newest = 119)
+[LOG] Manager::finishLoadBank                  : Bank with guid {239c57fe-2a35-0579-29ab-c973bfe9ff19} has already been loaded
+[LOG] Manager::readBank                        : fileversion = 119, compatVersion = 119 (oldest = 44, newest = 119)
+[LOG] Manager::finishLoadBank                  : Bank with guid {239c57fe-2a35-0579-29ab-c973bfe9ff19} has already been loaded
+[LOG] Manager::readBank                        : fileversion = 119, compatVersion = 119 (oldest = 44, newest = 119)
+[LOG] Manager::readBank                        : fileversion = 119, compatVersion = 119 (oldest = 44, newest = 119)

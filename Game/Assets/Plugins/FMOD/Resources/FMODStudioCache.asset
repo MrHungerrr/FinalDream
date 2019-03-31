@@ -13,16 +13,22 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: 
   EditorBanks:
-  - {fileID: 114511183182482558}
-  - {fileID: 114454759624531410}
+  - {fileID: 114637142212534804}
+  - {fileID: 114697472849250074}
+  - {fileID: 114297390529904552}
+  - {fileID: 114286342092919118}
+  - {fileID: 114837316544338576}
   EditorEvents:
-  - {fileID: 114085969633461624}
+  - {fileID: 114731780336579148}
+  - {fileID: 114175622003130866}
+  - {fileID: 114324290351595632}
+  - {fileID: 114813791969547698}
   EditorParameters: []
   MasterBanks:
-  - {fileID: 114454759624531410}
+  - {fileID: 114297390529904552}
   StringsBanks:
-  - {fileID: 114511183182482558}
-  stringsBankWriteTime: 636893979683991651
+  - {fileID: 114637142212534804}
+  stringsBankWriteTime: 636896355974757855
   cacheVersion: 3
 --- !u!114 &114011845849945032
 MonoBehaviour:
@@ -84,8 +90,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/Record
   guid: 958c221d401b644c87ec18e5b8b24863
-  Banks:
-  - {fileID: 114454759624531410}
+  Banks: []
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -93,6 +98,28 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 1700
+--- !u!114 &114116317936825030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: "event:/\u0441\u043E\u0441\u0438"
+  guid: 79e77a939ad16c48a5fb40bd7af6e365
+  Banks: []
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 228075
 --- !u!114 &114147963029392166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,6 +137,29 @@ MonoBehaviour:
   LoadResult: 0
   FileSizes: []
   Exists: 1
+--- !u!114 &114175622003130866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/AudioRecordsAndNotes/CloseNote
+  guid: 6a44b399b5c6d145a3958db078244b75
+  Banks:
+  - {fileID: 114297390529904552}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 2127
 --- !u!114 &114215850929318978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,6 +194,63 @@ MonoBehaviour:
   LoadResult: 70
   FileSizes: []
   Exists: 1
+--- !u!114 &114286342092919118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: F:\Bogdan\NBH\FinalDream\Game\FMOD\Build\Desktop\Master.streams.bank
+  lastModified: 636896355974687875
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
+--- !u!114 &114297390529904552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: F:\Bogdan\NBH\FinalDream\Game\FMOD\Build\Desktop\Master.bank
+  lastModified: 636896355972888464
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
+--- !u!114 &114324290351595632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/AudioRecordsAndNotes/OpenNote
+  guid: bbcd2ec3cfd4da479da4f62ad86fa164
+  Banks:
+  - {fileID: 114297390529904552}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 1000
 --- !u!114 &114333709894677806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,12 +338,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: C:\Users\Public\Documents\Unity Projects\NBH\FMOD\Build\Desktop\Master.bank
-  lastModified: 636893979683941658
+  lastModified: 636893990623779311
   LoadResult: 0
   FileSizes:
   - Name: Desktop
-    Value: 2360
-  Exists: 1
+    Value: 2795200
+  Exists: 0
 --- !u!114 &114488084784344090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,12 +380,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: C:\Users\Public\Documents\Unity Projects\NBH\FMOD\Build\Desktop\Master.strings.bank
-  lastModified: 636893979683991651
+  lastModified: 636893990623809305
   LoadResult: 0
   FileSizes:
   - Name: Desktop
-    Value: 724
-  Exists: 1
+    Value: 726
+  Exists: 0
 --- !u!114 &114526464239465290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -372,6 +479,29 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 0
+--- !u!114 &114637142212534804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: FMOD\Build\Desktop\Master.strings.bank
+  lastModified: 636896355974757855
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 992
+  - Name: PS4
+    Value: 992
+  - Name: XboxOne
+    Value: 992
+  Exists: 1
 --- !u!114 &114638783767349704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -387,6 +517,46 @@ MonoBehaviour:
   Path: event:/Player/Sonar
   guid: e800fb8de627864c849bad6d1a2791b4
   Banks: []
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 156
+--- !u!114 &114697472849250074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: F:\Bogdan\NBH\FinalDream\Game\FMOD\Build\Desktop\Master.assets.bank
+  lastModified: 636896355973198357
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
+--- !u!114 &114731780336579148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/Player/Sonar
+  guid: e800fb8de627864c849bad6d1a2791b4
+  Banks:
+  - {fileID: 114297390529904552}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -428,6 +598,46 @@ MonoBehaviour:
   LoadResult: 70
   FileSizes: []
   Exists: 1
+--- !u!114 &114813791969547698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/AudioRecordsAndNotes/AudioRecord1
+  guid: bdf83a3919cd0c4190c089e1779a205e
+  Banks:
+  - {fileID: 114297390529904552}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 3000
+--- !u!114 &114837316544338576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: F:\Bogdan\NBH\FinalDream\Game\FMOD\Build\Desktop\Master.strings.bank
+  lastModified: 636896355974757855
+  LoadResult: 70
+  FileSizes: []
+  Exists: 1
 --- !u!114 &114899326935030876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -462,6 +672,29 @@ MonoBehaviour:
   LoadResult: 70
   FileSizes: []
   Exists: 0
+--- !u!114 &114921283410137416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/AudioRecords/AudioRecord1
+  guid: bdf83a3919cd0c4190c089e1779a205e
+  Banks:
+  - {fileID: 114297390529904552}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 3000
 --- !u!114 &114971298887758528
 MonoBehaviour:
   m_ObjectHideFlags: 0
