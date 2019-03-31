@@ -63,7 +63,7 @@ public class EnemyHelperAI : MonoBehaviour
          pointsBusy[i, orbless_Nom] = false;
          pointsBusy[i, spider_Nom] = false;
       }
-      //Debug.Log(pointCount);
+      Debug.Log(pointCount);
    }
 
    // Start is called before the first frame update

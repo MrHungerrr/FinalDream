@@ -12,8 +12,13 @@ public class InputManager : MonoBehaviour
    private Vector2 inputMove;
    public PlayerScript player;
 
-    //private ParticleSystem.VelocityOverLifetimeModule vel;
-    //private ParticleSystem.ShapeModule shape;
+   //private ParticleSystem.VelocityOverLifetimeModule vel;
+   //private ParticleSystem.ShapeModule shape;
+
+   void Start()
+   {
+   }
+
 
    void Update()
    {
@@ -128,21 +133,12 @@ public class InputManager : MonoBehaviour
       //Меню
       if (Input.GetKeyDown(KeyCode.Escape))
       {
-            if (AudioRecordsAndNotes.Notes_Script.cheking)
-            {
-                AudioRecordsAndNotes.Notes_Script.CloseNote("event:/AudioRecordsAndNotes/CloseNote");
-            }
-        }
 
-      if (Input.GetKeyDown(KeyCode.Z))
-      {
-            int k = 0;
-            AudioRecordsAndNotes.AudioRecords_Script.AudioListening(k);
       }
    } 
 
    private void MenuInput()
    {
-     
+
    }
 }

@@ -83,7 +83,7 @@ public class OrblessAI : MonoBehaviour
          else
          {
             napor = false;
-            //Debug.Log("Безокий начал отступать");
+            Debug.Log("Безокий начал отступать");
          }
       }
       else
@@ -95,12 +95,12 @@ public class OrblessAI : MonoBehaviour
          else
          {
             napor = true;
-           // Debug.Log("Безокий начал наступать");
+            Debug.Log("Безокий начал наступать");
          }
       }
 
       nervous += nervCoef*Time.deltaTime;
-      //Debug.Log(nervous);
+      Debug.Log(nervous);
 
    }
 
@@ -112,7 +112,7 @@ public class OrblessAI : MonoBehaviour
          pTarget_NomBuf = pTarget_Nom;
          FindPoint(player.transform.position, nervous, nervous-5);
          eHelpAI.pointsBusy[pTarget_NomBuf, orb_Nom] = false;
-         //Debug.Log("Безокий Начал идти к " + goal);
+         Debug.Log("Безокий Начал идти к " + goal);
       }
       else
       {
@@ -127,7 +127,7 @@ public class OrblessAI : MonoBehaviour
       {
          if (checkCD <= 0)
          {
-            //Debug.Log("Безокий пытается найти добычу");
+            Debug.Log("Безокий пытается найти добычу");
             pTarget_NomBuf = pTarget_Nom;
             FindPoint(player.transform.position, 15);
             eHelpAI.pointsBusy[pTarget_NomBuf, orb_Nom] = false;
@@ -147,7 +147,7 @@ public class OrblessAI : MonoBehaviour
 
       if (nervous <= 0)
       {
-         //Debug.Log("Безокий перестает искать добычу");
+         Debug.Log("Безокий перестает искать добычу");
          check = false;
          FindPoint(player.transform.position, 20, 5);
          StartCoroutine(StartPatrol());
@@ -161,7 +161,7 @@ public class OrblessAI : MonoBehaviour
       {
          if (pScript.forceScare && (pScript.forceType == 1))
          {
-            //Debug.Log("Безокий боится огня");
+            Debug.Log("Безокий боится огня");
             goal = player.transform.position + (transform.position - player.transform.position).normalized * 5;
          }
          else
@@ -181,7 +181,7 @@ public class OrblessAI : MonoBehaviour
          agent.SetDestination(goal);
          if (Vector3.Distance(transform.position, chaseTarget.transform.position) <= 0.5f)
          {
-            //Debug.Log("Безокий убил " + chaseTarget);
+            Debug.Log("Безокий убил " + chaseTarget);
             //Смерть
          }
 
@@ -196,15 +196,15 @@ public class OrblessAI : MonoBehaviour
       pTarget_Nom = eHelpAI.PointNear(target, rad, orb_Nom);
       if (pTarget_Nom >= 0)
       {
-         //Debug.Log(pTarget_Nom + "    " + orb_Nom);
+         Debug.Log(pTarget_Nom + "    " + orb_Nom);
          goal = eHelpAI.points[pTarget_Nom].transform.position;
-         //Debug.Log("Безокий нашел точку " + goal);
+         Debug.Log("Безокий нашел точку " + goal);
          agent.SetDestination(goal);
 
       }
       else
       {
-         //Debug.Log("Безокий НЕ НАШЕЛ ТОЧКУ");
+         Debug.Log("Безокий НЕ НАШЕЛ ТОЧКУ");
          FindPoint(target, rad + 1);
       }
    }
@@ -214,14 +214,14 @@ public class OrblessAI : MonoBehaviour
       pTarget_Nom = eHelpAI.PointBetween(target, rad_B, rad_S, orb_Nom);
       if (pTarget_Nom >= 0)
       {
-         //Debug.Log(pTarget_Nom + "    " + orb_Nom);
+         Debug.Log(pTarget_Nom + "    " + orb_Nom);
          goal = eHelpAI.points[pTarget_Nom].transform.position;
-         //Debug.Log("Безокий нашел точку " + goal);
+         Debug.Log("Безокий нашел точку " + goal);
          agent.SetDestination(goal);
       }
       else
       {
-         //Debug.Log("Безокий НЕ НАШЕЛ ТОЧКУ");
+         Debug.Log("Безокий НЕ НАШЕЛ ТОЧКУ");
          FindPoint(target, rad_B + 1, rad_S - 1);
       }
    }
@@ -233,7 +233,7 @@ public class OrblessAI : MonoBehaviour
       if (patrol)
       {
 
-         //Debug.Log("Безокий услышал что-то подозрительное");
+         Debug.Log("Безокий услышал что-то подозрительное");
          patrol = false;
          FindPoint(pos, 4);
          StartCoroutine(StartCheck());
@@ -243,7 +243,7 @@ public class OrblessAI : MonoBehaviour
       {
          if (Vector3.Distance(pos, transform.position) < chaseDistance)
          {
-            //Debug.Log("Безокий 'нашел' добычу");
+            Debug.Log("Безокий 'нашел' добычу");
             check = false;
             chaseTarget = source;
             StartCoroutine(StartChase());
