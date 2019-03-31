@@ -63,6 +63,10 @@ public class EnemyHelperAI : MonoBehaviour
          pointsBusy[i, orbless_Nom] = false;
          pointsBusy[i, spider_Nom] = false;
       }
+<<<<<<< HEAD
+=======
+      //Debug.Log(pointCount);
+>>>>>>> parent of d001a88... Revert "AudioRecordsAndNotes"
    }
 
    // Start is called before the first frame update
