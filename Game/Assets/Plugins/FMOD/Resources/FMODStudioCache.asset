@@ -13,16 +13,19 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: 
   EditorBanks:
-  - {fileID: 114511183182482558}
-  - {fileID: 114454759624531410}
+  - {fileID: 114468673449118236}
+  - {fileID: 114621228072434094}
+  - {fileID: 114919474728371182}
+  - {fileID: 114976238653386980}
+  - {fileID: 114681515649637250}
   EditorEvents:
-  - {fileID: 114085969633461624}
+  - {fileID: 114595082795021562}
   EditorParameters: []
   MasterBanks:
-  - {fileID: 114454759624531410}
+  - {fileID: 114919474728371182}
   StringsBanks:
-  - {fileID: 114511183182482558}
-  stringsBankWriteTime: 636893979683991651
+  - {fileID: 114468673449118236}
+  stringsBankWriteTime: 636888026669296576
   cacheVersion: 3
 --- !u!114 &114011845849945032
 MonoBehaviour:
@@ -237,6 +240,29 @@ MonoBehaviour:
   - Name: Desktop
     Value: 2360
   Exists: 1
+--- !u!114 &114468673449118236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: FMOD\Build\Desktop\Master.strings.bank
+  lastModified: 636888026669296576
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 826
+  - Name: PS4
+    Value: 826
+  - Name: XboxOne
+    Value: 826
+  Exists: 1
 --- !u!114 &114488084784344090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,6 +356,29 @@ MonoBehaviour:
   LoadResult: 0
   FileSizes: []
   Exists: 0
+--- !u!114 &114595082795021562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/Player/Sonar
+  guid: e800fb8de627864c849bad6d1a2791b4
+  Banks:
+  - {fileID: 114919474728371182}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 156
 --- !u!114 &114614977212001338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -372,6 +421,23 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 0
+--- !u!114 &114621228072434094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: D:\Creativity\GitHub\FinalDream\Game\FMOD\Build\Desktop\Master.assets.bank
+  lastModified: 636888026669046675
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
 --- !u!114 &114638783767349704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -394,6 +460,23 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 156
+--- !u!114 &114681515649637250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: D:\Creativity\GitHub\FinalDream\Game\FMOD\Build\Desktop\Master.strings.bank
+  lastModified: 636888026669296576
+  LoadResult: 70
+  FileSizes: []
+  Exists: 1
 --- !u!114 &114775774360018830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -462,7 +545,41 @@ MonoBehaviour:
   LoadResult: 70
   FileSizes: []
   Exists: 0
+--- !u!114 &114919474728371182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: D:\Creativity\GitHub\FinalDream\Game\FMOD\Build\Desktop\Master.bank
+  lastModified: 636888026668646788
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
 --- !u!114 &114971298887758528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: D:\Creativity\GitHub\FinalDream\Game\FMOD\Build\Desktop\Master.streams.bank
+  lastModified: 636888026669176627
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
+--- !u!114 &114976238653386980
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

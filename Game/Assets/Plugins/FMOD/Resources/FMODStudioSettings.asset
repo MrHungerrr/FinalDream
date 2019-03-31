@@ -15,9 +15,9 @@ MonoBehaviour:
   SwitchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: C:\Users\Public\Documents\Unity Projects\NBH\FMOD\FMOD.fspro
-  SourceProjectPathUnformatted: C:\Users\Public\Documents\Unity Projects\NBH\FMOD\FMOD.fspro
-  SourceBankPathUnformatted: C:\Users\Public\Documents\Unity Projects\NBH\FMOD\Build
+  sourceProjectPath: FMOD\FDream.fspro
+  SourceProjectPathUnformatted: FMOD\FDream.fspro
+  SourceBankPathUnformatted: FMOD\Build
   AutomaticEventLoading: 0
   BankLoadType: 0
   AutomaticSampleLoading: 1
@@ -83,6 +83,9 @@ MonoBehaviour:
   Plugins: []
   MasterBanks:
   - Master
-  Banks: []
+  Banks:
+  - Master.assets
+  - Master.streams
+  - Master.strings
   BanksToLoad: []
   LiveUpdatePort: 9264
