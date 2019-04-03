@@ -334,7 +334,7 @@ public class OrblessAI : MonoBehaviour
       {
          pTarget_Nom = pTarget_NomBuf;
          Debug.Log("Безокий НЕ НАШЕЛ ТОЧКУ");
-         FindPoint(target, rad + 1);
+         FindPoint(target, rad + 5);
       }
 
 
@@ -358,7 +358,7 @@ public class OrblessAI : MonoBehaviour
          {
             pTargets_Nom[i] = pTarget_NomBuf;
             Debug.Log("Безокий НЕ НАШЕЛ ТОЧКУ");
-            FindPoint(count, target, rad + 1);
+            FindPoint(target, rad + 5);
          }
       }
    }
@@ -379,7 +379,7 @@ public class OrblessAI : MonoBehaviour
       {
          pTarget_Nom = pTarget_NomBuf;
          Debug.Log("Безокий НЕ НАШЕЛ ТОЧКУ");
-         FindPoint(target, rad_B + 1, rad_S - 1);
+         FindPoint(target, rad_B + 5, rad_S - 5);
       }
    }
 
@@ -401,7 +401,7 @@ public class OrblessAI : MonoBehaviour
          {
             pTargets_Nom[i] = pTarget_NomBuf;
             Debug.Log("Безокий НЕ НАШЕЛ ТОЧКУ");
-            FindPoint(count, target, rad_B + 1, rad_S - 1);
+            FindPoint(target, rad_B + 5, rad_S - 5);
          }
       }
    }

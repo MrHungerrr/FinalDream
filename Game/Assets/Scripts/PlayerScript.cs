@@ -16,9 +16,9 @@ public class PlayerScript : MonoBehaviour
    private Animator legsAnim;
    private Vector3 legsOffset;
    private Transform legsTrans;
-   public Light[] lights_suit = new Light[3];
+   public Light[] lights_suit;
    [HideInInspector]
-   public float[] lights_suit_intens = new float[3];
+   public float[] lights_suit_intens;
    public Light light_snow;
    private float light_snow_intens;
    public Transform cameraTrans;
@@ -27,7 +27,8 @@ public class PlayerScript : MonoBehaviour
 
 
    //События и действия
-   private bool idle = false;
+   [HideInInspector]
+   public bool idle = false;
    [HideInInspector]
    public bool action = false;
    private bool actComplete = false;
@@ -78,6 +79,8 @@ public class PlayerScript : MonoBehaviour
    private float switchTime;
    private float switchTime_N = 1.0f;
    private string[] forceType_string = new string[2];
+
+
 
 
    //Здоровье
@@ -141,7 +144,7 @@ public class PlayerScript : MonoBehaviour
       legsOffset = legsTrans.position;
       playerAnim = GetComponent<Animator>();
       rb = GetComponent<Rigidbody>();
-      cameraTrans.position = transform.position;
+      cameraTrans.position = new Vector3(transform.position.x, 0 , transform.position.z);
 
    }
 
@@ -153,10 +156,10 @@ public class PlayerScript : MonoBehaviour
       jumpTime = jumpTime_N;
       health = healthMax;
       mana = manaMax;
-      force_lightColor[0] = new Color(0, 0.6f, 0.7254902f, 1);
-      force_lightColor[1] = new Color(0.8f, 0.5f, 0, 1);
-      suit_lightColor[0] = new Color(0.4f, 0.9f, 1.0f, 1);
-      suit_lightColor[1] = new Color(1.0f, 0.86f, 0.63f, 1);
+      force_lightColor[0] = new Color(0, 0.6f, 0.7254902f);
+      force_lightColor[1] = new Color(0.8f, 0.5f, 0);
+      suit_lightColor[0] = new Color(0.4f, 0.9f, 1.0f);
+      suit_lightColor[1] = new Color(1.0f, 0.86f, 0.63f);
       forceType_string[0] = "ice";
       forceType_string[1] = "fire";
       forceType = 0;
@@ -182,7 +185,9 @@ public class PlayerScript : MonoBehaviour
       {
          Act();
       }
+      Debug.Log(cameraTrans.position);
    }
+
 
 
    private void FixedUpdate()
@@ -364,7 +369,7 @@ public class PlayerScript : MonoBehaviour
                forcePrep_particle.enableEmission = false;
                enemyHelpAI.Sound(transform.position, 40, this.gameObject);
                mana -= Time.deltaTime;
-               force_light_intens = 0;
+               force_light_intens = 1.8f;
                light_snow_intens = 8;
 
             }
@@ -375,7 +380,7 @@ public class PlayerScript : MonoBehaviour
                enemyHelpAI.Sound(transform.position, 8, this.gameObject);
                forcePrep_particle.enableEmission = true;
                mana -= Time.deltaTime * 0.1f;
-               force_light_intens = 1.2f;
+               force_light_intens = 1.8f;
                if (suitOff)
                   light_snow_intens = 2;
                else
@@ -461,6 +466,10 @@ public class PlayerScript : MonoBehaviour
       {
          lights_suit[i].color = suit_lightColor[forceType];
       }
+      if(suitOff)
+      {
+         lights_suit[0].color = new Color(1, 1, 1);
+      }
       for (int i = 0; i < lights_force.Length; i++)
       {
          lights_force[i].color = mana_color;
@@ -534,6 +543,7 @@ public class PlayerScript : MonoBehaviour
                   //Debug.Log("Вкл/Выкл двигателя + остановка действия")
                   actObject.GetComponent<Engine>().power = !actObject.GetComponent<Engine>().power;
                   playerAnim.SetBool("ActionHard", false);
+                  playerAnim.SetBool("ActionEasy", false);
                   actComplete = true;
                }
             }
@@ -545,6 +555,7 @@ public class PlayerScript : MonoBehaviour
             if (!actEasyHappen)
             {
                playerAnim.SetBool("ActionEasy", true);
+               actObject.GetComponent<Door>().ByHand(); 
                actEasyHappen = true;
             }
 
@@ -567,7 +578,7 @@ public class PlayerScript : MonoBehaviour
                 if (!actEasyHappen)
                 {
                     FMOD.Studio.EventInstance play;
-                    play.start;
+                    //play.start;
                     actEasyHappen = true;
                 }
 
@@ -644,11 +655,15 @@ public class PlayerScript : MonoBehaviour
             break;
 
       }
-
       LightSuit();
+   }
 
+
+   public void Death()
+   {
 
    }
+
 
    private void OnCollisionEnter(Collision col)
    {

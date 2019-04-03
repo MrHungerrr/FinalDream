@@ -15,24 +15,33 @@ public class Lamp : MonoBehaviour
    private float dist;
    private float blackoutDist;
    private float overloadDist;
+   private float lightIntens;
 
 
-   public Renderer lamp;
-   private Material material;
-   public Light pointLight;
+   public Renderer[] lamps;
+   private Material[] materials;
+   public Light trueLight;
 
-   public Color colorOn = new Color(1, 1, 1);
+   private Color[] colorOn;
    private Color colorOff = new Color(0, 0, 0);
 
 
 
    void Start()
    {
+      lightIntens = trueLight.intensity;
       blackoutDist = enemyHelpAI.blackoutDist;
       overloadDist = enemyHelpAI.overloadDist;
+      materials = new Material[lamps.Length];
+      colorOn = new Color[lamps.Length];
 
-      material = lamp.GetComponent<Renderer>().material;
-      PowerOff();
+      for (int i = 0; i < lamps.Length; i++)
+      {
+         materials[i] = lamps[i].GetComponent<Renderer>().material;
+         colorOn[i] = materials[i].color;
+      }
+
+         PowerOff();
 
       if (this.tag == "electricityOn")
       {
@@ -67,7 +76,7 @@ public class Lamp : MonoBehaviour
             if (dist <= overloadDist)
          {
             blackout = false;
-            PowerOn((1 / ((dist - 0.5f))) + Random.Range(-0.1f, 0.1f));
+            PowerOn(((lightIntens / dist) + Random.Range(-0.1f, 0.1f))*2);
          }
          else if (dist <= blackoutDist)
          {
@@ -99,14 +108,12 @@ public class Lamp : MonoBehaviour
    }
 
 
-
    private void Power()
    {
       if (this.tag == "electricityOn" && !power)
       {
          PowerOn();
       }
-
       if (this.tag == "electricityOff" && power)
       {
          PowerOff();
@@ -114,25 +121,24 @@ public class Lamp : MonoBehaviour
    }
 
 
-
    private void PowerOn()
    {
       power = true;
-      material.SetColor("_EmissionColor", colorOn * 3);
-      pointLight.intensity = 1.5f;
+      for (int i = 0; i < lamps.Length; i++)
+         materials[i].SetColor("_EmissionColor", colorOn[i] * 3);
+      trueLight.intensity = lightIntens;
 
    }
-
 
 
    private void PowerOn(float intensivity)
    {
       power = true;
-      material.SetColor("_EmissionColor", colorOn * intensivity);
-      pointLight.intensity = Mathf.Lerp(pointLight.intensity, 1.5f * intensivity, 0.3f);
+      for (int i = 0; i < lamps.Length; i++)
+         materials[i].SetColor("_EmissionColor", colorOn[i] * 3 * intensivity);
+      trueLight.intensity = Mathf.Lerp(trueLight.intensity, 1.5f * intensivity, 0.3f);
 
    }
-
 
 
    private void Blackout()
@@ -141,11 +147,11 @@ public class Lamp : MonoBehaviour
    }
 
 
-
    private void PowerOff()
    {
       power = false;
-      material.SetColor("_EmissionColor", colorOff);
-      pointLight.intensity = 0f;
+      for (int i = 0; i < lamps.Length; i++)
+         materials[i].SetColor("_EmissionColor", colorOff * 3);
+      trueLight.intensity = 0f;
    }
 }

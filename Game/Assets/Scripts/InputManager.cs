@@ -70,11 +70,6 @@ public class InputManager : MonoBehaviour
    private void GameInput()
    {
 
-      if (Input.GetMouseButtonDown(0))
-      {
-      }
-
-
       //Смена силы
       if (Input.GetKeyDown(KeyCode.Q) && !player.forceSwitch && !player.doing)
       {
@@ -100,7 +95,7 @@ public class InputManager : MonoBehaviour
       }
 
 
-      //Первая способность костюма
+      //бег
       if (Input.GetKey(KeyCode.LeftShift) && !player.forcePrep && !player.jumpAct && !player.forceSwitch && !player.doing)
       {
          player.runAct = true;
@@ -111,7 +106,7 @@ public class InputManager : MonoBehaviour
       }
 
 
-      //Вторая способность костюма
+      //Способность костюма
       if (Input.GetKeyDown(KeyCode.Space) && (player.jumpCD <= 0) && !player.forcePrep && !player.doing)
       { 
          player.jumpAct = true;
@@ -119,7 +114,7 @@ public class InputManager : MonoBehaviour
 
 
       //Сохранение
-      if (Input.GetKey(KeyCode.F) && !player.forcePrep && !player.forceSwitch && inputMove == Vector2.zero && !player.jumpAct && !player.doing)
+     /* if (Input.GetKey(KeyCode.F) && !player.forcePrep && !player.forceSwitch && inputMove == Vector2.zero && !player.jumpAct && !player.doing)
       {
          player.Save();
       }
@@ -129,6 +124,9 @@ public class InputManager : MonoBehaviour
       {
 
       }
+      */
+
+
 
       //Меню
       if (Input.GetKeyDown(KeyCode.Escape))

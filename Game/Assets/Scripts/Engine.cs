@@ -76,7 +76,7 @@ public class Engine : MonoBehaviour
          if (dist <= overloadDist)
          {
             blackout = false;
-            PowerOn((1 / ((dist - 0.5f))) + Random.Range(-0.1f, 0.1f));
+            PowerOn(((1 / dist) + Random.Range(-0.1f, 0.1f))*2);
          }
          else if (dist <= blackoutDist)
          {
