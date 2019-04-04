@@ -2,142 +2,206 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Conductor : MonoBehaviour
+public class Сonductor: MonoBehaviour
 {
+   public GameObject[] mechanism;
+   private int temp;
+   private float forceTime;
+   private const float forceTime_N = 2f;
+   private bool change;
 
-
-   public bool power;
-   public GameObject[] mechanism = new GameObject[0];
 
    [HideInInspector]
-   public GameObject[] lights = new GameObject[4];
-   private Material[] materials = new Material[4];
-   private int lightsQuant;
+   public bool power = false;
    [HideInInspector]
-   public Light pointLight_active;
-   public byte temp;
-   private const float forceTime = 2;
-   private float iceTime = forceTime;
-   private float fireTime = forceTime;
-   private bool act; 
+   private bool blackout = false;
+   private EnemyHelperAI eHelpAI;
+   private float distBuf;
+   private float dist;
+   private float blackoutDist;
+   private float overloadDist;
+   private float orblessGlitch;
+
+
+   public Renderer emissionLamp;
+   private float lightIntens;
+   private Material material;
+   public Light lightTrue;
+   private bool act;
    private Animator anim;
 
-   private Color colorOn = new Color(0,1,0);
-   private Color colorOff = new Color (1,0,0);
+   private Color colorOn = new Color(0, 1, 0);
+   private Color colorOff = new Color(0, 0, 0);
    private Color colorIce = new Color(0, 0.5f, 1.0f);
    private Color colorFire = new Color(1.0f, 0.5f, 0);
 
    private Color colorLightOn = new Color(0.4f, 1, 0.4f);
-   private Color colorLightOff = new Color(1, 0.35f, 0);
+   private Color colorLightOff = new Color(0, 0, 0);
    private Color colorLightIce = new Color(0.5f, 0.75f, 1.0f);
    private Color colorLightFire = new Color(1.0f, 0.7f, 0.3f);
 
 
    void Start()
    {
-      lightsQuant = lights.Length;
+      eHelpAI = GameObject.Find("EnemyHelper").GetComponent<EnemyHelperAI>();
+      material = emissionLamp.material;
+      //anim = GetComponent<Animator>();
+      lightIntens = lightTrue.intensity;
+      blackoutDist = eHelpAI.blackoutDist;
+      overloadDist = eHelpAI.overloadDist;
 
-      for (int i = 0; i < lightsQuant; i++)
-      {
-         materials[i] = lights[i].GetComponent<Renderer>().material;
-      }
+      PowerOff();
 
-      anim = GetComponent<Animator>();
-      if (power && temp == 1)
-      {
-         this.tag = "actionOn";
-         PowerOn();
-      }
-      else
-      {
-         this.tag = "actionOff";
-         PowerOff();
-      }
-   }
-	
-
-
-	void Update ()
-   {
-      if ((this.tag == "actionWantOn" || this.tag == "actionOn") && (temp == 1))
-      {
-         this.tag = "actionOn";
-      }
-      else
-      {
-         this.tag = "actionOff";
-      }
-      if (this.tag == "actionOn" && !power)
+      if (this.tag == "electricityOn")
       {
          power = true;
          PowerOn();
       }
 
-      if (this.tag == "actionOff" && power)
+      if (this.tag == "electricityOff")
       {
          power = false;
          PowerOff();
       }
+   }
+
+   void Update()
+   {
+      if (eHelpAI.night)
+      {
+         dist = blackoutDist + 1;
+         for (int i = 0; i < eHelpAI.orblessCount; i++)
+         {
+            distBuf = (transform.position - eHelpAI.orblesses[i].transform.position).magnitude;
+            if (dist > distBuf)
+            {
+               orblessGlitch = eHelpAI.orblessAI[i].orbGlitchInt;
+               dist = distBuf;
+            }
+         }
+
+         if (dist <= overloadDist)
+         {
+            blackout = false;
+            PowerOn(((lightIntens / dist) + Random.Range(-orblessGlitch, orblessGlitch)) * 2);
+         }
+         else if (dist <= blackoutDist)
+         {
+            if (!blackout)
+            {
+               blackout = true;
+               PowerOff();
+            }
+         }
+         else
+         {
+            if (blackout)
+            {
+               blackout = false;
+               power = false;
+               PowerOff();
+            }
+            else
+            {
+               Power();
+            }
+         }
+      }
+      else
+      {
+         Power();
+      }
+   }
 
 
-      if(!act && iceTime == forceTime && fireTime == forceTime)
-      Temperature();
 
-	}
+   private void Power()
+   {
+      if (this.tag == "electricityOn")
+      {
+         PowerOn();
+      }
+      if (this.tag == "electricityOff" && power)
+      {
+         PowerOff();
+      }
+   }
 
 
 
    private void PowerOn()
    {
-      anim.SetBool("Active", true);
-      for (int i = 0; i < lightsQuant; i++)
+      if (change)
       {
-         materials[i].SetColor("_EmissionColor", colorOn * 5);
-         pointLight_active.color = colorLightOn;
-      }
-
-      if (mechanism.Length > 0)
-         for (int i = 0; i < mechanism.Length; i++)
+         power = true;
+         switch (temp)
          {
-            mechanism[i].tag = "actionWantOn";
+            case -1:
+               {
+                  //anim.SetBool("Active", false);
+                  material.SetColor("_EmissionColor", colorIce * 5);
+                  lightTrue.color = colorLightIce;
+                  change = false;
+                  if (mechanism.Length > 0)
+                     for (int i = 0; i < mechanism.Length; i++)
+                     {
+                        mechanism[i].tag = "electricityOff";
+                     }
+                  break;
+               }
+            case 0:
+               {
+                  //anim.SetBool("Active", true);
+                  material.SetColor("_EmissionColor", colorOn * 5);
+                  lightTrue.color = colorLightOn;
+                  change = false;
+                  if (mechanism.Length > 0)
+                     for (int i = 0; i < mechanism.Length; i++)
+                     {
+                        mechanism[i].tag = "electricityOn";
+                     }
+                  break;
+               }
+            case 1:
+               {
+                  //anim.SetBool("Active", false);
+                  material.SetColor("_EmissionColor", colorFire * 5);
+                  lightTrue.color = colorLightFire;
+                  change = false;
+                  if (mechanism.Length > 0)
+                     for (int i = 0; i < mechanism.Length; i++)
+                     {
+                        mechanism[i].tag = "electricityOff";
+                     }
+                  break;
+               }
          }
+      }
+   }
+
+
+
+   private void PowerOn(float intesivity)
+   {
+      //anim.SetBool("Active", true);
+      material.SetColor("_EmissionColor", colorOn * 5 * intesivity);
+      lightTrue.color = colorLightOn;
+      lightTrue.intensity = Mathf.Lerp(lightTrue.intensity, intesivity, 0.3f);
    }
 
 
 
    private void PowerOff()
    {
-      anim.SetBool("Active", false);
-      switch (temp)
+      //anim.SetBool("Active", false);
+      power = false;
+      change = true;
+      lightTrue.color = colorLightOff;
+      material.SetColor("_EmissionColor", colorOff);
+      for (int i = 0; i < mechanism.Length; i++)
       {
-         case 2:
-            {
-               for (int i = 0; i < lightsQuant; i++)
-                  materials[i].SetColor("_EmissionColor", colorFire * 5);
-               pointLight_active.color = colorLightFire;
-               break;
-            }
-         case 1:
-            {
-               for (int i = 0; i < lightsQuant; i++)
-                  materials[i].SetColor("_EmissionColor", colorOff * 5);
-               pointLight_active.color = colorLightOff;
-               break;
-            }
-         case 0:
-            {
-               for (int i = 0; i < lightsQuant; i++)
-                  materials[i].SetColor("_EmissionColor", colorIce * 5);
-               pointLight_active.color = colorLightIce;
-               break;
-            }
+         mechanism[i].tag = "electricityOff";
       }
-
-      if (mechanism.Length > 0)
-         for (int i = 0; i < mechanism.Length; i++)
-         {
-            mechanism[i].tag = "actionOff";
-         }
    }
 
 
@@ -146,62 +210,30 @@ public class Conductor : MonoBehaviour
    {
       act = true;
 
-      if (force.tag == "ice")
+      if (force.tag == "ice" && temp > -1)
       {
-         iceTime -= Time.deltaTime;
-         fireTime += Time.deltaTime;
-         if (temp > 0 && iceTime <= 0)
+         forceTime -= Time.fixedDeltaTime;
+         if (forceTime <= -forceTime_N)
          {
+            change = true;
             temp--;
-            Temperature();
-            iceTime = 3;
-            fireTime = 1;
+            forceTime = 0;
          }
       }
 
-      if (force.tag == "fire")
+      if (force.tag == "fire" && temp < 1)
       {
-         fireTime -= Time.deltaTime;
-         iceTime += Time.deltaTime;
-         if (temp < 2 && fireTime <= 0)
+         forceTime += Time.fixedDeltaTime;
+         if (forceTime >= forceTime_N)
          {
+            change = true;
             temp++;
-            Temperature();
-            iceTime = 1;
-            fireTime = 3;
+            forceTime = 0;
          }
       }
 
 
    }
-
-
-
-   private void OnTriggerExit(Collider force)
-   {
-      if (force.tag == "ice" || force.tag == "fire")
-         act = false;
-   }
-
-
-
-   private void Temperature()
-   {
-
-
-
-      if (act)
-      {
-         PowerOff();
-      }
-      else
-      {
-         iceTime = Mathf.Lerp(iceTime, forceTime, 0.1f);
-         fireTime = Mathf.Lerp(fireTime, forceTime, 0.1f);
-      }
-
-   }
-
 
 
 }

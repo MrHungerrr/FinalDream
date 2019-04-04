@@ -373,15 +373,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   power: 0
-  mechanism:
-  - {fileID: 0}
-  enemyHelpAI: {fileID: 0}
-  lights:
-  - {fileID: 2549156602398444467}
-  - {fileID: 2549156604371706216}
-  - {fileID: 2870367299182361014}
-  - {fileID: 2549156603980347847}
-  pointLight_active: {fileID: 2549156602645801573}
+  mechanism: []
+  emissionLamps:
+  - {fileID: 2549156602398444465}
+  - {fileID: 2549156604371706262}
+  - {fileID: 2870367299180423030}
+  - {fileID: 2549156603980347845}
+  lightTrue: {fileID: 2549156602645801573}
 --- !u!65 &2859588596412076188
 BoxCollider:
   m_ObjectHideFlags: 0

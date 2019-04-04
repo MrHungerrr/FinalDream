@@ -10,17 +10,17 @@ public class Lamp : MonoBehaviour
    [HideInInspector]
    private bool blackout = false;
 
-   public EnemyHelperAI enemyHelpAI;
+   private EnemyHelperAI eHelpAI;
    private float distBuf;
    private float dist;
    private float blackoutDist;
    private float overloadDist;
    private float lightIntens;
+   private float orblessGlitch;
 
-
-   public Renderer[] lamps;
+   public Renderer[] emissionLamps;
    private Material[] materials;
-   public Light trueLight;
+   public Light lightTrue;
 
    private Color[] colorOn;
    private Color colorOff = new Color(0, 0, 0);
@@ -29,16 +29,17 @@ public class Lamp : MonoBehaviour
 
    void Start()
    {
-      lightIntens = trueLight.intensity;
-      blackoutDist = enemyHelpAI.blackoutDist;
-      overloadDist = enemyHelpAI.overloadDist;
-      materials = new Material[lamps.Length];
-      colorOn = new Color[lamps.Length];
+      eHelpAI = GameObject.Find("EnemyHelper").GetComponent<EnemyHelperAI>();
+      lightIntens = lightTrue.intensity;
+      blackoutDist = eHelpAI.blackoutDist;
+      overloadDist = eHelpAI.overloadDist;
+      materials = new Material[emissionLamps.Length];
+      colorOn = new Color[emissionLamps.Length];
 
-      for (int i = 0; i < lamps.Length; i++)
+      for (int i = 0; i < emissionLamps.Length; i++)
       {
-         materials[i] = lamps[i].GetComponent<Renderer>().material;
-         colorOn[i] = materials[i].color;
+         materials[i] = emissionLamps[i].GetComponent<Renderer>().material;
+         colorOn[i] = materials[i].GetColor("_EmissionColor");
       }
 
          PowerOff();
@@ -62,21 +63,24 @@ public class Lamp : MonoBehaviour
 
    void Update()
    {
-      if (enemyHelpAI.night)
+      if (eHelpAI.night)
       {
          dist = blackoutDist + 1;
 
-         for (int i = 0; i < enemyHelpAI.orblessCount; i++)
+         for (int i = 0; i < eHelpAI.orblessCount; i++)
          {
-            distBuf = (transform.position - enemyHelpAI.orblesses[i].transform.position).magnitude;
+            distBuf = (transform.position - eHelpAI.orblesses[i].transform.position).magnitude;
             if (dist > distBuf)
+            {
+               orblessGlitch = eHelpAI.orblessAI[i].orbGlitchInt;
                dist = distBuf;
+            }
          }
 
             if (dist <= overloadDist)
          {
             blackout = false;
-            PowerOn(((lightIntens / dist) + Random.Range(-0.1f, 0.1f))*2);
+            PowerOn(((lightIntens / dist) + Random.Range(-orblessGlitch, orblessGlitch))*2);
          }
          else if (dist <= blackoutDist)
          {
@@ -124,9 +128,9 @@ public class Lamp : MonoBehaviour
    private void PowerOn()
    {
       power = true;
-      for (int i = 0; i < lamps.Length; i++)
-         materials[i].SetColor("_EmissionColor", colorOn[i] * 3);
-      trueLight.intensity = lightIntens;
+      for (int i = 0; i < emissionLamps.Length; i++)
+         materials[i].SetColor("_EmissionColor", colorOn[i]);
+      lightTrue.intensity = lightIntens;
 
    }
 
@@ -134,9 +138,9 @@ public class Lamp : MonoBehaviour
    private void PowerOn(float intensivity)
    {
       power = true;
-      for (int i = 0; i < lamps.Length; i++)
-         materials[i].SetColor("_EmissionColor", colorOn[i] * 3 * intensivity);
-      trueLight.intensity = Mathf.Lerp(trueLight.intensity, 1.5f * intensivity, 0.3f);
+      for (int i = 0; i < emissionLamps.Length; i++)
+         materials[i].SetColor("_EmissionColor", colorOn[i] * intensivity);
+      lightTrue.intensity = Mathf.Lerp(lightTrue.intensity, 1.5f * intensivity, 0.3f);
 
    }
 
@@ -150,8 +154,8 @@ public class Lamp : MonoBehaviour
    private void PowerOff()
    {
       power = false;
-      for (int i = 0; i < lamps.Length; i++)
-         materials[i].SetColor("_EmissionColor", colorOff * 3);
-      trueLight.intensity = 0f;
+      for (int i = 0; i < emissionLamps.Length; i++)
+         materials[i].SetColor("_EmissionColor", colorOff);
+      lightTrue.intensity = 0f;
    }
 }

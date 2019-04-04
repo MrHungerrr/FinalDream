@@ -5,23 +5,23 @@ using UnityEngine.AI;
 
 public class OrblessAI : MonoBehaviour
 {
-   [HideInInspector]
-   public EnemyHelperAI eHelpAI;
+   private EnemyHelperAI eHelpAI;
    private NavMeshAgent agent;
-   [HideInInspector]
-   public GameObject player;
+   private GameObject player;
    private PlayerScript pScript;
-   [HideInInspector]
-   public Sonar sonScript;
+   private Vector3 mainTarget;
    private Vector3 goal;
    private Vector3[] goals;
    private const int goalsCount = 3;
    private int pTarget_NomBuf;
    private int pTarget_Nom;
    private int[] pTargets_Nom;
-   private bool pHave = true;
+   private bool pHave = false;
    private int p_i = 0;
    private byte orb_Nom;
+   [HideInInspector]
+   public float orbGlitchInt = 0.1f;
+   private GlitchEffect glitch;
 
    //Реакция на силы игрока
    private float nervous;
@@ -58,6 +58,9 @@ public class OrblessAI : MonoBehaviour
 
    void Start()
    {
+      eHelpAI = GameObject.Find("EnemyHelper").GetComponent<EnemyHelperAI>();
+      player = GameObject.FindGameObjectWithTag("Player");
+      glitch = GameObject.Find("Main Camera").GetComponent<GlitchEffect>();
       orb_Nom = eHelpAI.orbless_Nom;
       pScript = player.GetComponent<PlayerScript>();
       agent = GetComponent<NavMeshAgent>();
@@ -73,6 +76,7 @@ public class OrblessAI : MonoBehaviour
 
       pTarget_Nom = 0;
       goal = eHelpAI.points[0].transform.position;
+      Debug.Log("Ura, Poehali k " + goal);
       agent.SetDestination(goal);
    }
 
@@ -116,7 +120,7 @@ public class OrblessAI : MonoBehaviour
                   pTarget_Nom = pTargets_Nom[p_i];
                   goal = eHelpAI.points[pTarget_Nom].transform.position;
                   agent.SetDestination(goal);
-                  //Debug.Log("Безокий начал идти к " + goal);
+                  Debug.Log("Безокий начал идти к " + goal);
                   patrolCD = checkCD_N;
                   p_i++;
                }
@@ -132,20 +136,17 @@ public class OrblessAI : MonoBehaviour
          }
          else
          {
-<<<<<<< HEAD
-            //Debug.Log("Безокий просто идет");
+            Debug.Log("Безокий просто идет");
             //Всякие звуки пока безокий передвигается
-=======
-            napor = false;
-            //Debug.Log("Безокий начал отступать");
->>>>>>> parent of d001a88... Revert "AudioRecordsAndNotes"
          }
       }
       else
       {
+         StartCoroutine(Glitch(0.3f));
+         Target();
          if (patrolFar)
          {
-            FindPoint(goalsCount, player.transform.position, 50, 20);
+            FindPoint(goalsCount, mainTarget, 50, 20);
             pHave = true;
             patrolFar = false;
             patrolMid = true;
@@ -154,7 +155,7 @@ public class OrblessAI : MonoBehaviour
          }
          else if (patrolMid)
          {
-            FindPoint(goalsCount, player.transform.position, 25, 10);
+            FindPoint(goalsCount, mainTarget, 25, 10);
             pHave = true;
             patrolMid = false;
             patrolNear = true;
@@ -163,8 +164,7 @@ public class OrblessAI : MonoBehaviour
          }
          else if (patrolNear)
          {
-<<<<<<< HEAD
-            FindPoint(goalsCount, player.transform.position, 15);
+            FindPoint(goalsCount, mainTarget, 15);
             pHave = true;
             patrolNear = false;
             patrolFar = true;
@@ -174,43 +174,12 @@ public class OrblessAI : MonoBehaviour
       }
    }
 
-
-=======
-            napor = true;
-           // Debug.Log("Безокий начал наступать");
-         }
-      }
-
-      nervous += nervCoef*Time.deltaTime;
-      //Debug.Log(nervous);
-
-   }
-
-
-   private void Patrol()
-   {
-      if (Vector3.Distance(new Vector3(goal.x, 0 ,goal.z), new Vector3(transform.position.x, 0, transform.position.z))<=0.1f)
-      {
-         pTarget_NomBuf = pTarget_Nom;
-         FindPoint(player.transform.position, nervous, nervous-5);
-         eHelpAI.pointsBusy[pTarget_NomBuf, orb_Nom] = false;
-         //Debug.Log("Безокий Начал идти к " + goal);
-      }
-      else
-      {
-         // Debug.Log("Безокий просто идет");
-         //Всякие звуки пока безокий передвигается
-      }
-   }
->>>>>>> parent of d001a88... Revert "AudioRecordsAndNotes"
-
    private void Check()
    {
       if (pHave)
       {
          if (Vector3.Distance(new Vector3(goal.x, 0, goal.z), new Vector3(transform.position.x, 0, transform.position.z)) <= 0.1f)
          {
-<<<<<<< HEAD
             if (checkCD <= 0)
             {
                if (p_i < goalsCount)
@@ -233,15 +202,6 @@ public class OrblessAI : MonoBehaviour
             {
                checkCD -= Time.deltaTime;
             }
-=======
-            //Debug.Log("Безокий пытается найти добычу");
-            pTarget_NomBuf = pTarget_Nom;
-            FindPoint(player.transform.position, 15);
-            eHelpAI.pointsBusy[pTarget_NomBuf, orb_Nom] = false;
-            agent.SetDestination(goal);
-            checkCD = checkCD_N;
-            //Еще один звук?
->>>>>>> parent of d001a88... Revert "AudioRecordsAndNotes"
          }
          else
          {
@@ -250,16 +210,7 @@ public class OrblessAI : MonoBehaviour
       }
       else
       {
-<<<<<<< HEAD
          Debug.Log("Безокий перестает искать добычу в месте");
-=======
-         //Всякие звуки пока безокий передвигается
-      }
-
-      if (nervous <= 0)
-      {
-         //Debug.Log("Безокий перестает искать добычу");
->>>>>>> parent of d001a88... Revert "AudioRecordsAndNotes"
          check = false;
          patrolCD = 4f;
          agent.speed = 6;
@@ -281,14 +232,8 @@ public class OrblessAI : MonoBehaviour
          pAngle = Quaternion.Angle(player.transform.rotation, pLook);
          if (pAngle < 75)
          {
-<<<<<<< HEAD
-<<<<<<< HEAD
-            pLook = Quaternion.LookRotation(player.transform.position - transform.position);
-            pAngle = Quaternion.Angle(transform.rotation, pLook);
-            if (pAngle < 75)
-=======
+
             if (pScript.forceScare && (pScript.forceType == 1) && Vector3.Distance(transform.position, player.transform.position) > 2f)
->>>>>>> 79bed4fd3326fd85cf0e549f13bda1c016891013
             {
                agent.speed = slowSpeed;
                Debug.Log("Безокий боится огня");
@@ -300,10 +245,6 @@ public class OrblessAI : MonoBehaviour
                nervous += Time.deltaTime;
                goal = player.transform.position;
             }
-=======
-            //Debug.Log("Безокий боится огня");
-            goal = player.transform.position + (transform.position - player.transform.position).normalized * 5;
->>>>>>> parent of d001a88... Revert "AudioRecordsAndNotes"
          }
          else
          {
@@ -313,7 +254,16 @@ public class OrblessAI : MonoBehaviour
 
          if (Vector3.Distance(transform.position, player.transform.position) <= 0.2f)
          {
+            pScript.TakeDamage(4);
             Debug.Log("Безокий убил нас");
+            chase = false;
+            patrolCD = 4f;
+            nervous = 0;
+            patrol = true;
+            patrolFar = false;
+            patrolMid = true;
+            patrolNear = false;
+            pHave = false;
             //Смерть
          }
       }
@@ -322,7 +272,15 @@ public class OrblessAI : MonoBehaviour
          goal = chaseTarget.transform.position;
          if (Vector3.Distance(transform.position, chaseTarget.transform.position) <= 0.5f)
          {
-            //Debug.Log("Безокий убил " + chaseTarget);
+            Debug.Log("Безокий убил " + chaseTarget);
+            chase = false;
+            patrolCD = 4f;
+            nervous = 0;
+            patrol = true;
+            patrolFar = false;
+            patrolMid = true;
+            patrolNear = false;
+            pHave = false;
             //Смерть
          }
       }
@@ -381,6 +339,18 @@ public class OrblessAI : MonoBehaviour
    }
 
 
+   private void Target()
+   {
+      if(player.activeSelf)
+      {
+         mainTarget = player.transform.position;
+      }
+      else
+      {
+         mainTarget = transform.position;
+      }
+   }
+
 
    //Найти одну точку вокруг таргета
    private void FindPoint(Vector3 target, float rad)
@@ -390,7 +360,6 @@ public class OrblessAI : MonoBehaviour
 
       if (pTarget_Nom >= 0)
       {
-<<<<<<< HEAD
          goal = eHelpAI.points[pTarget_Nom].transform.position;
          eHelpAI.pointsBusy[pTarget_NomBuf, orb_Nom] = false;
          Debug.Log("Безокий нашел точку " + goal);
@@ -399,25 +368,8 @@ public class OrblessAI : MonoBehaviour
       {
          pTarget_Nom = pTarget_NomBuf;
          Debug.Log("Безокий НЕ НАШЕЛ ТОЧКУ");
-<<<<<<< HEAD
          FindPoint(target, rad + 5);
-=======
-=======
-         //Debug.Log(pTarget_Nom + "    " + orb_Nom);
-         goal = eHelpAI.points[pTarget_Nom].transform.position;
-         //Debug.Log("Безокий нашел точку " + goal);
-         agent.SetDestination(goal);
-
       }
-      else
-      {
-         //Debug.Log("Безокий НЕ НАШЕЛ ТОЧКУ");
->>>>>>> parent of d001a88... Revert "AudioRecordsAndNotes"
-         FindPoint(target, rad + 1);
->>>>>>> 839c21d555b23cd0d738f38279abe0cd7612dd46
-      }
-
-
    }
 
    //Найти несколько точек вокруг таргета
@@ -439,6 +391,8 @@ public class OrblessAI : MonoBehaviour
             pTargets_Nom[i] = pTarget_NomBuf;
             Debug.Log("Безокий НЕ НАШЕЛ ТОЧКУ");
             FindPoint(target, rad + 5);
+            pTargets_Nom[i] = pTarget_Nom;
+            goals[i] = goal;
          }
       }
    }
@@ -451,7 +405,6 @@ public class OrblessAI : MonoBehaviour
 
       if (pTarget_Nom >= 0)
       {
-<<<<<<< HEAD
          goal = eHelpAI.points[pTarget_Nom].transform.position;
          eHelpAI.pointsBusy[pTarget_NomBuf, orb_Nom] = false;
          Debug.Log("Безокий нашел точку " + goal);
@@ -460,21 +413,7 @@ public class OrblessAI : MonoBehaviour
       {
          pTarget_Nom = pTarget_NomBuf;
          Debug.Log("Безокий НЕ НАШЕЛ ТОЧКУ");
-<<<<<<< HEAD
          FindPoint(target, rad_B + 5, rad_S - 5);
-=======
-=======
-         //Debug.Log(pTarget_Nom + "    " + orb_Nom);
-         goal = eHelpAI.points[pTarget_Nom].transform.position;
-         //Debug.Log("Безокий нашел точку " + goal);
-         agent.SetDestination(goal);
-      }
-      else
-      {
-         //Debug.Log("Безокий НЕ НАШЕЛ ТОЧКУ");
->>>>>>> parent of d001a88... Revert "AudioRecordsAndNotes"
-         FindPoint(target, rad_B + 1, rad_S - 1);
->>>>>>> 839c21d555b23cd0d738f38279abe0cd7612dd46
       }
    }
 
@@ -497,6 +436,8 @@ public class OrblessAI : MonoBehaviour
             pTargets_Nom[i] = pTarget_NomBuf;
             Debug.Log("Безокий НЕ НАШЕЛ ТОЧКУ");
             FindPoint(target, rad_B + 5, rad_S - 5);
+            pTargets_Nom[i] = pTarget_Nom;
+            goals[i] = goal;
          }
       }
    }
@@ -509,11 +450,20 @@ public class OrblessAI : MonoBehaviour
       {
 
          //Debug.Log("Безокий услышал что-то подозрительное");
-         patrol = false;
-         checkPos = pos;
-         StartCoroutine(StartCheck());
+         if (Vector3.Distance(pos, transform.position) < chaseDistance)
+         {
+            //Debug.Log("Безокий 'нашел' добычу");
+            check = false;
+            chaseTarget = source;
+            StartCoroutine(StartChase());
+         }
+         else
+         {
+            patrol = false;
+            checkPos = pos;
+            StartCoroutine(StartCheck());
+         }
       }
-
       if (check)
       {
          if (Vector3.Distance(pos, transform.position) < chaseDistance)
@@ -543,7 +493,7 @@ public class OrblessAI : MonoBehaviour
    {
       //Звуки всякие
       agent.SetDestination(transform.position);
-
+      StartCoroutine(Glitch(0.6f));
       for (int i = 0; i < goalsCount; i++)
       {
          eHelpAI.pointsBusy[pTargets_Nom[i], orb_Nom] = false;
@@ -564,7 +514,7 @@ public class OrblessAI : MonoBehaviour
 
       p_i = 1;
       pHave = true;
-      agent.speed = midSpeed;
+      nervous = 60;
       pTarget_Nom = pTargets_Nom[0];
       goal = eHelpAI.points[pTarget_Nom].transform.position;
       Debug.Log("Следующая точка для проверки места" + goal);
@@ -579,6 +529,8 @@ public class OrblessAI : MonoBehaviour
    IEnumerator StartChase()
    {
       //Звуки всякие
+
+      StartCoroutine(Glitch(1f));
       agent.SetDestination(transform.position);
       yield return new WaitForSeconds(1.0f);
       chase = true;
@@ -605,6 +557,18 @@ public class OrblessAI : MonoBehaviour
       chase = true;
    }
 
+   IEnumerator Glitch(float max)
+   {
+      orbGlitchInt = Random.Range(0.1f, max);
+      glitch.flipIntensity = Random.Range(0.1f, max);
+      glitch.colorIntensity = Random.Range(0.1f, max);
+      glitch.intensity = Random.Range(0.1f, max);
+      yield return new WaitForSeconds(max*2);
+      orbGlitchInt = 0.1f;
+      glitch.flipIntensity = 0;
+      glitch.colorIntensity = 0;
+      glitch.intensity = 0;
+   }
 
    private void Harm()
    {

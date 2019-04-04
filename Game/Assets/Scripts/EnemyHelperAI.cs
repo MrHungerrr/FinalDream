@@ -28,8 +28,7 @@ public class EnemyHelperAI : MonoBehaviour
 
    [HideInInspector]
    public Transform player;
-   [HideInInspector]
-   public bool night = true;
+   public bool night = false;
    [HideInInspector]
    public float blackoutDist = 75;
    [HideInInspector]
@@ -63,10 +62,6 @@ public class EnemyHelperAI : MonoBehaviour
          pointsBusy[i, orbless_Nom] = false;
          pointsBusy[i, spider_Nom] = false;
       }
-<<<<<<< HEAD
-=======
-      //Debug.Log(pointCount);
->>>>>>> parent of d001a88... Revert "AudioRecordsAndNotes"
    }
 
    // Start is called before the first frame update

@@ -12,16 +12,17 @@ public class Door : MonoBehaviour
    public bool lockDoor;
    private bool open = false;
    private bool action = true;
-   public bool horizontal;
-   public Transform doorLeft;
-   public Transform doorRight;
+   [SerializeField]
+   private bool horizontal;
+   private Transform doorLeft;
+   private Transform doorRight;
    private float doorLeftPos;
    private float doorRightPos;
    private float doorAddPos = 0;
    private float doorOpen = 0.7f;
 
-   public GameObject player;
-   public EnemyHelperAI eHelpAI;
+   private GameObject player;
+   private EnemyHelperAI eHelpAI;
    private float distBuf;
    private float dist;
    private float blackoutDist;
@@ -39,6 +40,10 @@ public class Door : MonoBehaviour
 
    void Start()
    {
+      doorLeft = gameObject.transform.Find("DoorInDoor").transform;
+      doorRight = gameObject.transform.Find("DoorInDoor2").transform;
+      player = GameObject.FindGameObjectWithTag("Player");
+      eHelpAI = GameObject.Find("EnemyHelper").GetComponent<EnemyHelperAI>();
       blackoutDist = eHelpAI.blackoutDist;
       overloadDist = eHelpAI.overloadDist;
       lampsCount = lamps.Length;
@@ -143,7 +148,7 @@ public class Door : MonoBehaviour
 
 
 
-   private void PowerOn()
+   public void PowerOn()
    {
       power = true;
       if(lockDoor)
@@ -151,7 +156,7 @@ public class Door : MonoBehaviour
          open = false;
          CloseOpen();
          for (int i = 0; i < lampsCount; i++)
-            material[i].SetColor("_EmissionColor", colorOff * 100);
+            material[i].SetColor("_EmissionColor", colorOff * 5);
       }
       else
       {
@@ -215,7 +220,7 @@ public class Door : MonoBehaviour
 
    public void ByHand()
    {
-      if (!power)
+      if (!power && !lockDoor)
       {
          action = true;
          open = !open;
@@ -236,7 +241,6 @@ public class Door : MonoBehaviour
             open = true;
             CloseOpen();
             eHelpAI.Sound(transform.position, 10, someone.gameObject);
-            Debug.Log("Suka");
          }
       }
    }
@@ -251,7 +255,6 @@ public class Door : MonoBehaviour
             open = false;
             CloseOpen();
             eHelpAI.Sound(transform.position, 4, someone.gameObject);
-            Debug.Log("Poka");
          }
       }
    }

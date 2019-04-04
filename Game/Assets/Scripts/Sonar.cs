@@ -7,6 +7,7 @@ public class Sonar : MonoBehaviour
 
    public PlayerScript player;
    public EnemyHelperAI eHelpAI;
+   public GlitchEffect glitch;
    private float distBuf;
    [HideInInspector]
    public float dist;
@@ -16,6 +17,9 @@ public class Sonar : MonoBehaviour
    private bool blackout = false;
    private float timeCD;
    private const float timeCD_N = 5f;
+   private float orblessGlitch;
+   private float GlitchCD;
+   private const float GlitchCD_N =1f;
 
    [FMODUnity.EventRef]
    public string sonarSound;
@@ -24,15 +28,20 @@ public class Sonar : MonoBehaviour
    [ContextMenu("AutoFill")]
    public void Fiil()
    {
-      eHelpAI = GameObject.FindGameObjectWithTag("enemyHelper").GetComponent<EnemyHelperAI>();
+      eHelpAI = GameObject.Find("EnemyHelper").GetComponent<EnemyHelperAI>();
       player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerScript>();
+      glitch = GameObject.Find("Main Camera").GetComponent<GlitchEffect>();
    }
+
 
    void Start()
    {
       blackoutDist = eHelpAI.blackoutDist;
       overloadDist = eHelpAI.overloadDist;
       dist = blackoutDist + 1;
+      glitch.intensity = 0;
+      glitch.flipIntensity = 0;
+      glitch.colorIntensity = 0;
    }
 
    // Update is called once per frame
@@ -46,21 +55,39 @@ public class Sonar : MonoBehaviour
          {
             distBuf = (transform.position - eHelpAI.orblesses[i].transform.position).magnitude;
             if (dist > distBuf)
+            {
+               orblessGlitch = eHelpAI.orblessAI[i].orbGlitchInt;
                dist = distBuf;
+            }
          }
 
          if (dist <= overloadDist)
          {
             //Debug.Log("Перенапряжение");
             player.suitOff = false;
-            Light(((1 / dist) + Random.Range(-0.1f, 0.1f))*2);
+            Light(((1 / dist) + Random.Range(-orblessGlitch, orblessGlitch))*2);
+            if (GlitchCD <= 0)
+            {
+               glitch.intensity = 1 / dist;
+               glitch.flipIntensity = 1 / dist;
+               glitch.colorIntensity = 1 / dist;
+               GlitchCD = GlitchCD_N;
+            }
+            else
+            {
+               GlitchCD -= Time.deltaTime;
+            }
             blackout = false;
+
          }
          else if (dist <= blackoutDist)
          {
             Distance();
             if (!blackout)
             {
+               glitch.intensity = 0;
+               glitch.flipIntensity = 0;
+               glitch.colorIntensity = 0;
                //Debug.Log("Отрубается костюм");
                player.suitOff = true;
                Light(0);
@@ -97,7 +124,6 @@ public class Sonar : MonoBehaviour
 
    private void Distance()
    {
-      Debug.Log(dist);
       if (dist > sonarOffDist)
       {
          if (timeCD<=0)
@@ -108,7 +134,6 @@ public class Sonar : MonoBehaviour
             }
             else
             {
-               Debug.Log("Fuck");
                FMODUnity.RuntimeManager.PlayOneShot(sonarSound);
                time = (dist / (blackoutDist-30));
                time *= time*time;

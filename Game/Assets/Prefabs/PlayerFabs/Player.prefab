@@ -114,8 +114,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 9150923043202464913}
-  enemyHelpAI: {fileID: 0}
-  sonarSound: 
+  eHelpAI: {fileID: 0}
+  glitch: {fileID: 0}
+  dist: 0
+  sonarSound: event:/Player/Sonar
 --- !u!114 &957387343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9919,7 +9921,7 @@ Light:
     m_Type: 1
     m_Resolution: 3
     m_CustomResolution: -1
-    m_Strength: 0.8
+    m_Strength: 1
     m_Bias: 0
     m_NormalBias: 3
     m_NearPlane: 0.1
@@ -10524,7 +10526,7 @@ GameObject:
   - component: {fileID: 9150923043126642932}
   m_Layer: 9
   m_Name: Player
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10650,7 +10652,6 @@ GameObject:
   - component: {fileID: 9150923043202464915}
   - component: {fileID: 9150923043202464914}
   - component: {fileID: 9150923043202464913}
-  - component: {fileID: 9150923043202464912}
   - component: {fileID: 9150923043202464940}
   m_Layer: 9
   m_Name: Suit
@@ -10667,7 +10668,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9150923043202464918}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 9150923042643083111}
@@ -10737,6 +10738,7 @@ MonoBehaviour:
   - 0
   light_snow: {fileID: 0}
   cameraTrans: {fileID: 2003526048}
+  idle: 0
   action: 0
   actEasyHappen: 0
   doing: 0
@@ -10749,8 +10751,10 @@ MonoBehaviour:
   force_light: {fileID: 818671362}
   forcePrep_particle: {fileID: 1901129898}
   force_Col: {fileID: 6718796686805414497}
+  forceScare: 0
   forceAct: 0
   forcePrep: 0
+  forceType: 0
   mana_material: {fileID: 2100000, guid: 355864cee94425e4ab764d62b33f1bf1, type: 2}
   mana_color: {r: 0, g: 0, b: 0, a: 0}
   mana_intensity: 6
@@ -10763,20 +10767,6 @@ MonoBehaviour:
   enemyHelpAI: {fileID: 0}
   jumpAct: 0
   jumpCD: 0
---- !u!114 &9150923043202464912
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9150923043202464918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2498ab1404d10c840bf7096f3a8c4ca1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  game: 1
-  player: {fileID: 9150923043202464913}
 --- !u!54 &9150923043202464940
 Rigidbody:
   m_ObjectHideFlags: 0

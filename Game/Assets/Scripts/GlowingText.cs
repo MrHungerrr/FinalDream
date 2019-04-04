@@ -233,13 +233,13 @@ public class GlowingText: MonoBehaviour
       yield return new WaitForSeconds(1f);
       for (int i = 0; i < tips.Length; i++)
          tips[i].material.SetColor("_Color", matColor * 0);
-      yield return new WaitForSeconds(Random.Range(0.1f,1f));
+      yield return new WaitForSeconds(Random.Range(0.1f, 0.4f));
       for (int i = 0; i < tips.Length; i++)
          tips[i].material.SetColor("_Color", matColor * fade);
       yield return new WaitForSeconds(Random.Range(0.1f, 0.4f));
       for (int i = 0; i < tips.Length; i++)
          tips[i].material.SetColor("_Color", matColor * 0);
-      yield return new WaitForSeconds(Random.Range(0.1f, 0.4f));
+      yield return new WaitForSeconds(Random.Range(0.1f, 1f));
       for (int i = 0; i < tips.Length; i++)
          tips[i].material.SetColor("_Color", matColor * fade);
       yield return new WaitForSeconds(Random.Range(0.05f, 0.2f));
@@ -251,7 +251,6 @@ public class GlowingText: MonoBehaviour
       yield return new WaitForSeconds(Random.Range(0.05f, 0.1f));
       for (int i = 0; i < tips.Length; i++)
          tips[i].material.SetColor("_Color", matColor * 0);
-      Debug.Log("Fuck");
       Destroy(this.gameObject);
    }
 }

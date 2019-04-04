@@ -8,6 +8,8 @@ public class PlayerScript : MonoBehaviour
    [Header("Cursor")]
    public Texture2D[] cursor = new Texture2D[2];
 
+   //Ввод
+   private InputManager inputMan;
 
    //Костюм
    [Header("Suit")]
@@ -132,16 +134,24 @@ public class PlayerScript : MonoBehaviour
    private float jumpTime;
    private const float jumpTime_N = 0.85f;
 
+   [ContextMenu("AutoFill")]
+   public void Fill()
+   {
+      inputMan = GetComponent<InputManager>();
+      cameraTrans = GameObject.Find("CameraTarget").transform;
+      legs = GameObject.Find("Legs");
+   }
 
 
 
    private void Awake()
    {
+      inputMan = GameObject.Find("GameManager").GetComponent<InputManager>();
       coll = GetComponent<BoxCollider>();
       force_particle = force.GetComponent<ParticleSystem>();
       legsTrans = legs.GetComponent<Transform>();
       legsAnim = legs.GetComponent<Animator>();
-      legsOffset = legsTrans.position;
+      legsOffset = legsTrans.position - transform.position;
       playerAnim = GetComponent<Animator>();
       rb = GetComponent<Rigidbody>();
       cameraTrans.position = new Vector3(transform.position.x, 0 , transform.position.z);
@@ -184,8 +194,7 @@ public class PlayerScript : MonoBehaviour
       if (action)
       {
          Act();
-      }
-      Debug.Log(cameraTrans.position);
+      }  
    }
 
 
@@ -486,7 +495,7 @@ public class PlayerScript : MonoBehaviour
    //События и действия
    private void OnTriggerStay(Collider interactive)
    {
-      if ((interactive.tag == "engine" && !suitOff) || interactive.tag == "door" || interactive.gameObject.layer == 11)
+      if ((interactive.tag == "engine" && !suitOff) || interactive.tag == "computer" || interactive.tag == "door" || interactive.gameObject.layer == 11)
       {
 
          lookAct = Quaternion.LookRotation(transform.position - interactive.transform.position);
@@ -518,14 +527,15 @@ public class PlayerScript : MonoBehaviour
       actHardTime = actHardTime_N;
       actEasyTime = actEasyTime_N;
       playerAnim.SetBool("ActionHard", false);
+      playerAnim.SetBool("ActionEasy", false);
 
    }
 
 
    //Действия игрока с предметами
-      public void Act()
-      {
-      if (doing && actObject!=null)
+   public void Act()
+   {
+      if (doing && actObject != null)
       {
          //Включение двигателя(зажать)
          if (actObject.tag == "engine")
@@ -555,7 +565,7 @@ public class PlayerScript : MonoBehaviour
             if (!actEasyHappen)
             {
                playerAnim.SetBool("ActionEasy", true);
-               actObject.GetComponent<Door>().ByHand(); 
+               actObject.GetComponent<Door>().ByHand();
                actEasyHappen = true;
             }
 
@@ -570,61 +580,77 @@ public class PlayerScript : MonoBehaviour
                actEasyTime = actEasyTime_N;
                playerAnim.SetBool("ActionEasy", false);
             }
-
          }
 
          if (actObject.tag == "AudioRecord" && !actComplete)
+         {
+            if (!actEasyHappen)
             {
-                if (!actEasyHappen)
-                {
-<<<<<<< HEAD
-                    FMOD.Studio.EventInstance play;
-                    //play.start;
-=======
-                    string path = ("event:/AudioRecordsAndNotes/" + actObject.name);
-                    AudioRecordsAndNotes.AudioRecords_Script.AddAudioRecord(path);
-                    playerAnim.SetBool("ActionEasy", true);
->>>>>>> 839c21d555b23cd0d738f38279abe0cd7612dd46
-                    actEasyHappen = true;
-                    Destroy(actObject.gameObject);
-                }
-
-                if (actEasyTime > 0)
-                {
-                    actEasyTime -= Time.deltaTime;
-                }
-                else
-                {
-                    actEasyHappen = false;
-                    actComplete = true;
-                    actEasyTime = actEasyTime_N;
-                    playerAnim.SetBool("ActionEasy", false);
-                }
+               string path = ("event:/AudioRecordsAndNotes/" + actObject.name);
+               AudioRecordsAndNotes.AudioRecords_Script.AddAudioRecord(path);
+               playerAnim.SetBool("ActionEasy", true);
+               actEasyHappen = true;
+               Destroy(actObject.gameObject);
             }
 
-         if (actObject.tag =="Note" && !actComplete)
+            if (actEasyTime > 0)
             {
-                if (!actEasyHappen && !AudioRecordsAndNotes.Notes_Script.cheking)
-                {
-                    string path = ("event:/AudioRecordsAndNotes/OpenNote");                   
-                    AudioRecordsAndNotes.Notes_Script.OpenNote(path, actObject.transform.GetChild(0).gameObject);
-                    playerAnim.SetBool("ActionEasy", true);
-                    actEasyHappen = true;
-                }
-
-                if (actEasyTime > 0)
-                {
-                    actEasyTime -= Time.deltaTime;
-                }
-                else
-                {
-                    actEasyHappen = false;
-                    actComplete = true;
-                    actEasyTime = actEasyTime_N;
-                    playerAnim.SetBool("ActionEasy", false);
-                }
+               actEasyTime -= Time.deltaTime;
             }
-        }
+            else
+            {
+               actEasyHappen = false;
+               actComplete = true;
+               actEasyTime = actEasyTime_N;
+               playerAnim.SetBool("ActionEasy", false);
+            }
+         }
+
+         if (actObject.tag == "Note" && !actComplete)
+         {
+            if (!actEasyHappen && !AudioRecordsAndNotes.Notes_Script.cheking)
+            {
+               string path = ("event:/AudioRecordsAndNotes/OpenNote");
+               AudioRecordsAndNotes.Notes_Script.OpenNote(path, actObject.transform.GetChild(0).gameObject);
+               playerAnim.SetBool("ActionEasy", true);
+               actEasyHappen = true;
+            }
+
+            if (actEasyTime > 0)
+            {
+               actEasyTime -= Time.deltaTime;
+            }
+            else
+            {
+               actEasyHappen = false;
+               actComplete = true;
+               actEasyTime = actEasyTime_N;
+               playerAnim.SetBool("ActionEasy", false);
+            }
+         }
+
+         if (actObject.tag == "computer" && !actComplete)
+         {
+            if (!actEasyHappen)
+            {
+               playerAnim.SetBool("ActionEasy", true);
+               actObject.GetComponent<Computer>().Unlock();
+               actEasyHappen = true;
+            }
+
+            if (actEasyTime > 0)
+            {
+               actEasyTime -= Time.deltaTime;
+            }
+            else
+            {
+               actEasyHappen = false;
+               actComplete = true;
+               actEasyTime = actEasyTime_N;
+               playerAnim.SetBool("ActionEasy", false);
+            }
+         }
+      }
       else
       {
          //Debug.Log("Обнуление переменных")
@@ -645,7 +671,7 @@ public class PlayerScript : MonoBehaviour
 
       if (health <= 0)
       {
-         gameObject.SetActive(false);
+         Death(); 
       }
 
       switch (health)
@@ -670,7 +696,8 @@ public class PlayerScript : MonoBehaviour
 
    public void Death()
    {
-
+      inputMan.death = true;
+      inputMan.game = false;
    }
 
 

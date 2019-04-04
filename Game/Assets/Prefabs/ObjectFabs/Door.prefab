@@ -126,10 +126,6 @@ MonoBehaviour:
   power: 0
   lockDoor: 0
   horizontal: 0
-  doorLeft: {fileID: 744235754568278717}
-  doorRight: {fileID: 744235755363181965}
-  player: {fileID: 0}
-  eHelpAI: {fileID: 0}
   lamps:
   - {fileID: 744235754711746073}
   - {fileID: 744235753877843129}
@@ -566,7 +562,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: de7f6b02982521d43900c5b7ecfb7e60, type: 3}
       propertyPath: m_Name
-      value: DoorInDoor 2
+      value: DoorInDoor2
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: de7f6b02982521d43900c5b7ecfb7e60, type: 3}
       propertyPath: m_LocalPosition.x
