@@ -139,7 +139,7 @@ public class Engine : MonoBehaviour
       anim.SetBool("Active", true);
       lightTrue.color = colorLightOn;
 
-      material.SetColor("_EmissionColor", colorOn * 5);
+      material.SetColor("_EmissionColor", colorOn * 2.5f);
 
 
       if (mechanism.Length > 0)
@@ -152,7 +152,7 @@ public class Engine : MonoBehaviour
    private void PowerOn(float intesivity)
    {
       anim.SetBool("Active", true);
-      material.SetColor("_EmissionColor", colorOn * 5 * intesivity);
+      material.SetColor("_EmissionColor", colorOn * 4 * intesivity);
       lightTrue.color = colorLightOn;
       lightTrue.intensity = Mathf.Lerp(lightTrue.intensity, intesivity, 0.3f);
    }
@@ -166,7 +166,7 @@ public class Engine : MonoBehaviour
          powerNow = false;
          anim.SetBool("Active", false);
          lightTrue.color = colorLightOff;
-         material.SetColor("_EmissionColor", colorOff * 5);
+         material.SetColor("_EmissionColor", colorOff * 3.5f);
 
          if (mechanism.Length > 0)
             for (int i = 0; i < mechanism.Length; i++)

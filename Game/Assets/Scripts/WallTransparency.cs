@@ -67,7 +67,7 @@ public class WallTransparency : MonoBehaviour
 
             if (inDoor && !pScript.suitOff)
             { 
-               pScript.lights_suit[0].intensity =(pScript.lights_suit_intens[0] + 0.7f * (1-transValue));
+               pScript.lights_suit[0].intensity =(pScript.lights_suit_intens[0] + 0.2f * (1-transValue));
             }
             
          }
@@ -82,7 +82,7 @@ public class WallTransparency : MonoBehaviour
 
             if (inDoor && !pScript.suitOff)
             {
-               pScript.lights_suit[0].intensity = (pScript.lights_suit_intens[0] + 0.7f * (1 - transValue));
+               pScript.lights_suit[0].intensity = (pScript.lights_suit_intens[0] + 0.2f * (1 - transValue));
             }
          }
 

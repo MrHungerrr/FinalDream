@@ -123,7 +123,7 @@ public class Sonar : MonoBehaviour
 
       player.lights_suit[0].intensity = player.lights_suit_intens[0] * (coef + 0.5f);
       player.lights_suit[1].intensity = player.lights_suit_intens[1] * coef;
-      player.mana_intensity = 6 * coef;
+      player.mana_intensity = 3.5f * coef;
       player.hp_intensity = 1 * coef;
       player.LightSuit();
    }

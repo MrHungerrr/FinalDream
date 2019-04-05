@@ -69,12 +69,10 @@ public class PlayerScript : MonoBehaviour
    private float mana;
    [HideInInspector]
    public byte forceType = 0;
-   [HideInInspector]
    public Material mana_material;
+   private Color mana_color;
    [HideInInspector]
-   public Color mana_color;
-   [HideInInspector]
-   public float mana_intensity = 6.0f;
+   public float mana_intensity = 0.0f;
    private Color[] force_lightColor = new Color[2];
    [HideInInspector]
    public bool forceSwitch = false;
@@ -173,6 +171,8 @@ public class PlayerScript : MonoBehaviour
       forceType_string[0] = "ice";
       forceType_string[1] = "fire";
       forceType = 0;
+      mana_intensity = 3.5f;
+      hp_intensity = 1.0f;
 
       force_particle.enableEmission = false;
       forcePrep_particle.enableEmission = false;

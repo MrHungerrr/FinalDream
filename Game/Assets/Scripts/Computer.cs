@@ -25,7 +25,10 @@ public class Computer : MonoBehaviour
    private Material lockLamp_mat;
    public Light lightTrue;
 
-   public Color colorOn;
+   [SerializeField]
+   private Color colorOn;
+   [SerializeField]
+   private float emisIntens;
    private Color colorOff = new Color(0, 0, 0);
    private Color colorLock = new Color(1, 0, 0);
    private Color colorUnLock = new Color(0, 1, 0);
@@ -41,6 +44,8 @@ public class Computer : MonoBehaviour
 
       monitor_mat = monitor.material;
       lockLamp_mat = lockLamp.material;
+      lightTrue.color = colorOn;
+  
 
       PowerOff();
 
@@ -139,10 +144,10 @@ public class Computer : MonoBehaviour
    private void PowerOn()
    {
       power = true;
-      monitor_mat.SetColor("_EmissionColor", colorOn * 5);
+      monitor_mat.SetColor("_EmissionColor", colorOn * emisIntens);
+      lightTrue.color = colorOn;
       lightTrue.intensity = lightIntens;
       this.tag = "computer";
-
       if(doorLock)
       {
          lockLamp_mat.SetColor("_EmissionColor", colorLock);
@@ -183,9 +188,11 @@ public class Computer : MonoBehaviour
    private void PowerOn(float intensivity)
    {
       power = true;
-      monitor_mat.SetColor("_EmissionColor", colorOn * 5 * intensivity);
-      lockLamp_mat.SetColor("_EmissionColor", colorUnLock * 5 * intensivity);
+      monitor_mat.SetColor("_EmissionColor", colorOn * emisIntens * intensivity);
+      lockLamp_mat.SetColor("_EmissionColor", colorUnLock * intensivity);
+      lightTrue.color = colorOn;
       lightTrue.intensity = Mathf.Lerp(lightTrue.intensity, 1.5f * intensivity, 0.3f);
+
    }
 
 

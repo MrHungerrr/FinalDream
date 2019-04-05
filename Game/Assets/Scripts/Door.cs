@@ -53,6 +53,21 @@ public class Door : MonoBehaviour
          material[i] = lamps[i].material;
 
 
+      if (horizontal)
+      {
+         doorLeftPos = doorLeft.position.x;
+         doorRightPos = doorRight.position.x;
+         Debug.Log(doorLeftPos);
+         Debug.Log(doorRightPos);
+      }
+      else
+      {
+         doorLeftPos = doorLeft.position.z;
+         doorRightPos = doorRight.position.z;
+         Debug.Log(doorLeftPos);
+         Debug.Log(doorRightPos);
+      }
+
       if (this.tag == "electricityOn")
       {
          power = true;
@@ -65,16 +80,7 @@ public class Door : MonoBehaviour
          PowerOff();
       }
 
-      if (horizontal)
-      {
-         doorLeftPos = doorLeft.position.x;
-         doorRightPos = doorRight.position.x;
-      }
-      else
-      {
-         doorLeftPos = doorLeft.position.z;
-         doorRightPos = doorRight.position.z;
-      }
+
    }
 
 
@@ -156,14 +162,14 @@ public class Door : MonoBehaviour
          open = false;
          CloseOpen();
          for (int i = 0; i < lampsCount; i++)
-            material[i].SetColor("_EmissionColor", colorOff * 5);
+            material[i].SetColor("_EmissionColor", colorOff * 3.2f);
       }
       else
       {
          open = false;
          CloseOpen();
          for (int i = 0; i < lampsCount; i++)
-            material[i].SetColor("_EmissionColor", colorOn * 5);
+            material[i].SetColor("_EmissionColor", colorOn * 2.7f);
       }
    }
 
@@ -192,11 +198,11 @@ public class Door : MonoBehaviour
    {
       if (open)
       {
-         doorAddPos = Mathf.Lerp(doorAddPos, doorOpen, 0.3f);
+         doorAddPos = Mathf.Lerp(doorAddPos, doorOpen, 0.1f);
       }
       else
       {
-         doorAddPos = Mathf.Lerp(doorAddPos, 0f, 0.3f);
+         doorAddPos = Mathf.Lerp(doorAddPos, 0f, 0.1f);
       }
 
       if (horizontal)

@@ -21,6 +21,7 @@ public class Сonductor: MonoBehaviour
    private float blackoutDist;
    private float overloadDist;
    private float orblessGlitch;
+   private float emisIntens = 2.5f;
 
 
    public Renderer emissionLamp;
@@ -139,7 +140,7 @@ public class Сonductor: MonoBehaviour
             case -1:
                {
                   //anim.SetBool("Active", false);
-                  material.SetColor("_EmissionColor", colorIce * 5);
+                  material.SetColor("_EmissionColor", colorIce * emisIntens);
                   lightTrue.color = colorLightIce;
                   change = false;
                   if (mechanism.Length > 0)
@@ -152,7 +153,7 @@ public class Сonductor: MonoBehaviour
             case 0:
                {
                   //anim.SetBool("Active", true);
-                  material.SetColor("_EmissionColor", colorOn * 5);
+                  material.SetColor("_EmissionColor", colorOn * emisIntens);
                   lightTrue.color = colorLightOn;
                   change = false;
                   if (mechanism.Length > 0)
@@ -165,7 +166,7 @@ public class Сonductor: MonoBehaviour
             case 1:
                {
                   //anim.SetBool("Active", false);
-                  material.SetColor("_EmissionColor", colorFire * 5);
+                  material.SetColor("_EmissionColor", colorFire * emisIntens);
                   lightTrue.color = colorLightFire;
                   change = false;
                   if (mechanism.Length > 0)
@@ -184,7 +185,7 @@ public class Сonductor: MonoBehaviour
    private void PowerOn(float intesivity)
    {
       //anim.SetBool("Active", true);
-      material.SetColor("_EmissionColor", colorOn * 5 * intesivity);
+      material.SetColor("_EmissionColor", colorOn * emisIntens * intesivity);
       lightTrue.color = colorLightOn;
       lightTrue.intensity = Mathf.Lerp(lightTrue.intensity, intesivity, 0.3f);
    }
