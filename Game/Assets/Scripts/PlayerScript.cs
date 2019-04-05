@@ -611,7 +611,7 @@ public class PlayerScript : MonoBehaviour
             if (!actEasyHappen && !AudioRecordsAndNotes.Notes_Script.cheking)
             {
                string path = ("event:/AudioRecordsAndNotes/OpenNote");
-               AudioRecordsAndNotes.Notes_Script.OpenNote(path, actObject.transform.GetChild(0).gameObject);
+               AudioRecordsAndNotes.Notes_Script.OpenNote(path, actObject);
                playerAnim.SetBool("ActionEasy", true);
                actEasyHappen = true;
             }

@@ -29,11 +29,12 @@ namespace AudioRecordsAndNotes
     {
         public static bool cheking = false;
         private static GameObject note = null;
+        public static GameObject NoteImage = GameObject.Find("NoteImage");
 
         public static void OpenNote(string path, GameObject note)
         {
-            Notes_Script.note = note;
-            note.GetComponent<Image>().enabled = true;
+            NoteImage.GetComponent<Image>().sprite =  note.GetComponent<Image>().sprite;
+            NoteImage.GetComponent<Image>().enabled = true;
             FMODUnity.RuntimeManager.PlayOneShot(path);
             cheking = true;
         }
@@ -41,7 +42,7 @@ namespace AudioRecordsAndNotes
         public static void CloseNote(string path)
         {     
             FMODUnity.RuntimeManager.PlayOneShot(path);
-            note.GetComponent<Image>().enabled = false;
+            NoteImage.GetComponent<Image>().enabled = false;
             cheking = false;
         }
     }
