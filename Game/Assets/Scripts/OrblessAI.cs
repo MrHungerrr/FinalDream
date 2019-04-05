@@ -71,11 +71,11 @@ public class OrblessAI : MonoBehaviour
       {
          pTargets_Nom[i] = i;
          eHelpAI.pointsBusy[i, orb_Nom] = true;
-         goals[i] = eHelpAI.points[i].transform.position;
+         goals[i] = eHelpAI.points[i];
       }
 
       pTarget_Nom = 0;
-      goal = eHelpAI.points[0].transform.position;
+      goal = eHelpAI.points[0];
       Debug.Log("Ura, Poehali k " + goal);
       agent.SetDestination(goal);
    }
@@ -118,7 +118,7 @@ public class OrblessAI : MonoBehaviour
                if (p_i < goalsCount)
                {
                   pTarget_Nom = pTargets_Nom[p_i];
-                  goal = eHelpAI.points[pTarget_Nom].transform.position;
+                  goal = eHelpAI.points[pTarget_Nom];
                   agent.SetDestination(goal);
                   Debug.Log("Безокий начал идти к " + goal);
                   patrolCD = checkCD_N;
@@ -136,7 +136,7 @@ public class OrblessAI : MonoBehaviour
          }
          else
          {
-            Debug.Log("Безокий просто идет");
+            //Debug.Log("Безокий просто идет");
             //Всякие звуки пока безокий передвигается
          }
       }
@@ -150,7 +150,11 @@ public class OrblessAI : MonoBehaviour
             pHave = true;
             patrolFar = false;
             patrolMid = true;
-            p_i = 0;
+            pTarget_Nom = pTargets_Nom[0];
+            goal = eHelpAI.points[0];
+            agent.SetDestination(goal);
+            patrolCD = checkCD_N;
+            p_i = 1;
             Debug.Log("Безокий ищет вдалеке");
          }
          else if (patrolMid)
@@ -159,7 +163,11 @@ public class OrblessAI : MonoBehaviour
             pHave = true;
             patrolMid = false;
             patrolNear = true;
-            p_i = 0;
+            pTarget_Nom = pTargets_Nom[0];
+            goal = eHelpAI.points[0];
+            agent.SetDestination(goal);
+            patrolCD = checkCD_N;
+            p_i = 1;
             Debug.Log("Безокий ищет рядом");
          }
          else if (patrolNear)
@@ -168,7 +176,11 @@ public class OrblessAI : MonoBehaviour
             pHave = true;
             patrolNear = false;
             patrolFar = true;
-            p_i = 0;
+            pTarget_Nom = pTargets_Nom[0];
+            goal = eHelpAI.points[0];
+            agent.SetDestination(goal);
+            patrolCD = checkCD_N;
+            p_i = 1;
             Debug.Log("Безокий ищет очень близко");
          }
       }
@@ -185,7 +197,7 @@ public class OrblessAI : MonoBehaviour
                if (p_i < goalsCount)
                {
                   pTarget_Nom = pTargets_Nom[p_i];
-                  goal = eHelpAI.points[pTarget_Nom].transform.position;
+                  goal = eHelpAI.points[pTarget_Nom];
                   Debug.Log("Следующая точка для проверки места" + goal);
                   agent.SetDestination(goal);
                   checkCD = checkCD_N;
@@ -360,7 +372,7 @@ public class OrblessAI : MonoBehaviour
 
       if (pTarget_Nom >= 0)
       {
-         goal = eHelpAI.points[pTarget_Nom].transform.position;
+         goal = eHelpAI.points[pTarget_Nom];
          eHelpAI.pointsBusy[pTarget_NomBuf, orb_Nom] = false;
          Debug.Log("Безокий нашел точку " + goal);
       }
@@ -382,7 +394,7 @@ public class OrblessAI : MonoBehaviour
 
          if (pTargets_Nom[i] >= 0)
          {
-            goals[i] = eHelpAI.points[pTargets_Nom[i]].transform.position;
+            goals[i] = eHelpAI.points[pTargets_Nom[i]];
             eHelpAI.pointsBusy[pTarget_NomBuf, orb_Nom] = false;
             Debug.Log("Безокий нашел точку " + goals[i]);
          }
@@ -405,7 +417,7 @@ public class OrblessAI : MonoBehaviour
 
       if (pTarget_Nom >= 0)
       {
-         goal = eHelpAI.points[pTarget_Nom].transform.position;
+         goal = eHelpAI.points[pTarget_Nom];
          eHelpAI.pointsBusy[pTarget_NomBuf, orb_Nom] = false;
          Debug.Log("Безокий нашел точку " + goal);
       }
@@ -427,7 +439,7 @@ public class OrblessAI : MonoBehaviour
 
          if (pTargets_Nom[i] >= 0)
          {
-            goals[i] = eHelpAI.points[pTargets_Nom[i]].transform.position;
+            goals[i] = eHelpAI.points[pTargets_Nom[i]];
             eHelpAI.pointsBusy[pTarget_NomBuf, orb_Nom] = false;
             Debug.Log("Безокий нашел точку " + goals[i]);
          }
@@ -453,6 +465,7 @@ public class OrblessAI : MonoBehaviour
          if (Vector3.Distance(pos, transform.position) < chaseDistance)
          {
             //Debug.Log("Безокий 'нашел' добычу");
+            patrol = false;
             check = false;
             chaseTarget = source;
             StartCoroutine(StartChase());
@@ -516,7 +529,7 @@ public class OrblessAI : MonoBehaviour
       pHave = true;
       nervous = 60;
       pTarget_Nom = pTargets_Nom[0];
-      goal = eHelpAI.points[pTarget_Nom].transform.position;
+      goal = eHelpAI.points[pTarget_Nom];
       Debug.Log("Следующая точка для проверки места" + goal);
       checkCD = checkCD_N;
       checkLookAround = false;
@@ -526,13 +539,13 @@ public class OrblessAI : MonoBehaviour
       check = true;
    }
 
-   IEnumerator StartChase()
+   public IEnumerator StartChase()
    {
       //Звуки всякие
 
-      StartCoroutine(Glitch(1f));
+      StartCoroutine(Glitch(2f));
       agent.SetDestination(transform.position);
-      yield return new WaitForSeconds(1.0f);
+      yield return new WaitForSeconds(2.0f);
       chase = true;
    }
 
@@ -645,4 +658,13 @@ public class OrblessAI : MonoBehaviour
       }
    }
 
+
+
+   public void Kill(GameObject target)
+   {
+      patrol = false;
+      check = false;
+      chaseTarget = target;
+      StartCoroutine(StartChase());
+   }
 }

@@ -9,7 +9,7 @@ public class PlayerScript : MonoBehaviour
    public Texture2D[] cursor = new Texture2D[2];
 
    //Ввод
-   private InputManager inputMan;
+   public InputManager inputMan;
 
    //Костюм
    [Header("Suit")]
@@ -137,8 +137,8 @@ public class PlayerScript : MonoBehaviour
    [ContextMenu("AutoFill")]
    public void Fill()
    {
-      inputMan = GetComponent<InputManager>();
-      cameraTrans = GameObject.Find("CameraTarget").transform;
+      inputMan = GameObject.Find("GameManager").GetComponent<InputManager>();
+      cameraTrans = GameObject.Find("Camera Target").transform;
       legs = GameObject.Find("Legs");
    }
 
@@ -146,7 +146,7 @@ public class PlayerScript : MonoBehaviour
 
    private void Awake()
    {
-      inputMan = GameObject.Find("GameManager").GetComponent<InputManager>();
+
       coll = GetComponent<BoxCollider>();
       force_particle = force.GetComponent<ParticleSystem>();
       legsTrans = legs.GetComponent<Transform>();
@@ -188,13 +188,17 @@ public class PlayerScript : MonoBehaviour
 
    private void Update()
    {
-      MouseFace();
+      if (!inputMan.cutScene)
+      {
+         MouseFace();
+      }
+
       legsTrans.position = transform.position + legsOffset;
 
       if (action)
       {
          Act();
-      }  
+      }
    }
 
 
@@ -698,6 +702,7 @@ public class PlayerScript : MonoBehaviour
    {
       inputMan.death = true;
       inputMan.game = false;
+      this.gameObject.SetActive(false);
    }
 
 

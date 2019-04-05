@@ -18,6 +18,7 @@ public class WallTransparency : MonoBehaviour
    private float transValue;
    public PlayerScript pScript;
 
+
    [ContextMenu("AutoFill")]
    public void Fill()
    {

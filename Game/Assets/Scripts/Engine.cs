@@ -86,6 +86,7 @@ public class Engine : MonoBehaviour
          {
             if (!blackout)
             {
+               power = false;
                blackout = true;
                PowerOff();
             }
@@ -105,10 +106,14 @@ public class Engine : MonoBehaviour
          }
 
       }
-      else
+      else if (blackout)
       {
-         Power();
+         blackout = false;
+         power = false;
+         PowerOff();
       }
+      else
+         Power();
    }
 
 

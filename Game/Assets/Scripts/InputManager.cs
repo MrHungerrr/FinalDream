@@ -9,6 +9,7 @@ public class InputManager : MonoBehaviour
    
    [HideInInspector]
    public bool game = true;
+   [HideInInspector]
    public bool cutScene = false;
    public bool death = false;
    private Vector2 inputMove;
@@ -27,7 +28,6 @@ public class InputManager : MonoBehaviour
    {
       if (game)
       {
-         if (!cutScene)
             GameInput();
       }
       else
@@ -37,7 +37,7 @@ public class InputManager : MonoBehaviour
 
    void FixedUpdate()
    {
-      if (game)
+      if (game && !cutScene)
          GameFixInput();
    }
 
@@ -144,7 +144,7 @@ public class InputManager : MonoBehaviour
       {
          if (Input.GetKeyDown(KeyCode.Space))
          {
-           levelMan.StartGame();
+           levelMan.CutSceneEnd();
          }
       }
       //Меню

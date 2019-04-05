@@ -1,4 +1,3 @@
-Game/Assets/Plugins/FMOD/Resources
 Game/Library/
 Game/Temp/
 Game/Assembly-CSharp.csproj
@@ -8,6 +7,10 @@ Game/Build/
 Game/Builds/
 Game/.vs/
 .vscode/
+Game/Assets/Plugins/FMOD/Resources/FMODStudioCache.asset
+
+Game/Assets/StreamingAssets/*.bank
+fmod_editor.log
 
 # Never ignore Asset meta data
 ![Aa]ssets/**/*.meta

@@ -65,7 +65,7 @@ public class Sonar : MonoBehaviour
          {
             //Debug.Log("Перенапряжение");
             player.suitOff = false;
-            Light(((1 / dist) + Random.Range(-orblessGlitch, orblessGlitch))*2);
+            Light(((1 / dist) + Random.Range(-orblessGlitch, orblessGlitch)) * 2);
             if (GlitchCD <= 0)
             {
                glitch.intensity = 1 / dist;
@@ -106,6 +106,14 @@ public class Sonar : MonoBehaviour
             }
          }
       }
+      else if (blackout)
+      {
+         player.suitOff = false;
+         blackout = false;
+         Light(1);
+         timeCD = 0;
+      }
+
    }
 
 

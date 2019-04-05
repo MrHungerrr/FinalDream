@@ -4,22 +4,32 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
-   private Vector3 position;
+   public GameObject cameraGame;
+   public GameObject cameraCutScene;
+   public InputManager inputMan;
 
-   private void Awake()
+   [ContextMenu("AutoFill")]
+   public void Fill()
    {
-      position = transform.position;
+      inputMan = GameObject.Find("GameManager").GetComponent<InputManager>();
    }
 
    void Start ()
    {
-
-      transform.position = position;
-
+      inputMan = GameObject.Find("GameManager").GetComponent<InputManager>();
    }
 
-   void FixedUpdate ()
+   public void SwitchCamera()
    {
-
-	}
+      if(inputMan.cutScene)
+      {
+         cameraGame.SetActive(false);
+         cameraCutScene.SetActive(true);
+      }
+      else
+      {
+         cameraGame.SetActive(true);
+         cameraCutScene.SetActive(false);
+      }
+   }
 }

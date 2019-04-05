@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SceneEgora.unity
-    guid: c53040ea1e9265042a98cf0d8c0010f0
+    path: Assets/Scenes/DemkaBezokih.unity
+    guid: 580ee5de41c19464e863a21ad8373916
   m_configObjects: {}

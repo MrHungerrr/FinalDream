@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyHelperAI : MonoBehaviour
 {
-   [Header("Orblesses")]
+   [HideInInspector]
    public GameObject[] orblesses;
    [HideInInspector]
    public OrblessAI[] orblessAI;
@@ -12,15 +12,15 @@ public class EnemyHelperAI : MonoBehaviour
    public int orblessCount;
 
 
-   [Header("Spiders")]
+   [HideInInspector]
    public GameObject[] spiders;
    [HideInInspector]
    public SpidersAI[] spiderAI;
    [HideInInspector]
    public int spiderCount;
 
-   [Header("Points")]
-   public GameObject[] points;
+   [HideInInspector]
+   public Vector3[] points;
    [HideInInspector]
    public int pointCount;
    [HideInInspector]
@@ -44,21 +44,27 @@ public class EnemyHelperAI : MonoBehaviour
    [ContextMenu("AutoFill")]
    public void Fill()
    {
-         orblesses = GameObject.FindGameObjectsWithTag("orbless");
-         spiders = GameObject.FindGameObjectsWithTag("spider");
-         points = GameObject.FindGameObjectsWithTag("point");
+
+
    }
 
 
 
    private void Awake()
    {
-      pointCount = points.Length;
+      orblesses = GameObject.FindGameObjectsWithTag("orbless");
+      spiders = GameObject.FindGameObjectsWithTag("spider");
+      GameObject[] pointsBuf = GameObject.FindGameObjectsWithTag("point");
+
+      pointCount = pointsBuf.Length;
+      points = new Vector3[pointCount];
       pointsBusy = new bool[pointCount, 2];
 
 
       for (int i = 0; i < pointCount; i++)
       {
+         points[i] = pointsBuf[i].transform.position;
+         Destroy(pointsBuf[i]);
          pointsBusy[i, orbless_Nom] = false;
          pointsBusy[i, spider_Nom] = false;
       }
@@ -67,7 +73,6 @@ public class EnemyHelperAI : MonoBehaviour
    // Start is called before the first frame update
    void Start()
    {
-      night = true;
       orblessAI = new OrblessAI[orblesses.Length];
       spiderAI = new SpidersAI[spiders.Length];
       orblessCount = orblesses.Length;
@@ -90,6 +95,8 @@ public class EnemyHelperAI : MonoBehaviour
       {
          orblessAI[i] = orblesses[i].GetComponent<OrblessAI>();
       }
+
+      Night();
    }
 
 
@@ -104,7 +111,7 @@ public class EnemyHelperAI : MonoBehaviour
             if (!pointsBusy[i, EnemyType])
             {
                //Debug.Log(Vector3.Distance(pos, point[i].transform.position));
-               if (Vector3.Distance(pos, points[i].transform.position) <= rad)
+               if (Vector3.Distance(pos, points[i]) <= rad)
                {
                   pointsBusy[i, EnemyType] = true;
                   return i;
@@ -120,7 +127,7 @@ public class EnemyHelperAI : MonoBehaviour
             if (!pointsBusy[i, EnemyType])
             {
                //Debug.Log(Vector3.Distance(pos, point[i].transform.position));
-               if (Vector3.Distance(pos, points[i].transform.position) <= rad)
+               if (Vector3.Distance(pos, points[i]) <= rad)
                {
                   pointsBusy[i, EnemyType] = true;
                   return i;
@@ -142,7 +149,7 @@ public class EnemyHelperAI : MonoBehaviour
          {
             if (!pointsBusy[i, EnemyType])
             {
-               if ((Vector3.Distance(pos, points[i].transform.position) <= rad_B) && (Vector3.Distance(pos, points[i].transform.position) >= rad_S))
+               if ((Vector3.Distance(pos, points[i]) <= rad_B) && (Vector3.Distance(pos, points[i]) >= rad_S))
                {
                   pointsBusy[i, EnemyType] = true;
                   return i;
@@ -157,7 +164,7 @@ public class EnemyHelperAI : MonoBehaviour
          {
             if (!pointsBusy[i, EnemyType])
             {
-               if ((Vector3.Distance(pos, points[i].transform.position) <= rad_B) && (Vector3.Distance(pos, points[i].transform.position) >= rad_S))
+               if ((Vector3.Distance(pos, points[i]) <= rad_B) && (Vector3.Distance(pos, points[i]) >= rad_S))
                {
                   pointsBusy[i, EnemyType] = true;
                   return i;
@@ -174,6 +181,25 @@ public class EnemyHelperAI : MonoBehaviour
    {
 
 
+   }
+
+
+   public void Night()
+   {
+      if (night)
+      {
+         for (int i = 0; i < orblessCount; i++)
+         {
+            orblesses[i].SetActive(true);
+         }
+      }
+      else
+      {
+         for (int i = 0; i < orblessCount; i++)
+         {
+            orblesses[i].SetActive(false);
+         }
+      }
    }
 
    public void Sound(Vector3 pos, float rad, GameObject source)
