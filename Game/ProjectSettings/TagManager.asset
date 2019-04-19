@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - ice
+  - fire
+  - ground
+  - actionOn
+  - actionOff
+  - actionWantOn
+  - electricityOn
+  - electricityOff
+  - engine
+  - door
+  - sound
+  - spider
+  - orbless
+  - point
+  - AudioRecord
+  - Note
+  - computer
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - PostProcessing
+  - Player
+  - Engine
+  - AudioRecord||Note
+  - Wall1
+  - Wall2
+  - Lamp
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
