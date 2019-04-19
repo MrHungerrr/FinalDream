@@ -11,10 +11,10 @@ Game/Assets/Plugins/FMOD/Resources/FMODStudioCache.asset
 
 Game/Assets/StreamingAssets/*.bank
 fmod_editor.log
-Game/Assets/TextMesh Pro
-Game/Assets/PostProcessing
-Game/Assets/Plugins
-Game/FMOD
+Game/Assets/TextMesh Pro/
+Game/Assets/PostProcessing/
+Game/Assets/Plugins/
+Game/FMOD/
 
 # Never ignore Asset meta data
 ![Aa]ssets/**/*.meta
