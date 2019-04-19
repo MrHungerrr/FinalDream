@@ -9,7 +9,6 @@ Game/.vs/
 .vscode/
 Game/Assets/Plugins/FMOD/Resources/FMODStudioCache.asset
 Game/Assets/StreamingAssets/*.bank
-fmod_editor.log
 Game/.vs/
 
 # Never ignore Asset meta data
