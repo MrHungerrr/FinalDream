@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{3446e4d8-3d2a-4eb0-8afa-d24b10ff2281}">
+        <property name="assetPath">
+            <value>Force/FireOn.wav</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>0.39063492063492061</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{fe293a1f-1c4f-4a9b-9f23-077686830431}</destination>
+        </relationship>
+    </object>
+</objects>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="ParameterPreset" id="{7ec8ea63-7ba6-4bbe-b80b-286e925c5a01}">
+        <property name="name">
+            <value>glitchLevel</value>
+        </property>
+        <relationship name="folder">
+            <destination>{63a9d6b4-528a-4b30-8742-2ed66570c9f0}</destination>
+        </relationship>
+        <relationship name="parameter">
+            <destination>{38faad72-c0db-42eb-b932-19972b5a35cc}</destination>
+        </relationship>
+    </object>
+    <object class="GameParameter" id="{38faad72-c0db-42eb-b932-19972b5a35cc}">
+        <property name="maximum">
+            <value>1.6000000000000001</value>
+        </property>
+        <property name="initialValue">
+            <value>0</value>
+        </property>
+    </object>
+</objects>

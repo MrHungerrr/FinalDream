@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{dd148622-f791-4e8f-8a7f-6a6f73355a6c}">
+        <property name="assetPath">
+            <value>Don/Zamechatelno ona zakrita ona zakrita.wav</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>48</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>6.8442291666666666</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{fe293a1f-1c4f-4a9b-9f23-077686830431}</destination>
+        </relationship>
+    </object>
+</objects>

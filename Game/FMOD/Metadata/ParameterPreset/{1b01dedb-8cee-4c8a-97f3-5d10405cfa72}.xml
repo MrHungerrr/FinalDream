@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="ParameterPreset" id="{1b01dedb-8cee-4c8a-97f3-5d10405cfa72}">
+        <property name="name">
+            <value>OverLoad</value>
+        </property>
+        <relationship name="folder">
+            <destination>{63a9d6b4-528a-4b30-8742-2ed66570c9f0}</destination>
+        </relationship>
+        <relationship name="parameter">
+            <destination>{926b3f27-806b-4b7d-a63b-d69461c28bf4}</destination>
+        </relationship>
+    </object>
+    <object class="GameParameter" id="{926b3f27-806b-4b7d-a63b-d69461c28bf4}">
+        <property name="initialValue">
+            <value>0</value>
+        </property>
+    </object>
+</objects>

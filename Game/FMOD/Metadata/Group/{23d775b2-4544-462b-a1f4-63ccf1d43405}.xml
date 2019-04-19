@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="MixerGroup" id="{23d775b2-4544-462b-a1f4-63ccf1d43405}">
+        <property name="name">
+            <value>SuitSounds</value>
+        </property>
+        <relationship name="effectChain">
+            <destination>{24ed9976-1acf-4963-bead-7212f9857fbe}</destination>
+        </relationship>
+        <relationship name="panner">
+            <destination>{1070fde6-b417-442c-9a4e-4ca1b2da3894}</destination>
+        </relationship>
+        <relationship name="output">
+            <destination>{be7147f7-12c9-4c9b-908f-c64b85e84f1d}</destination>
+        </relationship>
+    </object>
+    <object class="MixerBusEffectChain" id="{24ed9976-1acf-4963-bead-7212f9857fbe}">
+        <relationship name="effects">
+            <destination>{f43b84a7-b22a-4f69-b94f-431d94d9289d}</destination>
+            <destination>{1f797a21-8cea-4c9b-b7c7-ac49a1e9c07f}</destination>
+        </relationship>
+    </object>
+    <object class="MixerBusPanner" id="{1070fde6-b417-442c-9a4e-4ca1b2da3894}"/>
+    <object class="MixerBusFader" id="{f43b84a7-b22a-4f69-b94f-431d94d9289d}"/>
+    <object class="MixerSend" id="{1f797a21-8cea-4c9b-b7c7-ac49a1e9c07f}">
+        <property name="level">
+            <value>0</value>
+        </property>
+        <property name="inputFormat">
+            <value>1</value>
+        </property>
+        <relationship name="mixerReturn">
+            <destination>{f3e5c2ab-2945-411d-825f-b9b0ded2d356}</destination>
+        </relationship>
+    </object>
+</objects>
