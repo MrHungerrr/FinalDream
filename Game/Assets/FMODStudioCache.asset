@@ -45,7 +45,7 @@ MonoBehaviour:
   - {fileID: 114165680732126738}
   StringsBanks:
   - {fileID: 114075367232316494}
-  stringsBankWriteTime: 636905089559477080
+  stringsBankWriteTime: 636913055827589567
   cacheVersion: 3
 --- !u!114 &114003675400177860
 MonoBehaviour:
@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: FMOD\Build\Desktop\Master Bank.strings.bank
-  lastModified: 636905089559477080
+  lastModified: 636913055827589567
   LoadResult: 0
   FileSizes:
   - Name: Desktop
@@ -258,7 +258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: D:\Creativity\GitHub\FinalDream\Game\FMOD\Build\Desktop\Master Bank.bank
-  lastModified: 636905089559207163
+  lastModified: 636913055827519603
   LoadResult: 0
   FileSizes:
   - Name: Desktop
@@ -303,6 +303,22 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &114261010449300946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: LPFNature
+  Min: 0
+  Max: 22000
+  Default: 0
 --- !u!114 &114273265382594464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -466,6 +482,22 @@ MonoBehaviour:
   Min: 0
   Max: 1.6
   Default: 0
+--- !u!114 &114504480610853552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: VolumeNature
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114526411868292646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -613,6 +645,22 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 5491
+--- !u!114 &114679323849096194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: glitchLevel
+  Min: 0
+  Max: 1.6
+  Default: 0
 --- !u!114 &114690906513085070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -773,7 +821,7 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 1
   Parameters:
-  - {fileID: 114989004021774596}
+  - {fileID: 114679323849096194}
   MinDistance: 0
   MaxDistance: 0
   Length: 12500
@@ -875,8 +923,8 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 114658528725266974}
-  - {fileID: 114690906513085070}
+  - {fileID: 114504480610853552}
+  - {fileID: 114261010449300946}
   MinDistance: 0
   MaxDistance: 0
   Length: 125437
