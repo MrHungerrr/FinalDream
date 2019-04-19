@@ -126,7 +126,7 @@ MonoBehaviour:
         tint: 0
         hueShift: 0
         saturation: 0.8
-        contrast: 1.9
+        contrast: 1.8
       channelMixer:
         red: {x: 1, y: 0, z: 0}
         green: {x: 0, y: 1, z: 0}
@@ -150,7 +150,7 @@ MonoBehaviour:
             - serializedVersion: 3
               time: 0
               value: 0
-              inSlope: 1
+              inSlope: 0
               outSlope: 1
               tangentMode: 0
               weightedMode: 0
@@ -160,7 +160,7 @@ MonoBehaviour:
               time: 1
               value: 1
               inSlope: 1
-              outSlope: 1
+              outSlope: 0
               tangentMode: 0
               weightedMode: 0
               inWeight: 0
@@ -178,7 +178,7 @@ MonoBehaviour:
             - serializedVersion: 3
               time: 0
               value: 0
-              inSlope: 1
+              inSlope: 0
               outSlope: 1
               tangentMode: 0
               weightedMode: 0
@@ -188,7 +188,7 @@ MonoBehaviour:
               time: 1
               value: 1
               inSlope: 1
-              outSlope: 1
+              outSlope: 0
               tangentMode: 0
               weightedMode: 0
               inWeight: 0
@@ -299,8 +299,8 @@ MonoBehaviour:
               inWeight: 0
               outWeight: 0
             - serializedVersion: 3
-              time: 0.1748879
-              value: 0.4019608
+              time: 0.20671834
+              value: 0.4076087
               inSlope: 0.12146006
               outSlope: 0.12146006
               tangentMode: 0
@@ -308,8 +308,8 @@ MonoBehaviour:
               inWeight: 0
               outWeight: 0
             - serializedVersion: 3
-              time: 0.76681614
-              value: 0.4019608
+              time: 0.7390181
+              value: 0.4130435
               inSlope: 0.09109447
               outSlope: 0.09109447
               tangentMode: 0
@@ -333,7 +333,7 @@ MonoBehaviour:
           m_Range: 1
         e_CurrentEditingCurve: 4
         e_CurveY: 1
-        e_CurveR: 0
+        e_CurveR: 1
         e_CurveG: 0
         e_CurveB: 0
   userLut:
