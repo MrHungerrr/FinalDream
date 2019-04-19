@@ -10,8 +10,6 @@ Game/.vs/
 Game/Assets/Plugins/FMOD/Resources/FMODStudioCache.asset
 Game/Assets/StreamingAssets/*.bank
 fmod_editor.log
-Game/Assets/TextMesh Pro/
-Game/Assets/PostProcessing/
 Game/.vs/
 
 # Never ignore Asset meta data
