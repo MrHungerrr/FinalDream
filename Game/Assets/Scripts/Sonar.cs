@@ -5,9 +5,9 @@ using UnityEngine;
 public class Sonar : MonoBehaviour
 {
 
-   public PlayerScript player;
-   public EnemyHelperAI eHelpAI;
-   public GlitchEffect glitch;
+   private PlayerScript player;
+   private EnemyHelperAI eHelpAI;
+   private GlitchEffect glitch;
    private float distBuf;
    [HideInInspector]
    public float dist;
@@ -25,17 +25,12 @@ public class Sonar : MonoBehaviour
    public string sonarSound;
    private float time = 1;
 
-   [ContextMenu("AutoFill")]
-   public void Fiil()
+
+   void Start()
    {
       eHelpAI = GameObject.Find("EnemyHelper").GetComponent<EnemyHelperAI>();
       player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerScript>();
       glitch = GameObject.Find("Main Camera").GetComponent<GlitchEffect>();
-   }
-
-
-   void Start()
-   {
       blackoutDist = eHelpAI.blackoutDist;
       overloadDist = eHelpAI.overloadDist;
       dist = blackoutDist + 1;
@@ -121,7 +116,7 @@ public class Sonar : MonoBehaviour
    private void Light(float coef)
    { 
 
-      player.lights_suit[0].intensity = player.lights_suit_intens[0] * (coef + 0.5f);
+      player.lights_suit[0].intensity = player.lights_suit_intens[0] * coef;
       player.lights_suit[1].intensity = player.lights_suit_intens[1] * coef;
       player.mana_intensity = 3.5f * coef;
       player.hp_intensity = 1 * coef;

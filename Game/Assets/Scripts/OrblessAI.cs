@@ -19,14 +19,18 @@ public class OrblessAI : MonoBehaviour
    private bool pHave = false;
    private int p_i = 0;
    private byte orb_Nom;
+
    [HideInInspector]
    public float orbGlitchInt = 0.1f;
    private GlitchEffect glitch;
+   [FMODUnity.EventRef]
+   public string glitchSound;
+   private FMOD.Studio.ParameterInstance glitchLevel;
 
    //Реакция на силы игрока
    private float nervous;
    private float forceDangerDist;
-   private float forceTime;
+   private float forceTime = 0;
    private const float fireTime_N = 2f;
    private const float iceTime_N = -5f;
    private const float stunTime_N = 10f;
@@ -41,15 +45,18 @@ public class OrblessAI : MonoBehaviour
    private bool check = false;
    private bool checkLookAround = false;
    private bool chase = false;
+   private bool runAway = false;
 
    private GameObject chaseTarget;
    private const float chaseDistance = 12f;
-   private Vector3 chaseFearVec;
+   private Vector3 chaseFearVec = Vector3.zero;
    private const float patrolCD_N = 2f;
    private float patrolCD = 0f;
    private const float checkCD_N = 1.0f;
    private float checkCD = 0f;
    private Vector3 checkPos;
+   private bool manipulate = false;
+   private Vector3 manipulateTarget;
 
    private const float fastSpeed = 15f;
    private const float midSpeed = 10f;
@@ -104,7 +111,8 @@ public class OrblessAI : MonoBehaviour
 
    private void FixedUpdate()
    {
-      Harm();
+      if(!runAway)
+         Harm();
    }
 
    private void Patrol()
@@ -142,7 +150,8 @@ public class OrblessAI : MonoBehaviour
       }
       else
       {
-         StartCoroutine(Glitch(0.3f));
+         StartCoroutine(Glitch(0.5f));
+         runAway = false;
          Target();
          if (patrolFar)
          {
@@ -264,7 +273,7 @@ public class OrblessAI : MonoBehaviour
             goal = player.transform.position;
          }
 
-         if (Vector3.Distance(transform.position, player.transform.position) <= 0.2f)
+         if (Vector3.Distance(transform.position, player.transform.position) <= 1f)
          {
             pScript.TakeDamage(4);
             Debug.Log("Безокий убил нас");
@@ -282,7 +291,7 @@ public class OrblessAI : MonoBehaviour
       else
       {
          goal = chaseTarget.transform.position;
-         if (Vector3.Distance(transform.position, chaseTarget.transform.position) <= 0.5f)
+         if (Vector3.Distance(transform.position, chaseTarget.transform.position) <= 1f)
          {
             Debug.Log("Безокий убил " + chaseTarget);
             chase = false;
@@ -306,14 +315,21 @@ public class OrblessAI : MonoBehaviour
 
       if (patrol)
       {
-         if (nervous > 0)
+         if (runAway)
          {
-            agent.speed = midSpeed;
-            nervous -= Time.deltaTime;
+            agent.speed = fastSpeed;
          }
          else
          {
-            agent.speed = slowSpeed;
+            if (nervous > 0)
+            {
+               agent.speed = midSpeed;
+               nervous -= Time.deltaTime;
+            }
+            else
+            {
+               agent.speed = slowSpeed;
+            }
          }
       }
 
@@ -328,7 +344,7 @@ public class OrblessAI : MonoBehaviour
          {
             if (forceTime < 0)
             {
-               agent.speed = fastSpeed * ((3 + forceTime) / 3);
+               agent.speed = fastSpeed * ((-iceTime_N + forceTime) / 3);
             }
             else
             {
@@ -351,17 +367,26 @@ public class OrblessAI : MonoBehaviour
    }
 
 
+
    private void Target()
    {
-      if(player.activeSelf)
+      if (!manipulate)
       {
-         mainTarget = player.transform.position;
+         if (player.activeSelf)
+         {
+            mainTarget = player.transform.position;
+         }
+         else
+         {
+            mainTarget = transform.position;
+         }
       }
       else
       {
-         mainTarget = transform.position;
+         mainTarget = manipulateTarget;
       }
    }
+
 
 
    //Найти одну точку вокруг таргета
@@ -458,47 +483,52 @@ public class OrblessAI : MonoBehaviour
 
    public void Sound(Vector3 pos, GameObject source)
    {
-      if (patrol)
+      if (!runAway)
       {
-
-         //Debug.Log("Безокий услышал что-то подозрительное");
-         if (Vector3.Distance(pos, transform.position) < chaseDistance)
+         if (patrol)
          {
-            //Debug.Log("Безокий 'нашел' добычу");
+
+            //Debug.Log("Безокий услышал что-то подозрительное");
+            if (Vector3.Distance(pos, transform.position) < chaseDistance)
+            {
+               //Debug.Log("Безокий 'нашел' добычу");
+               patrol = false;
+               check = false;
+               chaseTarget = source;
+               StartCoroutine(StartChase());
+            }
+            else
+            {
+               patrol = false;
+               checkPos = pos;
+               StartCoroutine(StartCheck());
+            }
+         }
+         if (check)
+         {
+            if (Vector3.Distance(pos, transform.position) < chaseDistance)
+            {
+               //Debug.Log("Безокий 'нашел' добычу");
+               check = false;
+               chaseTarget = source;
+               StartCoroutine(StartChase());
+            }
+            else
+            {
+               StartCoroutine(StartCheck());
+            }
+         }
+
+         if (hurt)
+         {
+            chaseTarget = source;
             patrol = false;
             check = false;
-            chaseTarget = source;
-            StartCoroutine(StartChase());
+            chase = true;
          }
-         else
-         {
-            patrol = false;
-            checkPos = pos;
-            StartCoroutine(StartCheck());
-         }
-      }
-      if (check)
-      {
-         if (Vector3.Distance(pos, transform.position) < chaseDistance)
-         {
-            //Debug.Log("Безокий 'нашел' добычу");
-            check = false;
-            chaseTarget = source;
-            StartCoroutine(StartChase());
-         }
-         else
-         {
-            StartCoroutine(StartCheck());
-         }
-      }
-
-      if(hurt)
-      {
-         patrol = false;
-         check = false;
-         chase = true;
       }
    }
+
 
 
 
@@ -506,7 +536,7 @@ public class OrblessAI : MonoBehaviour
    {
       //Звуки всякие
       agent.SetDestination(transform.position);
-      StartCoroutine(Glitch(0.6f));
+      StartCoroutine(Glitch(1f));
       for (int i = 0; i < goalsCount; i++)
       {
          eHelpAI.pointsBusy[pTargets_Nom[i], orb_Nom] = false;
@@ -539,11 +569,12 @@ public class OrblessAI : MonoBehaviour
       check = true;
    }
 
+
    public IEnumerator StartChase()
    {
       //Звуки всякие
 
-      StartCoroutine(Glitch(2f));
+      StartCoroutine(Glitch(1.5f));
       agent.SetDestination(transform.position);
       yield return new WaitForSeconds(2.0f);
       chase = true;
@@ -572,6 +603,8 @@ public class OrblessAI : MonoBehaviour
 
    IEnumerator Glitch(float max)
    {
+      glitchLevel.setValue(max);
+      FMODUnity.RuntimeManager.PlayOneShot(glitchSound);
       orbGlitchInt = Random.Range(0.1f, max);
       glitch.flipIntensity = Random.Range(0.1f, max);
       glitch.colorIntensity = Random.Range(0.1f, max);
@@ -592,20 +625,24 @@ public class OrblessAI : MonoBehaviour
 
          if(forceTime<fireTime_N)
          {
-            chaseFearVec = (transform.position - player.transform.position).normalized * forceTime * 2;
+            if (forceTime > 0)
+               chaseFearVec = (transform.position - player.transform.position).normalized * forceTime * 2;
+            else
+               forceTime = 0;
          }
          else
          {
-            hurt = false;
             Debug.Log("Убегает");
             //Звук
+            runAway = true;
             hurt = false;
             chase = false;
             FindPoint(player.transform.position, 50, 40);
-            goals[2] = goal;   
+            forceTime = 0;
+            goals[2] = goal;
+            agent.SetDestination(goal);
             patrolCD = 4f;
             nervous = 120;
-            agent.speed = 10;
             patrol = true;
             patrolFar = false;
             patrolMid = true;
@@ -615,6 +652,8 @@ public class OrblessAI : MonoBehaviour
          }
       }
 
+
+
       //Заледенение
       if (forceTime < 0)
       {
@@ -622,10 +661,15 @@ public class OrblessAI : MonoBehaviour
 
          if (forceTime > iceTime_N)
          {
-            nervous += Time.fixedDeltaTime * 5;
+            if(forceTime < 0)
+               nervous += Time.fixedDeltaTime * 5;
+            else
+               forceTime = 0;
          }
          else
          {
+            forceTime = 0;
+            runAway = true;
             hurt = false;
             Debug.Log("Заморозился");
             StartCoroutine(Stun());
@@ -634,21 +678,26 @@ public class OrblessAI : MonoBehaviour
    }
 
 
+
    private void OnTriggerStay(Collider harm)
    {
       if(harm.tag == "fire")
       {
+         Debug.Log("Жарюсь");
          hurt = true;
          forceTime += 2 * Time.fixedDeltaTime;
       }
 
       if (harm.tag == "ice")
       {
+         Debug.Log("Замораживаюсь");
          hurt = true;
          forceTime -= 2 * Time.fixedDeltaTime;
       }
 
    }
+
+
 
    private void OnTriggerExit(Collider harm)
    {
@@ -660,8 +709,23 @@ public class OrblessAI : MonoBehaviour
 
 
 
+
+   public void Manipulate(Vector3 tar)
+   {
+      manipulate = true;
+      manipulateTarget = tar;
+   }
+
+   public void Manipulate()
+   {
+      manipulate = false;
+   }
+
+
+
    public void Kill(GameObject target)
    {
+      manipulate = false;
       patrol = false;
       check = false;
       chaseTarget = target;

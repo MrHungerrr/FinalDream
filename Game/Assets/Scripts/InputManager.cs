@@ -57,7 +57,7 @@ public class InputManager : MonoBehaviour
       {
          pScript.forcePrep = true;
 
-         if (Input.GetMouseButton(0))
+       /*  if (Input.GetMouseButton(0))
          {
             pScript.forceAct = true;
          }
@@ -65,7 +65,7 @@ public class InputManager : MonoBehaviour
          {
             pScript.forceAct = false;
          }
-
+         */
       }
       else
       {
@@ -79,11 +79,11 @@ public class InputManager : MonoBehaviour
       if (!cutScene)
       {
          //Смена силы
-         if (Input.GetKeyDown(KeyCode.Q) && !pScript.forceSwitch && !pScript.doing)
-         {
-            pScript.SwitchForce();
-         }
-
+         /* if (Input.GetKeyDown(KeyCode.Q) && !pScript.forceSwitch && !pScript.doing)
+          {
+             pScript.SwitchForce();
+          }
+          */
 
          //Действие
          if (Input.GetKey(KeyCode.E) && pScript.action && !pScript.forcePrep && !pScript.jumpAct && !pScript.forceSwitch)
@@ -95,13 +95,13 @@ public class InputManager : MonoBehaviour
             pScript.doing = false;
          }
 
-
-         //Перезарядка кристалла
-         if (Input.GetKeyDown(KeyCode.R))
-         {
-            pScript.ReloadForce();
-         }
-
+         /*
+                  //Перезарядка кристалла
+                  if (Input.GetKeyDown(KeyCode.R))
+                  {
+                     pScript.ReloadForce();
+                  }
+*/
 
          //бег
          if (Input.GetKey(KeyCode.LeftShift) && !pScript.forcePrep && !pScript.jumpAct && !pScript.forceSwitch && !pScript.doing)
@@ -144,7 +144,7 @@ public class InputManager : MonoBehaviour
       {
          if (Input.GetKeyDown(KeyCode.Space))
          {
-           levelMan.CutSceneEnd();
+            levelMan.CutSceneEnd();
          }
       }
       //Меню
@@ -163,7 +163,7 @@ public class InputManager : MonoBehaviour
 
 
 
-   } 
+   }
 
    private void MenuInput()
    {

@@ -5,39 +5,52 @@ using UnityEngine;
 public class WallTransparency : MonoBehaviour
 {
 
+   [Header("Wall Transparent")]
    public Renderer[] walls;
    public Collider[] enter;
    public Collider[] exit;
    public bool inDoor;
-   private Color[] colors;
    private int wallsCount;
    private int enterCount;
    private int exitCount;
    public bool transparency;
    private bool end = false;
    private float transValue;
-   public PlayerScript pScript;
+   private PlayerScript pScript;
+   private LevelManager levMan;
 
-
-   [ContextMenu("AutoFill")]
-   public void Fill()
-   {
-      pScript = GameObject.Find("Suit").GetComponent<PlayerScript>();
-   }
+   [Header("Nature Sound")]
+   [Range(0f, 1f)]
+   public float volume;
+   [Range(10,22000)]
+   public int cutOff;
 
 
 
    private void Start()
    {
+
+      pScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerScript>();
+      levMan = GameObject.Find("GameManager").GetComponent<LevelManager>();
       wallsCount = walls.Length;
       enterCount = enter.Length;
       exitCount = exit.Length;
-      colors = new Color[wallsCount];
-      for(int i = 0; i<wallsCount; i++)
+      if (transparency)
       {
-         colors[i] = walls[i].material.color;
+         InOutDoor();
       }
+      else
+      {
+         for (int i = 0; i < enterCount; i++)
+            enter[i].enabled = true;
+         for (int i = 0; i < exitCount; i++)
+            exit[i].enabled = false;
 
+         for (int i = 0; i < wallsCount; i++)
+         {
+            walls[i].enabled = true;
+         }
+      }
    }
 
 
@@ -47,58 +60,53 @@ public class WallTransparency : MonoBehaviour
       if (obj.tag == "Player")
       {
          transparency = !transparency;
-         end = false;
+         InOutDoor();
       }
    }
 
 
-   void Update()
+
+   private void InOutDoor()
    {
-      if (!end)
+      if (transparency)
       {
-         if (transparency)
-         {
-            transValue = Mathf.Lerp(transValue, 0.0f, 0.2f);
-
-            for (int i = 0; i < enterCount; i++)
-               enter[i].enabled = false;
-            for (int i = 0; i < exitCount; i++)
-               exit[i].enabled = true;
-
-            if (inDoor && !pScript.suitOff)
-            { 
-               pScript.lights_suit[0].intensity =(pScript.lights_suit_intens[0] + 0.2f * (1-transValue));
-            }
-            
-         }
-         else
-         {
-            transValue = Mathf.Lerp(transValue, 1.01f, 0.2f);
-
-            for (int i = 0; i < enterCount; i++)
-               enter[i].enabled = true;
-            for (int i = 0; i < exitCount; i++)
-               exit[i].enabled = false;
-
-            if (inDoor && !pScript.suitOff)
-            {
-               pScript.lights_suit[0].intensity = (pScript.lights_suit_intens[0] + 0.2f * (1 - transValue));
-            }
-         }
-
-
+         for (int i = 0; i < enterCount; i++)
+            enter[i].enabled = false;
+         for (int i = 0; i < exitCount; i++)
+            exit[i].enabled = true;
 
          for (int i = 0; i < wallsCount; i++)
          {
-            walls[i].material.color = new Color(colors[i].r, colors[i].g, colors[i].b, transValue);
+            walls[i].enabled = false;
          }
 
-         if (transValue == 0.0f || transValue >=1.0f)
+         if (inDoor)
          {
-            end = true;
+            levMan.NatureSound(cutOff, volume);
+            pScript.lights_suit_intens[0] += 0.4f;
+            if (!pScript.suitOff)
+               pScript.lights_suit[0].intensity = pScript.lights_suit_intens[0];
          }
       }
+      else
+      {
+         for (int i = 0; i < enterCount; i++)
+            enter[i].enabled = true;
+         for (int i = 0; i < exitCount; i++)
+            exit[i].enabled = false;
 
-      
+         for (int i = 0; i < wallsCount; i++)
+         {
+            walls[i].enabled = true;
+         }
+
+         if (inDoor)
+         {
+            levMan.NatureSound(22000, 1);
+            pScript.lights_suit_intens[0] -= 0.4f;
+            if (!pScript.suitOff)
+               pScript.lights_suit[0].intensity = pScript.lights_suit_intens[0];
+         }
+      }
    }
 }

@@ -11,7 +11,7 @@ public class GlowingText: MonoBehaviour
    public Renderer[] tips;
    private Color matColor;
    private float fade;
-   public  PlayerScript pScript;
+   private  PlayerScript pScript;
    public bool justDelay;
    public bool colExit;
    public bool keyWASD;
@@ -26,16 +26,11 @@ public class GlowingText: MonoBehaviour
    public bool keyShift;
 
 
-   [ContextMenu("AutoFill")]
-   private void Fill()
-   {
-      pScript = GameObject.Find("Suit").GetComponent<PlayerScript>();
-   }
-
 
 
    private void Start()
    {
+      pScript = GameObject.Find("Suit").GetComponent<PlayerScript>();
       destroy = false;
       matColor = tips[0].material.color;
       fade = 0;

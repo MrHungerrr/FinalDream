@@ -10,10 +10,12 @@ public class PlayerScript : MonoBehaviour
 
    //Ввод
    public InputManager inputMan;
+   private SubtitleGuiManager guiManager;
 
    //Костюм
    [Header("Suit")]
    public GameObject legs;
+   private Transform listener;
    private Animator playerAnim;
    private Animator legsAnim;
    private Vector3 legsOffset;
@@ -64,6 +66,7 @@ public class PlayerScript : MonoBehaviour
    public bool forceScare = false;
    [HideInInspector]
    public bool forceAct = false;
+   private bool forceActNow = false;
    [HideInInspector]
    public bool forcePrep = false;
    private float mana;
@@ -80,6 +83,12 @@ public class PlayerScript : MonoBehaviour
    private float switchTime_N = 1.0f;
    private string[] forceType_string = new string[2];
 
+
+
+   //Звуки
+   [FMODUnity.EventRef]
+   public string[] forceSounds = new string[2];
+   private FMOD.Studio.EventInstance[] forceSoundsInst = new FMOD.Studio.EventInstance[2];
 
 
 
@@ -120,7 +129,7 @@ public class PlayerScript : MonoBehaviour
 
 
     //Прыжок
-    private Vector3 jumpVector = new Vector3(0,1400,0);
+    private Vector3 jumpVector = new Vector3(0,800,0);
    [HideInInspector]
    public bool jumpAct = false;
    private bool jumpBounce = true;
@@ -128,9 +137,9 @@ public class PlayerScript : MonoBehaviour
    private bool ground = true;
    [HideInInspector]
    public float jumpCD = 0;
-   private const float jumpCD_N = 1.0f;
+   private const float jumpCD_N = 0.5f;
    private float jumpTime;
-   private const float jumpTime_N = 0.85f;
+   private const float jumpTime_N = 0.2f;
 
    [ContextMenu("AutoFill")]
    public void Fill()
@@ -154,36 +163,43 @@ public class PlayerScript : MonoBehaviour
       rb = GetComponent<Rigidbody>();
       cameraTrans.position = new Vector3(transform.position.x, 0 , transform.position.z);
 
-   }
-
-   private void Start()
-   {
-      actHardTime = actHardTime_N;
-      actHardTime = actHardTime_N;
-      actEasyTime = actEasyTime_N;
-      jumpTime = jumpTime_N;
-      health = healthMax;
-      mana = manaMax;
       force_lightColor[0] = new Color(0, 0.6f, 0.7254902f);
       force_lightColor[1] = new Color(0.8f, 0.5f, 0);
       suit_lightColor[0] = new Color(0.4f, 0.9f, 1.0f);
       suit_lightColor[1] = new Color(1.0f, 0.86f, 0.63f);
       forceType_string[0] = "ice";
       forceType_string[1] = "fire";
-      forceType = 0;
+      forceType = 1;
       mana_intensity = 3.5f;
       hp_intensity = 1.0f;
 
-      force_particle.enableEmission = false;
-      forcePrep_particle.enableEmission = false;
-      hp_color = new Color(0, 1, 0, 1);
-   
       LightSuit();
       for (int i = 0; i < lights_suit.Length; i++)
       {
          lights_suit_intens[i] = lights_suit[i].intensity;
       }
+   }
 
+   private void Start()
+   {
+      guiManager = FindObjectOfType<SubtitleGuiManager>();
+      actHardTime = actHardTime_N;
+      actHardTime = actHardTime_N;
+      actEasyTime = actEasyTime_N;
+      jumpTime = jumpTime_N;
+      health = healthMax;
+      mana = manaMax;
+
+      forceSoundsInst[0] = FMODUnity.RuntimeManager.CreateInstance(forceSounds[0]);
+      forceSoundsInst[1] = FMODUnity.RuntimeManager.CreateInstance(forceSounds[1]);
+
+      force_particle.enableEmission = false;
+      forcePrep_particle.enableEmission = false;
+      hp_color = new Color(0, 1, 0, 1);
+   
+
+
+      listener = GameObject.Find("Listener").transform;
    }
 
    private void Update()
@@ -194,6 +210,7 @@ public class PlayerScript : MonoBehaviour
       }
 
       legsTrans.position = transform.position + legsOffset;
+      listener.position = transform.position;
 
       if (action)
       {
@@ -209,6 +226,7 @@ public class PlayerScript : MonoBehaviour
       Force();
       Jump();
    }
+
 
 
    //Передвижение
@@ -318,7 +336,7 @@ public class PlayerScript : MonoBehaviour
                jumpFall = true;
             }
 
-            if (ground && jumpFall)
+            if (jumpFall)
             {
                jumpAct = false;
                jumpFall = false;
@@ -377,20 +395,26 @@ public class PlayerScript : MonoBehaviour
 
             if (forceAct)
             {
-               force_Col.enabled = true;
-               force_particle.enableEmission = true;
-               forcePrep_particle.enableEmission = false;
-               enemyHelpAI.Sound(transform.position, 40, this.gameObject);
-               mana -= Time.deltaTime;
-               force_light_intens = 1.8f;
-               light_snow_intens = 8;
-
+               if(!forceActNow)
+               {
+                  force_Col.enabled = true;
+                  force_particle.enableEmission = true;
+                  forcePrep_particle.enableEmission = false;
+                  force_light_intens = 1.8f; 
+                  light_snow_intens = 8;
+                  forceActNow = true;
+                  forceSoundsInst[forceType].start();
+               }
+                  mana -= Time.deltaTime;
+                  enemyHelpAI.Sound(transform.position, 40, this.gameObject);
             }
             else
             {
+               forceSoundsInst[forceType].stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+               forceActNow = false;
                force_Col.enabled = false;
                force_particle.enableEmission = false;
-               enemyHelpAI.Sound(transform.position, 8, this.gameObject);
+               //enemyHelpAI.Sound(transform.position, 8, this.gameObject);
                forcePrep_particle.enableEmission = true;
                mana -= Time.deltaTime * 0.1f;
                force_light_intens = 1.8f;
@@ -403,6 +427,10 @@ public class PlayerScript : MonoBehaviour
          }
          else
          {
+            force_Col.enabled = false;
+            force_particle.enableEmission = false;
+            forceSoundsInst[forceType].stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            forceActNow = false;
             forceScare = false;
             forcePrep_particle.enableEmission = false;
             force_light_intens = 0;
@@ -415,6 +443,8 @@ public class PlayerScript : MonoBehaviour
       }
       else
       {
+         forceSoundsInst[forceType].stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+         forceActNow = false;
          forceScare = false;
          coll.size = new Vector3(0.8f, 1.5f, 0.5f);
          coll.center = new Vector3(0.0f, 0.25f, 0.0f);
@@ -451,6 +481,7 @@ public class PlayerScript : MonoBehaviour
 
    public void SwitchForce()
    {
+      forceSoundsInst[forceType].stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
       if (forceType == 0)
       {
          forceType = 1;
@@ -499,7 +530,7 @@ public class PlayerScript : MonoBehaviour
    //События и действия
    private void OnTriggerStay(Collider interactive)
    {
-      if ((interactive.tag == "engine" && !suitOff) || interactive.tag == "computer" || interactive.tag == "door" || interactive.gameObject.layer == 11)
+      if ((interactive.tag == "engine" && !suitOff) || interactive.tag == "computer" || interactive.tag == "door" || interactive.gameObject.layer == 11 || interactive.tag == "terminal" || interactive.tag == "easyEngine")
       {
 
          lookAct = Quaternion.LookRotation(transform.position - interactive.transform.position);
@@ -570,6 +601,50 @@ public class PlayerScript : MonoBehaviour
             {
                playerAnim.SetBool("ActionEasy", true);
                actObject.GetComponent<Door>().ByHand();
+               actEasyHappen = true;
+            }
+
+            if (actEasyTime > 0)
+            {
+               actEasyTime -= Time.deltaTime;
+            }
+            else
+            {
+               actEasyHappen = false;
+               actComplete = true;
+               actEasyTime = actEasyTime_N;
+               playerAnim.SetBool("ActionEasy", false);
+            }
+         }
+
+         if (actObject.tag == "terminal" && !actComplete)
+         {
+            if (!actEasyHappen)
+            {
+               playerAnim.SetBool("ActionEasy", true);
+               actObject.GetComponent<Terminal>().Switch();
+               actEasyHappen = true;
+            }
+
+            if (actEasyTime > 0)
+            {
+               actEasyTime -= Time.deltaTime;
+            }
+            else
+            {
+               actEasyHappen = false;
+               actComplete = true;
+               actEasyTime = actEasyTime_N;
+               playerAnim.SetBool("ActionEasy", false);
+            }
+         }
+
+         if (actObject.tag == "easyEngine" && !actComplete)
+         {
+            if (!actEasyHappen)
+            {
+               playerAnim.SetBool("ActionEasy", true);
+               actObject.GetComponent<EasyEngine>().PowerOn();
                actEasyHappen = true;
             }
 
@@ -702,6 +777,7 @@ public class PlayerScript : MonoBehaviour
    {
       inputMan.death = true;
       inputMan.game = false;
+      guiManager.SetText("Ты умер. R - ПЕРЕЗАГРУЗКА");
       this.gameObject.SetActive(false);
    }
 

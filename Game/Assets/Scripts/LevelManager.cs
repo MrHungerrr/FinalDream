@@ -7,6 +7,7 @@ public class LevelManager : MonoBehaviour
 {
    private CameraController camControl;
    public GameObject startText;
+   public GameObject startText2;
    private InputManager inputMan;
    private Animator anim;
    private EnemyHelperAI eHelpAI;
@@ -14,6 +15,15 @@ public class LevelManager : MonoBehaviour
    private byte index = 0;
    public Collider first;
    public Collider second;
+   public Collider third;
+   public bool playDialog;
+   private SubtitleGuiManager guiManager;
+
+   private FMOD.Studio.EventInstance natureSound;
+   private FMOD.Studio.ParameterInstance natureVolume;
+   private FMOD.Studio.ParameterInstance natureLPF;
+
+
 
    void Awake()
    {
@@ -21,18 +31,30 @@ public class LevelManager : MonoBehaviour
       anim = GetComponent<Animator>();
       eHelpAI = GameObject.Find("EnemyHelper").GetComponent<EnemyHelperAI>();
       inputMan = GameObject.Find("GameManager").GetComponent<InputManager>();
+      playDialog = false;
       anim.enabled = false;
-
    }
 
    void Start()
    {
+      guiManager = FindObjectOfType<SubtitleGuiManager>();
+      natureSound = FMODUnity.RuntimeManager.CreateInstance("event:/Blizzard");
+      natureSound.getParameter("LPFNature", out natureLPF);
+      natureSound.getParameter("VolumeNature", out natureVolume);
       inputMan.cutScene = true;
-      camControl.SwitchCamera();
+      natureSound.start();
+      natureLPF.setValue(22000);
+      natureVolume.setValue(1f);
       StartCoroutine(DemoStart());
    }
 
 
+   public void NatureSound(int cutOff, float volume)
+   {
+      natureLPF.setValue(cutOff);
+      natureVolume.setValue(volume);
+   }
+   
 
    public void CutSceneEnd()
    {
@@ -41,6 +63,8 @@ public class LevelManager : MonoBehaviour
          cutSceneAct = false;
          anim.enabled = true;
          anim.SetTrigger("StartCS0");
+         startText2.SetActive(false);
+         inputMan.cutScene = false;
       }
    }
 
@@ -48,9 +72,9 @@ public class LevelManager : MonoBehaviour
    {
       eHelpAI.night = true;
       eHelpAI.Night();
-      inputMan.cutScene = false;
-      camControl.SwitchCamera();
    }
+
+
 
    IEnumerator DemoStart()
    {
@@ -63,6 +87,8 @@ public class LevelManager : MonoBehaviour
       }
    }
 
+
+
    private void OnTriggerEnter(Collider other)
    {
       if (other.tag == "Player")
@@ -70,15 +96,18 @@ public class LevelManager : MonoBehaviour
          if (first.enabled == true)
          {
             first.enabled = false;
-            eHelpAI.night = false;
-            eHelpAI.Night();
+            eHelpAI.orblessAI[0].Manipulate(new Vector3(0, 0, 0));
          }
-         else
+         else if (second.enabled == true)
          {
             second.enabled = false;
-            eHelpAI.night = true;
-            eHelpAI.Night();
             eHelpAI.orblessAI[0].Kill(GameObject.FindGameObjectWithTag("Player"));
+         } else
+         {
+            third.enabled = false;
+            Time.timeScale = 0;
+            inputMan.game = false;
+            guiManager.SetText("Ты убежал! Поздравляю) Спасибо, что поиграл. Если есть что сказать - обязательно напиши!");
          }
       }
    }
