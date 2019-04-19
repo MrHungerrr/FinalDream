@@ -9,7 +9,6 @@ public class Engine : MonoBehaviour
    private bool powerNow;
    public GameObject[] mechanism = new GameObject[0];
 
-
    [HideInInspector]
    private bool blackout = false;
    private EnemyHelperAI eHelpAI;
@@ -18,7 +17,6 @@ public class Engine : MonoBehaviour
    private float blackoutDist;
    private float overloadDist;
    private float orblessGlitch;
-
 
    public Renderer[] emissionLamps;
    private Material material;
@@ -34,14 +32,17 @@ public class Engine : MonoBehaviour
    private Color colorLightOff = new Color(1, 0.35f, 0);
    private Color colorLightBlackout = new Color(0, 0, 0);
 
+   private FMOD.Studio.EventInstance soundEngine;
 
    void Awake()
    {
+      soundEngine = FMODUnity.RuntimeManager.CreateInstance("event:/Engine");
       eHelpAI = GameObject.Find("EnemyHelper").GetComponent<EnemyHelperAI>();
       lampsQuant = emissionLamps.Length;
       blackoutDist = eHelpAI.blackoutDist;
       overloadDist = eHelpAI.overloadDist;
       material = emissionLamps[0].material;
+      soundEngine.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(transform.position));
 
       for (int i = 0; i < lampsQuant; i++)
       {
@@ -49,6 +50,7 @@ public class Engine : MonoBehaviour
       }
 
       anim = GetComponent<Animator>();
+
       if (power)
       {
          PowerOn();
@@ -138,9 +140,8 @@ public class Engine : MonoBehaviour
       powerNow = true;
       anim.SetBool("Active", true);
       lightTrue.color = colorLightOn;
-
       material.SetColor("_EmissionColor", colorOn * 2.5f);
-
+      soundEngine.start();
 
       if (mechanism.Length > 0)
          for (int i = 0; i < mechanism.Length; i++)
@@ -149,9 +150,13 @@ public class Engine : MonoBehaviour
          }
    }
 
+
+
    private void PowerOn(float intesivity)
    {
+      
       anim.SetBool("Active", true);
+      soundEngine.start();
       material.SetColor("_EmissionColor", colorOn * 4 * intesivity);
       lightTrue.color = colorLightOn;
       lightTrue.intensity = Mathf.Lerp(lightTrue.intensity, intesivity, 0.3f);
@@ -165,6 +170,7 @@ public class Engine : MonoBehaviour
       {
          powerNow = false;
          anim.SetBool("Active", false);
+         soundEngine.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
          lightTrue.color = colorLightOff;
          material.SetColor("_EmissionColor", colorOff * 3.5f);
 
@@ -176,6 +182,7 @@ public class Engine : MonoBehaviour
       }
       else
       {
+         soundEngine.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
          anim.SetBool("Active", false);
          lightTrue.color = colorLightBlackout;
          material.SetColor("_EmissionColor", colorBlackout);

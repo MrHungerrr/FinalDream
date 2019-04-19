@@ -49,17 +49,6 @@ public class Computer : MonoBehaviour
 
       PowerOff();
 
-      if (doorLock)
-      {
-         for (int i = 0; i < doors.Length; i++)
-            doors[i].GetComponent<Door>().lockDoor = true;
-      }
-      else
-      {
-         for (int i = 0; i < doors.Length; i++)
-            doors[i].GetComponent<Door>().lockDoor = false;
-      }
-
       if (this.tag == "electricityOn")
       {
          power = true;

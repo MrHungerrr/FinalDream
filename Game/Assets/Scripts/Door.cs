@@ -7,19 +7,24 @@ public class Door : MonoBehaviour
 
    [HideInInspector]
    public bool power = false;
+   private bool powerNow = false;
    [HideInInspector]
    private bool blackout = false;
-   public bool lockDoor;
    private bool open = false;
    private bool action = true;
+   private BoxCollider col;
+
    [SerializeField]
    private bool horizontal;
-   private Transform doorLeft;
-   private Transform doorRight;
+   [SerializeField]
+   private bool rightPlace;
+   public bool lockDoor;
    private float doorLeftPos;
    private float doorRightPos;
    private float doorAddPos = 0;
    private float doorOpen = 0.7f;
+   private Transform doorLeft;
+   private Transform doorRight;
 
    private GameObject player;
    private EnemyHelperAI eHelpAI;
@@ -36,12 +41,26 @@ public class Door : MonoBehaviour
    private Color colorOff = new Color(1, 0, 0);
    private Color colorBlackout = new Color(0, 0, 0);
 
+   private string soundOpen;
+   private string soundClose;
+
 
 
    void Start()
    {
-      doorLeft = gameObject.transform.Find("DoorInDoor").transform;
-      doorRight = gameObject.transform.Find("DoorInDoor2").transform;
+      if (!rightPlace)
+      {
+         doorLeft = gameObject.transform.Find("DoorInDoor").transform;
+         doorRight = gameObject.transform.Find("DoorInDoor2").transform;
+      }
+      else
+      {
+         doorLeft = gameObject.transform.Find("DoorInDoor2").transform;
+         doorRight = gameObject.transform.Find("DoorInDoor").transform;
+      }
+      soundOpen = "event:/DoorOpen";
+      soundClose = "event:/DoorClose";
+      col = GetComponent<BoxCollider>();
       player = GameObject.FindGameObjectWithTag("Player");
       eHelpAI = GameObject.Find("EnemyHelper").GetComponent<EnemyHelperAI>();
       blackoutDist = eHelpAI.blackoutDist;
@@ -74,7 +93,7 @@ public class Door : MonoBehaviour
          PowerOn();
       }
 
-      if (this.tag == "electricityOff")
+      if (this.tag == "electricityOff" || this.tag == "Untagged")
       {
          power = false;
          PowerOff();
@@ -129,6 +148,10 @@ public class Door : MonoBehaviour
          Power();
       }
 
+      if (action)
+      {
+         CloseOpen();
+      }
    }
 
 
@@ -145,10 +168,7 @@ public class Door : MonoBehaviour
          PowerOff();
       }
 
-      if(action)
-      {
-         CloseOpen();
-      }
+
 
    }
 
@@ -199,10 +219,12 @@ public class Door : MonoBehaviour
       if (open)
       {
          doorAddPos = Mathf.Lerp(doorAddPos, doorOpen, 0.1f);
+         col.enabled = false;
       }
       else
       {
          doorAddPos = Mathf.Lerp(doorAddPos, 0f, 0.1f);
+         col.enabled = true;
       }
 
       if (horizontal)
@@ -230,6 +252,14 @@ public class Door : MonoBehaviour
       {
          action = true;
          open = !open;
+         if(open)
+         {
+            FMODUnity.RuntimeManager.PlayOneShot(soundOpen, transform.position);
+         }
+         else
+         {
+            FMODUnity.RuntimeManager.PlayOneShot(soundClose, transform.position);
+         }
          CloseOpen();
          eHelpAI.Sound(transform.position, 10, player);
       }
@@ -245,6 +275,7 @@ public class Door : MonoBehaviour
          {
             action = true;
             open = true;
+            FMODUnity.RuntimeManager.PlayOneShot(soundOpen, transform.position);
             CloseOpen();
             eHelpAI.Sound(transform.position, 10, someone.gameObject);
          }
@@ -259,6 +290,7 @@ public class Door : MonoBehaviour
          {
             action = true;
             open = false;
+            FMODUnity.RuntimeManager.PlayOneShot(soundClose, transform.position);
             CloseOpen();
             eHelpAI.Sound(transform.position, 4, someone.gameObject);
          }

@@ -4,21 +4,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-   private bool pause = false;
-
-   public GameObject player;
+   private GameObject player;
    private PlayerScript pScript;
-
-   [ContextMenu("AutoFill")]
-   public void Fill()
-   {
-      player = GameObject.Find("Suit");
-   }
-
 
 
    private void Start()
    {
+      player = GameObject.FindGameObjectWithTag("Player");
       pScript = player.GetComponent<PlayerScript>();
    }
 
