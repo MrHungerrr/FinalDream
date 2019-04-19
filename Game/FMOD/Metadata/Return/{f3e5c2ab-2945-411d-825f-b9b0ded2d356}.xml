@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.01.10.00">
     <object class="MixerReturn" id="{f3e5c2ab-2945-411d-825f-b9b0ded2d356}">
+        <property name="volume">
+            <value>0.200000003</value>
+        </property>
         <property name="overridingInputFormat">
             <value>2</value>
         </property>
