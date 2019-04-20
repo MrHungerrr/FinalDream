@@ -79,11 +79,10 @@ public class InputManager : MonoBehaviour
       if (!cutScene)
       {
          //Смена силы
-         /* if (Input.GetKeyDown(KeyCode.Q) && !pScript.forceSwitch && !pScript.doing)
+         if (Input.GetKeyDown(KeyCode.Q) && !pScript.forceSwitch && !pScript.doing)
           {
              pScript.SwitchForce();
           }
-          */
 
          //Действие
          if (Input.GetKey(KeyCode.E) && pScript.action && !pScript.forcePrep && !pScript.jumpAct && !pScript.forceSwitch)

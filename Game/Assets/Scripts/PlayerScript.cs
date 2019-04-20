@@ -400,7 +400,7 @@ public class PlayerScript : MonoBehaviour
                   force_Col.enabled = true;
                   force_particle.enableEmission = true;
                   forcePrep_particle.enableEmission = false;
-                  force_light_intens = 1.8f; 
+                  force_light_intens = 1.2f; 
                   light_snow_intens = 8;
                   forceActNow = true;
                   forceSoundsInst[forceType].start();
@@ -417,7 +417,7 @@ public class PlayerScript : MonoBehaviour
                //enemyHelpAI.Sound(transform.position, 8, this.gameObject);
                forcePrep_particle.enableEmission = true;
                mana -= Time.deltaTime * 0.1f;
-               force_light_intens = 1.8f;
+               force_light_intens = 1.2f;
                if (suitOff)
                   light_snow_intens = 2;
                else

@@ -7,10 +7,6 @@ TagManager:
   - ice
   - fire
   - ground
-  - actionOn
-  - actionOff
-  - actionWantOn
-  - electricityOn
   - electricityOff
   - engine
   - door
@@ -21,6 +17,9 @@ TagManager:
   - AudioRecord
   - Note
   - computer
+  - easyEngine
+  - generator
+  - terminal
   layers:
   - Default
   - TransparentFX

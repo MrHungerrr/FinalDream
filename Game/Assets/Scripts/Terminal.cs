@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Terminal : MonoBehaviour
 {
-   private bool power = false;
+   public bool power = false;
+   private bool powerNow = false;
    public Generator generator;
    private bool active;
    public byte nomber;
@@ -48,6 +49,8 @@ public class Terminal : MonoBehaviour
       {
          emissionLamps[i].material = materials[i];
       }
+
+      this.tag = "terminal";
 
       if (power)
       {
@@ -95,6 +98,7 @@ public class Terminal : MonoBehaviour
             if (blackout)
             {
                blackout = false;
+               powerNow = false;
                PowerOff();
             }
             else
@@ -122,12 +126,12 @@ public class Terminal : MonoBehaviour
 
    private void Power()
    {
-      if (!power && this.tag == "electricityOn")
+      if (power && !powerNow)
       {
          PowerOn();
       }
 
-      if (power && this.tag == "electricityOff")
+      if (!power && powerNow)
       {
          PowerOff();
       }
@@ -135,7 +139,7 @@ public class Terminal : MonoBehaviour
 
    private void PowerOn()
    {
-      power = true;
+      powerNow = true;
       lightTrue.intensity = lightIntens;
       materials[0].SetColor("_EmissionColor", colorOnLamps * 2.5f);
       soundEngine.start();
@@ -165,13 +169,10 @@ public class Terminal : MonoBehaviour
 
    private void PowerOff()
    {
-      if (!blackout)
-      {
-         power = false;
+         powerNow = false;
          soundEngine.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
          lightTrue.intensity = 0;
          materials[0].SetColor("_EmissionColor", colorBlackout);
          materials[1].SetColor("_EmissionColor", colorBlackout);
-      }
    }
 }

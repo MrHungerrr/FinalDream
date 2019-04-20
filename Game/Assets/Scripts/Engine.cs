@@ -88,7 +88,6 @@ public class Engine : MonoBehaviour
          {
             if (!blackout)
             {
-               power = false;
                blackout = true;
                PowerOff();
             }
@@ -146,7 +145,16 @@ public class Engine : MonoBehaviour
       if (mechanism.Length > 0)
          for (int i = 0; i < mechanism.Length; i++)
          {
-            mechanism[i].tag = "electricityOn";
+            if (mechanism[i].tag == "door")
+               mechanism[i].GetComponent<Door>().power = true;
+            if (mechanism[i].tag == "lamp")
+               mechanism[i].GetComponent<Lamp>().power = true;
+            if (mechanism[i].tag == "computer")
+               mechanism[i].GetComponent<Computer>().power = true;
+            if (mechanism[i].tag == "terminal")
+               mechanism[i].GetComponent<Terminal>().power = true;
+            if (mechanism[i].tag == "generator")
+               mechanism[i].GetComponent<Generator>().power = true;
          }
    }
 

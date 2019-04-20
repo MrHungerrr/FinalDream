@@ -7,6 +7,7 @@ public class Lamp : MonoBehaviour
 
    [HideInInspector]
    public bool power = false;
+   private bool powerNow = false;
    [HideInInspector]
    private bool blackout = false;
 
@@ -42,17 +43,14 @@ public class Lamp : MonoBehaviour
          colorOn[i] = materials[i].GetColor("_EmissionColor");
       }
 
-         PowerOff();
+      this.tag = "lamp";
 
-      if (this.tag == "electricityOn")
+      if (power)
       {
-         power = true;
          PowerOn();
       }
-
-      if (this.tag == "electricityOff")
+      else
       {
-         power = false;
          PowerOff();
       }
 
@@ -114,11 +112,12 @@ public class Lamp : MonoBehaviour
 
    private void Power()
    {
-      if (this.tag == "electricityOn" && !power)
+      if (power && !powerNow)
       {
          PowerOn();
       }
-      if (this.tag == "electricityOff" && power)
+
+      if (!power && powerNow)
       {
          PowerOff();
       }
@@ -127,7 +126,7 @@ public class Lamp : MonoBehaviour
 
    private void PowerOn()
    {
-      power = true;
+      powerNow = true;
       for (int i = 0; i < emissionLamps.Length; i++)
          materials[i].SetColor("_EmissionColor", colorOn[i]);
       lightTrue.intensity = lightIntens;
@@ -137,7 +136,6 @@ public class Lamp : MonoBehaviour
 
    private void PowerOn(float intensivity)
    {
-      power = true;
       for (int i = 0; i < emissionLamps.Length; i++)
          materials[i].SetColor("_EmissionColor", colorOn[i] * intensivity);
       lightTrue.intensity = Mathf.Lerp(lightTrue.intensity, 1.5f * intensivity, 0.3f);
@@ -153,7 +151,7 @@ public class Lamp : MonoBehaviour
 
    private void PowerOff()
    {
-      power = false;
+      powerNow = false;
       for (int i = 0; i < emissionLamps.Length; i++)
          materials[i].SetColor("_EmissionColor", colorOff);
       lightTrue.intensity = 0f;

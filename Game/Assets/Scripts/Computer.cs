@@ -7,6 +7,7 @@ public class Computer : MonoBehaviour
    public Door[] doors;
    [HideInInspector]
    public bool power = false;
+   private bool powerNow = false;
    [HideInInspector]
    private bool blackout = false;
    public bool doorLock;
@@ -45,19 +46,15 @@ public class Computer : MonoBehaviour
       monitor_mat = monitor.material;
       lockLamp_mat = lockLamp.material;
       lightTrue.color = colorOn;
-  
 
-      PowerOff();
+      this.tag = "computer";
 
-      if (this.tag == "electricityOn")
+      if (power)
       {
-         power = true;
          PowerOn();
       }
-
-      if (this.tag == "electricityOff")
+      else
       {
-         power = false;
          PowerOff();
       }
 
@@ -101,7 +98,7 @@ public class Computer : MonoBehaviour
             if (blackout)
             {
                PowerOff();
-               this.tag = "electricityOff";
+               power = false;
                blackout = false;
             }
             else
@@ -120,11 +117,12 @@ public class Computer : MonoBehaviour
 
    private void Power()
    {
-      if (this.tag == "electricityOn" && !power)
+      if (power && !powerNow)
       {
          PowerOn();
       }
-      if (this.tag == "electricityOff" && power)
+
+      if (!power && powerNow)
       {
          PowerOff();
       }
@@ -132,11 +130,10 @@ public class Computer : MonoBehaviour
 
    private void PowerOn()
    {
-      power = true;
+      powerNow = true;
       monitor_mat.SetColor("_EmissionColor", colorOn * emisIntens);
       lightTrue.color = colorOn;
       lightTrue.intensity = lightIntens;
-      this.tag = "computer";
       if(doorLock)
       {
          lockLamp_mat.SetColor("_EmissionColor", colorLock);
@@ -176,7 +173,6 @@ public class Computer : MonoBehaviour
 
    private void PowerOn(float intensivity)
    {
-      power = true;
       monitor_mat.SetColor("_EmissionColor", colorOn * emisIntens * intensivity);
       lockLamp_mat.SetColor("_EmissionColor", colorUnLock * intensivity);
       lightTrue.color = colorOn;
@@ -187,7 +183,7 @@ public class Computer : MonoBehaviour
 
    private void PowerOff()
    {
-      power = false;
+      powerNow = false;
       monitor_mat.SetColor("_EmissionColor", colorOff);
       lockLamp_mat.SetColor("_EmissionColor", colorOff);
       lightTrue.intensity = 0f;

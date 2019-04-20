@@ -71,7 +71,6 @@ public class Door : MonoBehaviour
       for (int i = 0; i < lampsCount; i++)
          material[i] = lamps[i].material;
 
-
       if (horizontal)
       {
          doorLeftPos = doorLeft.position.x;
@@ -87,15 +86,15 @@ public class Door : MonoBehaviour
          Debug.Log(doorRightPos);
       }
 
-      if (this.tag == "electricityOn")
+
+      this.tag = "door";
+
+      if (power)
       {
-         power = true;
          PowerOn();
       }
-
-      if (this.tag == "electricityOff" || this.tag == "Untagged")
+      else
       {
-         power = false;
          PowerOff();
       }
 
@@ -134,6 +133,7 @@ public class Door : MonoBehaviour
          {
             if (blackout)
             {
+               power = false;
                PowerOff();
                blackout = false;
             }
@@ -158,12 +158,12 @@ public class Door : MonoBehaviour
 
    private void Power()
    {
-      if (this.tag == "electricityOn" && !power)
+      if (power && !powerNow)
       {
          PowerOn();
       }
 
-      if (this.tag == "electricityOff")
+      if (!power && powerNow)
       {
          PowerOff();
       }
@@ -176,7 +176,7 @@ public class Door : MonoBehaviour
 
    public void PowerOn()
    {
-      power = true;
+      powerNow = true;
       if(lockDoor)
       {
          open = false;
@@ -197,7 +197,6 @@ public class Door : MonoBehaviour
 
    private void PowerOn(float intensivity)
    {
-      power = true;
       if (horizontal)
       {
          doorLeft.position = new Vector3(doorLeftPos - doorOpen * intensivity, doorLeft.position.y, doorLeft.position.z);
@@ -301,9 +300,8 @@ public class Door : MonoBehaviour
 
    private void PowerOff()
    {
-      power = false;
+      powerNow = false;
       action = true;
-      this.tag = "door";
       for (int i = 0; i < lampsCount; i++)
             material[i].SetColor("_EmissionColor", colorBlackout);
    }
